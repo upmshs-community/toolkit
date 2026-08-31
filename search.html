@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Global Search | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="search-loading" class="portal-loading"><img src="assets/shs-logo.png" alt="UPM-SHS"><strong>Opening Global Search…</strong><span>Checking your session.</span></div>
+  <div id="search-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html"><img src="assets/up-upm-branding.png" alt="UP and UP Manila"><span class="portal-topbar-divider"></span><img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS"><div><strong>Global Search</strong><span>Community Health Toolkit</span></div></a>
+      <div class="portal-account"><div class="portal-avatar" data-user-initials>UP</div><div class="portal-user-copy"><strong data-user-name>User</strong><span data-user-email></span></div><a class="portal-signout admin-return-link" href="portal.html">Portal</a><button class="portal-signout" data-sign-out type="button">Sign out</button></div>
+    </header>
+
+    <main class="knowledge-page-main">
+      <section class="knowledge-hero">
+        <span class="portal-kicker">Find across the Toolkit</span>
+        <h1>Global Search</h1>
+        <p>Search communities, projects, resources, directory entries, and project document metadata in one place.</p>
+      </section>
+
+      <form id="global-search-form" class="global-search-form">
+        <input id="global-search-input" type="search" required minlength="2" placeholder="Try: Alangalang, hypertension, community mobilization, MHO…">
+        <button class="button button-maroon" type="submit">Search</button>
+      </form>
+
+      <div id="search-message" class="directory-count">Enter at least 2 characters.</div>
+      <section id="search-results" class="search-results"></section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>
