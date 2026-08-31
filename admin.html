@@ -8,7 +8,7 @@
   <title>Administration | Community Health Toolkit</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="portal-body toolkit-scroll-page">
+<body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page">
   <div id="admin-loading" class="portal-loading">
     <img src="assets/shs-logo.png" alt="UPM-SHS">
     <strong>Opening administration…</strong>
@@ -44,8 +44,7 @@
         <nav>
           <a class="active" href="#users">User Management</a>
           <a href="#communities">Communities</a>
-          <a href="#rotations">Student Rotations</a>
-          <a href="#faculty-assignments">Faculty Assignments</a>
+          <a href="#rotations">Rotations</a>
           <a href="#projects">Projects</a>
           <a href="#handovers">Handovers</a>
         </nav>
@@ -62,7 +61,7 @@
           <h1>Manage the Toolkit.</h1>
           <p>
             Approve accounts, control roles and status, maintain community sites,
-            assign students and faculty to communities, register projects, and review handovers.
+            assign students to community rotations, register projects, and review handovers.
           </p>
         </section>
 
@@ -163,8 +162,8 @@
               <input id="community-municipality" type="text" placeholder="Municipality">
             </label>
             <label>
-              <span>Faculty / preceptor display name</span>
-              <input id="community-preceptor" type="text" placeholder="Optional legacy/display field">
+              <span>Preceptor</span>
+              <input id="community-preceptor" type="text" placeholder="Optional">
             </label>
             <label class="form-wide">
               <span>Description</span>
@@ -185,7 +184,7 @@
             <div>
               <span class="portal-label">Assignments</span>
               <h2>Rotation Management</h2>
-              <p>Assign an active student to a community and rotation period. Faculty/preceptor assignments are managed separately below.</p>
+              <p>Assign an active student to a community and rotation period.</p>
             </div>
           </div>
 
@@ -251,83 +250,6 @@
               </thead>
               <tbody id="rotations-body">
                 <tr><td colspan="6" class="table-loading">Loading rotations…</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-
-        <section class="portal-panel admin-section" id="faculty-assignments">
-          <div class="portal-panel-heading admin-panel-heading">
-            <div>
-              <span class="portal-label">Academic supervision</span>
-              <h2>Faculty / Preceptor Assignments</h2>
-              <p>
-                Faculty is the account role. “Preceptor” is stored here as a community assignment/designation,
-                so the same faculty member may supervise different sites, courses, or batches over time.
-              </p>
-            </div>
-          </div>
-
-          <form id="faculty-assignment-form" class="rotation-admin-form faculty-assignment-form">
-            <label class="form-wide">
-              <span>Faculty member</span>
-              <select id="faculty-assignment-user" required>
-                <option value="">Select active faculty</option>
-              </select>
-            </label>
-            <label>
-              <span>Community</span>
-              <select id="faculty-assignment-community" required>
-                <option value="">Select community</option>
-              </select>
-            </label>
-            <label>
-              <span>Designation</span>
-              <input id="faculty-assignment-label" type="text" value="Preceptor" placeholder="e.g. Preceptor">
-            </label>
-            <label>
-              <span>Course / rotation</span>
-              <input id="faculty-assignment-course" type="text" placeholder="e.g. CH205">
-            </label>
-            <label>
-              <span>Batch</span>
-              <input id="faculty-assignment-batch" type="text" placeholder="e.g. MD24">
-            </label>
-            <label>
-              <span>Start date</span>
-              <input id="faculty-assignment-start" type="date">
-            </label>
-            <label>
-              <span>End date</span>
-              <input id="faculty-assignment-end" type="date">
-            </label>
-            <label class="form-wide">
-              <span>Notes</span>
-              <input id="faculty-assignment-notes" type="text" placeholder="Optional supervision / assignment notes">
-            </label>
-            <div class="admin-form-actions form-wide">
-              <button class="button button-maroon" type="submit">Assign Faculty</button>
-            </div>
-          </form>
-
-          <div id="faculty-assignment-message" class="admin-message" aria-live="polite"></div>
-
-          <div class="admin-table-wrap rotation-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Faculty</th>
-                  <th>Community</th>
-                  <th>Designation</th>
-                  <th>Course / Batch</th>
-                  <th>Period</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="faculty-assignments-body">
-                <tr><td colspan="7" class="table-loading">Loading faculty assignments…</td></tr>
               </tbody>
             </table>
           </div>

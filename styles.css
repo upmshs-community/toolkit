@@ -2240,3 +2240,98 @@ html.public-scroll-document body.public-landing-page {
   position: relative !important;
   overflow: visible !important;
 }
+
+
+/* =========================================================
+   ADMIN — STICKY SIDEBAR ON TABLET / DESKTOP
+   Header stays visible, sidebar stays in place,
+   main admin document remains vertically scrollable.
+   ========================================================= */
+
+@media (min-width: 641px) {
+  body.admin-sticky-sidebar-page .portal-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 300 !important;
+  }
+
+  body.admin-sticky-sidebar-page .portal-shell {
+    display: grid !important;
+    grid-template-columns: 230px minmax(0, 1fr) !important;
+    align-items: start !important;
+    height: auto !important;
+    min-height: calc(100dvh - 84px) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar {
+    position: sticky !important;
+    top: 84px !important;
+    align-self: start !important;
+    width: 100% !important;
+    height: calc(100dvh - 84px) !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 84px) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-main {
+    height: auto !important;
+    min-height: calc(100dvh - 84px) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+/* Slightly narrower admin rail on portrait tablets. */
+@media (min-width: 641px) and (max-width: 900px) {
+  body.admin-sticky-sidebar-page .portal-shell {
+    grid-template-columns: 205px minmax(0, 1fr) !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  body.admin-sticky-sidebar-page .portal-sidebar nav {
+    display: grid !important;
+    min-width: 0 !important;
+  }
+
+  body.admin-sticky-sidebar-page .portal-sidebar nav a {
+    border-bottom: 0 !important;
+    border-left: 3px solid transparent !important;
+    white-space: normal !important;
+  }
+
+  body.admin-sticky-sidebar-page .portal-sidebar nav a.active {
+    border-left-color: var(--gold) !important;
+  }
+
+  body.admin-sticky-sidebar-page .portal-sidebar-title {
+    display: block !important;
+  }
+
+  body.admin-sticky-sidebar-page .sidebar-note {
+    display: grid !important;
+  }
+}
+
+/* Phone: use the existing compact navigation instead of a fixed left rail. */
+@media (max-width: 640px) {
+  body.admin-sticky-sidebar-page .portal-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+}
