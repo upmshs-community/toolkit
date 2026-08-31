@@ -469,8 +469,13 @@
     const fullName = profile.full_name || user.email || "Authorized user";
     const email = profile.email || user.email || "";
     const role = profile.role || "student";
+    const firstName = (profile.full_name || user.email || "there")
+      .trim()
+      .split(/\s+/)[0]
+      .replace(/[._-]+.*$/, "") || "there";
 
     document.querySelectorAll("[data-user-name]").forEach(el => el.textContent = fullName);
+    document.querySelectorAll("[data-user-first-name]").forEach(el => el.textContent = firstName);
     document.querySelectorAll("[data-user-email]").forEach(el => el.textContent = email);
     document.querySelectorAll("[data-user-role]").forEach(el => el.textContent = role.charAt(0).toUpperCase() + role.slice(1));
     document.querySelectorAll("[data-user-batch]").forEach(el => el.textContent = profile.batch || "—");

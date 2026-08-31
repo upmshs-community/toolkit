@@ -2014,3 +2014,31 @@ html.toolkit-scroll-document:has(body.portal-is-loading) {
   .community-phase6-main { width:min(100% - 24px, 1400px); }
   .community-live-map { height:300px; }
 }
+
+
+/* =========================================================
+   PHASE 6 PATCH — SCROLLABLE SIDEBAR + FIRST-NAME GREETING
+   ========================================================= */
+.portal-dashboard-page .portal-sidebar {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.28) transparent;
+  padding-bottom: 30px;
+}
+.portal-dashboard-page .portal-sidebar::-webkit-scrollbar { width: 5px; }
+.portal-dashboard-page .portal-sidebar::-webkit-scrollbar-track { background: transparent; }
+.portal-dashboard-page .portal-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.24);
+  border-radius: 999px;
+}
+@media (min-width: 641px) and (max-width: 1100px) {
+  .portal-dashboard-page .portal-sidebar nav a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+  .portal-dashboard-page .phase6-sidebar-note { margin-bottom: 18px; }
+}
