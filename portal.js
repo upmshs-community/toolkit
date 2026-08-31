@@ -58,7 +58,11 @@
 
   function setLoadingCard({title, text, detail = "", action = ""}) {
     if (!loading) return;
+    document.body.classList.add("portal-is-loading");
+    document.body.classList.remove("portal-is-ready");
+    if (app) app.hidden = true;
     loading.hidden = false;
+    loading.removeAttribute("aria-hidden");
     loading.innerHTML = `
       <img src="assets/shs-logo.png" alt="UPM-SHS">
       <strong>${safe(title)}</strong>
@@ -385,6 +389,8 @@
   async function start() {
     try {
       if (configMissing() || !window.supabase?.createClient) {
+        document.body.classList.add("portal-is-loading");
+        if (app) app.hidden = true;
         if (loading) {
           loading.innerHTML = `
             <img src="assets/shs-logo.png" alt="UPM-SHS">
@@ -550,9 +556,16 @@
 
       document.getElementById("portal-handover-form")?.addEventListener("submit", submitPortalHandover);
 
-      // Show the dashboard immediately once auth + profile are valid.
-      if (loading) loading.hidden = true;
+      // Switch atomically from the full-screen loader to the app.
+      // The CSS also has explicit [hidden] rules so loader and dashboard can never show together.
       if (app) app.hidden = false;
+      if (loading) {
+        loading.hidden = true;
+        loading.setAttribute("aria-hidden", "true");
+      }
+      document.body.classList.remove("portal-is-loading");
+      document.body.classList.add("portal-is-ready");
+      window.scrollTo(0, 0);
 
       // The rest of the dashboard data should not be allowed to block opening.
       const settled = await Promise.allSettled([
