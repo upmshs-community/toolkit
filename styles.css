@@ -2181,39 +2181,83 @@ html.toolkit-scroll-document:has(body.portal-is-loading) {
 
 
 /* =========================================================
-   PHASE 6 — PUBLIC LANDING PAGE TABLET SCROLL FIX
-   The fixed Toolkit app-shell must never lock index.html.
+   PHASE 6.2 — FACULTY COLLABORATION WORKSPACE
    ========================================================= */
-
-html.public-scroll-document {
-  height: auto !important;
-  min-height: 100% !important;
-  max-height: none !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  overscroll-behavior-y: auto !important;
-  -webkit-overflow-scrolling: touch;
+.faculty-workspace-main {
+  width: min(1380px, calc(100% - 42px));
+  margin: 0 auto;
+  padding: 32px 0 60px;
 }
-
-body.public-landing-page {
-  height: auto !important;
-  min-height: 100vh !important;
-  max-height: none !important;
-  overflow-x: hidden !important;
-  overflow-y: visible !important;
-  overscroll-behavior-y: auto !important;
+.faculty-workspace-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  align-items: flex-end;
+  padding: 30px;
+  margin-bottom: 18px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, #fffaf1 0%, #f5eadb 100%);
+  border: 1px solid #e6d8c7;
 }
-
-/* Extra safeguard against the shared portal tablet lock. */
-@media (min-width: 641px) {
-  html.public-scroll-document {
-    height: auto !important;
-    overflow-y: auto !important;
-  }
-
-  body.public-landing-page {
-    height: auto !important;
-    min-height: 100vh !important;
-    overflow-y: visible !important;
-  }
+.faculty-workspace-hero h1 {
+  margin: 7px 0 10px;
+  font-family: var(--serif);
+  font-size: clamp(38px, 4vw, 58px);
+  line-height: 1;
+  color: #17120f;
+}
+.faculty-workspace-hero p {
+  max-width: 850px;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #635b53;
+}
+.faculty-workspace-actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+.faculty-stat-grid { margin-bottom: 18px; }
+.faculty-stat-grid article { border-radius: 18px; }
+.faculty-workspace-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.faculty-workspace-grid > .portal-panel { border-radius: 20px; }
+.faculty-assignment-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.faculty-assignment-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 15px;
+  background: #fffdf9;
+}
+.faculty-assignment-card h3 { font-family:var(--serif); color:var(--green); font-size:18px; margin:9px 0 3px; }
+.faculty-assignment-card p { margin:0 0 10px; font-family:var(--serif); font-size:10px; color:var(--muted); }
+.faculty-card-meta { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 12px; }
+.faculty-card-meta span { padding:5px 7px; background:#f5f0e7; font-size:8px; }
+.faculty-project-list,.faculty-resource-list { display:grid; gap:7px; }
+.faculty-project-row,.faculty-resource-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:inherit;
+  text-decoration:none;
+}
+.faculty-project-row div,.faculty-resource-row div { display:grid; gap:2px; }
+.faculty-project-row strong,.faculty-resource-row strong { font-family:var(--serif); color:var(--maroon); font-size:13px; }
+.faculty-project-row span,.faculty-resource-row span { font-size:8px; color:var(--muted); }
+.faculty-assignment-form { margin-bottom: 14px; }
+@media (max-width: 900px) {
+  .faculty-workspace-hero { display:grid; align-items:start; }
+  .faculty-workspace-actions { justify-content:flex-start; }
+  .faculty-workspace-grid { grid-template-columns:1fr; }
+}
+@media (max-width: 640px) {
+  .faculty-workspace-main { width:min(100% - 22px,1380px); }
+  .faculty-assignment-cards { grid-template-columns:1fr; }
 }

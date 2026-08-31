@@ -6,7 +6,7 @@
   const loading = document.getElementById("admin-loading");
   const app = document.getElementById("admin-app");
 
-  const roles = ["student", "faculty", "preceptor", "coordinator", "admin"];
+  const roles = ["student", "faculty", "coordinator", "admin"];
   const statuses = ["pending", "active", "suspended", "archived"];
   const projectStatuses = ["planning", "active", "for_handover", "completed", "archived"];
   const handoverStatuses = ["draft", "submitted", "approved", "returned"];
@@ -19,6 +19,7 @@
   let rotations = [];
   let projects = [];
   let handovers = [];
+  let facultyAssignments = [];
 
   function escapeHtml(value = "") {
     return String(value)
@@ -106,6 +107,7 @@
       loadUsers(),
       loadCommunities(),
       loadRotations(),
+      loadFacultyAssignments(),
       loadProjects(),
       loadHandovers()
     ]);
@@ -137,6 +139,7 @@
     document.getElementById("community-form")?.addEventListener("submit", saveCommunity);
 
     document.getElementById("rotation-form")?.addEventListener("submit", saveRotation);
+    document.getElementById("faculty-assignment-form")?.addEventListener("submit", saveFacultyAssignment);
 
     document.getElementById("open-project-form")?.addEventListener("click", () => {
       resetProjectForm();
@@ -167,6 +170,8 @@
     users = data || [];
     renderUsers();
     populateRotationUsers();
+    populateFacultyUsers();
+    renderFacultyAssignments();
     refreshStats();
   }
 
@@ -284,7 +289,9 @@
     communities = data || [];
     renderCommunities();
     populateRotationCommunities();
+    populateFacultyCommunities();
     populateProjectCommunities();
+    renderFacultyAssignments();
     refreshStats();
   }
 
@@ -302,7 +309,7 @@
         <span class="community-card-status">${c.is_active ? "Active" : "Inactive"}</span>
         <h3>${escapeHtml(c.name)}</h3>
         <p>${escapeHtml(c.municipality || c.name)}, ${escapeHtml(c.province || "")}</p>
-        <small>${escapeHtml(c.preceptor_name || "No preceptor recorded")}</small>
+        <small>${escapeHtml(c.preceptor_name || "No designated faculty/preceptor recorded")}</small>
         <div class="community-card-actions">
           <button class="mini-action save" data-community-action="edit" data-community-id="${c.id}">Edit</button>
           <button class="mini-action ${c.is_active ? "suspend" : "approve"}" data-community-action="toggle" data-community-id="${c.id}">
@@ -386,6 +393,124 @@
 
     setMessage("community-message", c.is_active ? "Community deactivated." : "Community activated.", "success");
     await loadCommunities();
+  }
+
+
+  function populateFacultyUsers() {
+    const select = document.getElementById("faculty-assignment-user");
+    if (!select) return;
+    const faculty = users
+      .filter(u => u.status === "active" && u.role === "faculty")
+      .sort((a,b) => (a.full_name || "").localeCompare(b.full_name || ""));
+    select.innerHTML = `<option value="">Select active faculty</option>` + faculty.map(u =>
+      `<option value="${u.id}">${escapeHtml(u.full_name || u.email)}${u.email ? ` · ${escapeHtml(u.email)}` : ""}</option>`
+    ).join("");
+  }
+
+  function populateFacultyCommunities() {
+    const select = document.getElementById("faculty-assignment-community");
+    if (!select) return;
+    select.innerHTML = `<option value="">Select community</option>` +
+      communities.filter(c => c.is_active).map(c =>
+        `<option value="${c.id}">${escapeHtml(c.name)}, ${escapeHtml(c.province || "")}</option>`
+      ).join("");
+  }
+
+  async function loadFacultyAssignments() {
+    const { data, error } = await client
+      .from("faculty_community_assignments")
+      .select(`
+        id,faculty_id,community_id,role_label,course_code,batch,start_date,end_date,is_active,notes,created_at,
+        communities(name,province)
+      `)
+      .order("is_active", { ascending: false })
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      setMessage("faculty-assignment-message", error.message, "error");
+      return;
+    }
+
+    facultyAssignments = data || [];
+    renderFacultyAssignments();
+  }
+
+  function renderFacultyAssignments() {
+    const body = document.getElementById("faculty-assignments-body");
+    if (!body) return;
+
+    if (!facultyAssignments.length) {
+      body.innerHTML = `<tr><td colspan="7" class="table-empty">No faculty assignments yet.</td></tr>`;
+      return;
+    }
+
+    body.innerHTML = facultyAssignments.map(a => {
+      const faculty = users.find(u => u.id === a.faculty_id);
+      const facultyName = faculty?.full_name || faculty?.email || "Faculty member";
+      const community = a.communities?.name || communities.find(c => c.id === a.community_id)?.name || "Community";
+      const period = [formatDate(a.start_date), formatDate(a.end_date)].join(" → ");
+      return `
+        <tr>
+          <td><div class="table-user"><strong>${escapeHtml(facultyName)}</strong><span>${escapeHtml(faculty?.email || "")}</span></div></td>
+          <td><div class="table-stack"><strong>${escapeHtml(community)}</strong><small>${escapeHtml(a.communities?.province || "")}</small></div></td>
+          <td>${escapeHtml(a.role_label || "Preceptor")}</td>
+          <td><div class="table-stack"><span>${escapeHtml(a.course_code || "—")}</span><small>${escapeHtml(a.batch || "—")}</small></div></td>
+          <td>${escapeHtml(period)}</td>
+          <td><span class="project-pill ${a.is_active ? "status-active" : "status-archived"}">${a.is_active ? "Active" : "Ended"}</span></td>
+          <td>${a.is_active ? `<button class="mini-action suspend" data-faculty-assignment-end="${a.id}">End</button>` : "—"}</td>
+        </tr>
+      `;
+    }).join("");
+
+    body.querySelectorAll("[data-faculty-assignment-end]").forEach(button => {
+      button.addEventListener("click", () => endFacultyAssignment(button.dataset.facultyAssignmentEnd));
+    });
+  }
+
+  async function saveFacultyAssignment(event) {
+    event.preventDefault();
+    const payload = {
+      faculty_id: document.getElementById("faculty-assignment-user").value,
+      community_id: document.getElementById("faculty-assignment-community").value,
+      role_label: document.getElementById("faculty-assignment-label").value.trim() || "Preceptor",
+      course_code: document.getElementById("faculty-assignment-course").value.trim() || null,
+      batch: document.getElementById("faculty-assignment-batch").value.trim() || null,
+      start_date: document.getElementById("faculty-assignment-start").value || null,
+      end_date: document.getElementById("faculty-assignment-end").value || null,
+      notes: document.getElementById("faculty-assignment-notes").value.trim() || null,
+      is_active: true,
+      created_by: currentUser.id
+    };
+
+    if (!payload.faculty_id || !payload.community_id) {
+      setMessage("faculty-assignment-message", "Select both a faculty member and community.", "error");
+      return;
+    }
+
+    setMessage("faculty-assignment-message", "Assigning faculty…");
+    const { error } = await client.from("faculty_community_assignments").insert(payload);
+    if (error) {
+      setMessage("faculty-assignment-message", error.message, "error");
+      return;
+    }
+
+    setMessage("faculty-assignment-message", "Faculty assignment created.", "success");
+    document.getElementById("faculty-assignment-form").reset();
+    document.getElementById("faculty-assignment-label").value = "Preceptor";
+    await loadFacultyAssignments();
+  }
+
+  async function endFacultyAssignment(id) {
+    const { error } = await client
+      .from("faculty_community_assignments")
+      .update({ is_active: false, end_date: new Date().toISOString().slice(0,10) })
+      .eq("id", id);
+    if (error) {
+      setMessage("faculty-assignment-message", error.message, "error");
+      return;
+    }
+    setMessage("faculty-assignment-message", "Faculty assignment ended.", "success");
+    await loadFacultyAssignments();
   }
 
   function populateRotationUsers() {

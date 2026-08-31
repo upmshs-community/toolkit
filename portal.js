@@ -207,7 +207,7 @@
     const form = document.getElementById("portal-handover-form");
     if (!note || !form) return;
 
-    const elevated = ["admin", "coordinator", "faculty", "preceptor"].includes(currentProfile.role);
+    const elevated = ["admin", "coordinator", "faculty"].includes(currentProfile.role);
     const canSubmit = elevated || !!currentRotation;
 
     if (canSubmit && projects.length) {
@@ -327,7 +327,7 @@
       `)
       .order("created_at", { ascending: false });
 
-    const elevated = ["admin", "coordinator", "faculty", "preceptor"].includes(currentProfile.role);
+    const elevated = ["admin", "coordinator", "faculty"].includes(currentProfile.role);
     if (!elevated && currentRotation?.community_id) {
       query = query.eq("community_id", currentRotation.community_id);
     }
@@ -358,7 +358,7 @@
       .order("updated_at", { ascending: false })
       .limit(8);
 
-    const elevated = ["admin", "coordinator", "faculty", "preceptor"].includes(currentProfile.role);
+    const elevated = ["admin", "coordinator", "faculty"].includes(currentProfile.role);
     if (!elevated && currentRotation?.community_id) {
       query = query.eq("projects.community_id", currentRotation.community_id);
     }
@@ -528,8 +528,11 @@
     const adminLink = document.getElementById("admin-link");
     if (adminLink && ["admin", "coordinator"].includes(role)) adminLink.hidden = false;
 
+    const facultyLink = document.getElementById("faculty-link");
+    if (facultyLink && role === "faculty") facultyLink.hidden = false;
+
     const reviewLink = document.getElementById("review-link");
-    if (reviewLink && ["admin", "coordinator", "faculty", "preceptor"].includes(role)) reviewLink.hidden = false;
+    if (reviewLink && ["admin", "coordinator", "faculty"].includes(role)) reviewLink.hidden = false;
 
     const knowledgeLink = document.getElementById("knowledge-link");
     if (knowledgeLink && ["admin", "coordinator", "faculty"].includes(role)) knowledgeLink.hidden = false;

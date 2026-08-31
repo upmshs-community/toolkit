@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Faculty Workspace | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body toolkit-scroll-page faculty-workspace-page">
+  <div id="faculty-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Faculty Workspace…</strong>
+    <span>Loading your supervision and teaching workspace.</span>
+  </div>
+
+  <div id="faculty-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div><strong>Faculty Workspace</strong><span>Community Health Toolkit</span></div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy"><strong data-user-name>Faculty</strong><span data-user-email></span></div>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="knowledge-page-main faculty-workspace-main">
+      <section class="faculty-workspace-hero">
+        <div>
+          <span class="portal-kicker">Teaching · Supervision · Collaboration</span>
+          <h1>Good day, <span data-user-first-name>Faculty</span>!</h1>
+          <p>
+            Your faculty account covers community preceptorship, academic review, and learning-resource contribution.
+            Preceptor is treated as an assignment to a community—not a separate system role.
+          </p>
+        </div>
+        <div class="faculty-workspace-actions">
+          <a href="review.html" class="button button-maroon">Open Review Center</a>
+          <a href="knowledge-admin.html" class="button button-green">Manage Resources</a>
+        </div>
+      </section>
+
+      <section class="portal-stat-grid faculty-stat-grid">
+        <article><span>Active assignments</span><strong id="faculty-stat-assignments">—</strong><small>Community supervision roles</small></article>
+        <article><span>Pending documents</span><strong id="faculty-stat-documents">—</strong><small>Awaiting academic review</small></article>
+        <article><span>Submitted handovers</span><strong id="faculty-stat-handovers">—</strong><small>Awaiting review</small></article>
+        <article><span>My resources</span><strong id="faculty-stat-resources">—</strong><small>Resources contributed by you</small></article>
+      </section>
+
+      <div class="faculty-workspace-grid">
+        <section class="portal-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Supervision</span><h2>My Community Assignments</h2><p>Current preceptor or other faculty designations.</p></div></div>
+          <div id="faculty-assignment-cards" class="faculty-assignment-cards"></div>
+        </section>
+
+        <section class="portal-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Academic work</span><h2>Projects in My Sites</h2><p>Projects linked to communities you currently supervise.</p></div></div>
+          <div id="faculty-projects" class="faculty-project-list"></div>
+        </section>
+      </div>
+
+      <div class="faculty-workspace-grid">
+        <section class="portal-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Knowledge</span><h2>My Resource Contributions</h2><p>Modules, manuals, forms, and references you contributed.</p></div><a href="knowledge-admin.html" class="mini-action save">Add material</a></div>
+          <div id="faculty-resources" class="faculty-resource-list"></div>
+        </section>
+
+        <section class="portal-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Quick access</span><h2>Faculty Tools</h2></div></div>
+          <div class="quick-resource-list">
+            <a href="review.html"><strong>Review Center</strong><span>Review documents and handovers →</span></a>
+            <a href="knowledge-admin.html"><strong>Knowledge & Resources</strong><span>Add or publish teaching materials →</span></a>
+            <a href="library.html"><strong>Toolkit Library</strong><span>Browse active learning resources →</span></a>
+            <a href="directory.html"><strong>Health System Directory</strong><span>Review local health-system records →</span></a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="faculty.js"></script>
+</body>
+</html>

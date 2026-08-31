@@ -66,8 +66,8 @@
 
     currentProfile = profile;
 
-    if (profile.status !== "active" || !["admin","coordinator","faculty","preceptor"].includes(profile.role)) {
-      fatal("Reviewer access required", "This page is for active faculty, preceptors, coordinators, and admins.");
+    if (profile.status !== "active" || !["admin","coordinator","faculty"].includes(profile.role)) {
+      fatal("Reviewer access required", "This page is for active faculty, coordinators, and admins.");
       return;
     }
 
