@@ -7,6 +7,6 @@
   - Protect database tables using Row Level Security (RLS).
 */
 window.APP_CONFIG = {
-  SUPABASE_URL: "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE",
-  SUPABASE_ANON_KEY: "PASTE_YOUR_SUPABASE_ANON_KEY_HERE"
+  SUPABASE_URL: "https://dtjjffckycjtnsrnmfyi.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_h5xE3MdpMtE8b32ScVtpVA_x8CAifF_"
 };
