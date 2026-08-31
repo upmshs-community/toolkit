@@ -4601,3 +4601,262 @@ body.field-detail-open{overflow:hidden!important}.field-detail-backdrop{position
   .analytics-split-metrics { grid-template-columns:1fr; }
   .analytics-quality-grid { grid-template-columns:1fr; }
 }
+
+
+/* =========================================================
+   PHASE 7C.2 — VISUAL POLISH + CACHE-BUST FOR FIELD PAGES
+   ========================================================= */
+
+.field-map-main,
+.field-admin-main,
+.survey-analytics-main {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.field-map-welcome h1,
+.field-admin-welcome h1,
+.survey-analytics-main .portal-welcome h1 {
+  font-size: clamp(42px, 4vw, 62px);
+  line-height: .95;
+  letter-spacing: -.02em;
+}
+
+.field-map-welcome p,
+.field-admin-welcome p,
+.survey-analytics-main .portal-welcome p {
+  max-width: 980px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.field-map-privacy-note,
+.analytics-method-note,
+.field-map-filter-bar,
+.analytics-filter-bar,
+.field-admin-panel,
+.field-map-table-panel,
+.portal-panel.analytics-panel,
+.analytics-quality-panel {
+  box-shadow: 0 12px 28px rgba(43, 32, 21, 0.04);
+}
+
+.field-map-privacy-note strong,
+.analytics-method-note strong,
+.field-map-panel-heading h2,
+.field-admin-panel h2,
+.analytics-panel .portal-panel-heading h2,
+.analytics-quality-panel h2 {
+  font-size: 28px;
+}
+
+.field-map-privacy-note a,
+.button,
+.portal-signout,
+.mini-action {
+  font-size: 14px;
+}
+
+.field-map-filter-bar,
+.field-admin-filters,
+.analytics-filter-bar {
+  gap: 12px;
+}
+
+.field-map-filter-bar label,
+.field-admin-filters label,
+.analytics-filter-bar label {
+  gap: 6px;
+}
+
+.field-map-filter-bar label span,
+.field-admin-filters label>span,
+.analytics-filter-bar label span,
+.portal-stat-grid span,
+.field-map-stat-grid span,
+.analytics-kpi-grid span,
+.portal-label,
+.portal-kicker {
+  font-size: 10px;
+  letter-spacing: .1em;
+}
+
+.field-map-filter-bar select,
+.field-map-filter-bar input,
+.field-admin-filters input,
+.field-admin-filters select,
+.analytics-filter-bar select,
+.analytics-filter-bar input {
+  min-height: 46px;
+  padding: 10px 12px;
+  font-size: 15px;
+}
+
+.field-map-stat-grid,
+.field-admin-stat-grid,
+.analytics-kpi-grid {
+  gap: 14px;
+}
+
+.field-map-stat-grid article,
+.portal-stat-grid article,
+.analytics-kpi-grid article {
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.field-map-stat-grid strong,
+.portal-stat-grid strong,
+.analytics-kpi-grid strong {
+  font-size: 38px;
+  margin: 10px 0 4px;
+}
+
+.field-map-stat-grid small,
+.portal-stat-grid small,
+.analytics-kpi-grid small,
+.analytics-denominator,
+.analytics-panel-note,
+.field-map-method-note p,
+.field-table-footer,
+.analytics-method-note p {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.field-map-layout { gap: 16px; }
+.field-map-panel,
+.field-map-analytics-panel,
+.field-map-table-panel,
+.field-admin-panel,
+.analytics-panel,
+.analytics-quality-panel {
+  border-radius: 22px;
+}
+
+.field-map-panel-heading,
+.portal-panel-heading.field-admin-heading,
+.analytics-panel .portal-panel-heading {
+  padding: 18px 18px 14px;
+}
+
+.field-map-layer-toggles {
+  gap: 10px 16px;
+}
+.field-map-layer-toggles label {
+  font-size: 14px;
+  font-weight: 700;
+}
+.field-map-layer-toggles input { width: 18px; height: 18px; }
+
+.field-map-legend {
+  gap: 10px 18px;
+  padding: 14px 18px 18px;
+  font-size: 14px;
+}
+
+.map-status-bars,
+.map-barangay-analytics,
+.analytics-bars,
+.analytics-ranked-list,
+.analytics-quality-grid,
+.analytics-philhealth-summary,
+.analytics-split-metrics {
+  font-size: 14px;
+}
+
+.admin-table,
+.field-map-table,
+.field-submission-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.admin-table thead th,
+.field-map-table thead th,
+.field-submission-table thead th {
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 14px 14px;
+  background: #eae5db;
+}
+
+.admin-table tbody td,
+.field-map-table tbody td,
+.field-submission-table tbody td {
+  padding: 14px 14px;
+  vertical-align: top;
+  line-height: 1.45;
+}
+
+.field-submission-table td strong,
+.field-map-table td strong {
+  font-size: 15px;
+}
+
+.field-status-chip {
+  padding: 6px 10px;
+  font-size: 11px;
+  letter-spacing: .02em;
+}
+
+.field-gps-yes,
+.field-gps-no {
+  font-size: 13px;
+}
+
+.table-loading,
+.table-empty {
+  font-size: 14px;
+}
+
+.analytics-ranked-list article {
+  padding: 12px 4px;
+}
+
+.analytics-ranked-list strong,
+.map-barangay-analytics strong,
+.map-status-bars strong {
+  font-size: 15px;
+}
+
+.analytics-ranked-list b {
+  font-size: 24px;
+}
+
+.analytics-quality-grid article,
+.analytics-philhealth-summary > div,
+.analytics-split-metrics > div {
+  padding: 15px;
+}
+
+.analytics-quality-grid strong,
+.analytics-philhealth-summary strong,
+.analytics-split-metrics strong {
+  font-size: 30px;
+}
+
+@media (max-width: 900px) {
+  .field-map-welcome h1,
+  .field-admin-welcome h1,
+  .survey-analytics-main .portal-welcome h1 {
+    font-size: clamp(34px, 7vw, 48px);
+  }
+
+  .field-map-privacy-note strong,
+  .analytics-method-note strong,
+  .field-map-panel-heading h2,
+  .field-admin-panel h2,
+  .analytics-panel .portal-panel-heading h2,
+  .analytics-quality-panel h2 {
+    font-size: 24px;
+  }
+
+  .field-map-layer-toggles,
+  .field-map-legend {
+    font-size: 13px;
+  }
+}
