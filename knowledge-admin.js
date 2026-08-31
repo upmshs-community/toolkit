@@ -58,22 +58,98 @@
   }
 
   async function uploadFile(resourceId,file){
-    if(file.size>25*1024*1024)throw new Error("File exceeds the 25 MB resource limit.");
-    const path=`${resourceId}/${crypto.randomUUID()}-${clean(file.name)||"resource"}`;
-    const {error}=await client.storage.from("toolkit-resources").upload(path,file,{contentType:file.type||undefined,upsert:false});
-    if(error)throw error;
-    return path;
+    const MAX_BYTES = 25 * 1024 * 1024;
+    if(file.size > MAX_BYTES){
+      throw new Error(`File exceeds the 25 MB resource limit (${(file.size/1024/1024).toFixed(1)} MB selected).`);
+    }
+
+    // Confirm/refresh the browser auth token before hitting Storage.
+    const { data: sessionData, error: sessionError } = await client.auth.getSession();
+    if(sessionError) throw sessionError;
+    if(!sessionData?.session){
+      throw new Error("Your login session expired. Please sign in again.");
+    }
+
+    const path = `${resourceId}/${crypto.randomUUID()}-${clean(file.name)||"resource"}`;
+    const contentType = file.type || "application/octet-stream";
+
+    // ArrayBuffer is more reliable than forwarding the Android-picked File
+    // object directly, especially with document-provider backed files.
+    let body;
+    try{
+      body = await file.arrayBuffer();
+    }catch(err){
+      throw new Error(`The selected file could not be read by the browser: ${err.message || err}`);
+    }
+
+    async function attemptUpload(){
+      const result = await client.storage
+        .from("toolkit-resources")
+        .upload(path, body, {
+          contentType,
+          cacheControl: "3600",
+          upsert: false
+        });
+
+      if(result.error) throw result.error;
+      return result.data;
+    }
+
+    try{
+      await attemptUpload();
+      return path;
+    }catch(firstError){
+      console.error("[Toolkit Storage] first upload attempt failed", firstError);
+
+      // A stale access token can make a Storage request fail separately from
+      // PostgREST reads. Refresh once, then retry.
+      try{
+        await client.auth.refreshSession();
+        await attemptUpload();
+        return path;
+      }catch(secondError){
+        console.error("[Toolkit Storage] retry failed", secondError);
+
+        const message = secondError?.message || firstError?.message || "Unknown Storage error";
+        const status = secondError?.statusCode || secondError?.status || firstError?.statusCode || firstError?.status;
+
+        if(/failed to fetch/i.test(message)){
+          throw new Error(
+            "Storage upload could not reach Supabase. Check that the `toolkit-resources` bucket exists, then try again on a stable connection. " +
+            "If this keeps happening, run the included Storage repair SQL."
+          );
+        }
+
+        if(/row-level security|unauthorized|permission/i.test(message)){
+          throw new Error(
+            `Storage permission denied${status ? ` (${status})` : ""}. Run the included Storage repair SQL and confirm your profile is Active with admin/coordinator/faculty role.`
+          );
+        }
+
+        if(/bucket/i.test(message) && /not found|does not exist/i.test(message)){
+          throw new Error("The `toolkit-resources` Storage bucket does not exist. Run the included Storage repair SQL.");
+        }
+
+        throw secondError || firstError;
+      }
+    }
   }
 
   async function attachSeededFile(e){
     const file=e.target.files?.[0];if(!file||!selectedResourceId)return;
     try{
-      msg("resource-admin-message","Uploading resource…");
+      msg("resource-admin-message",`Reading and uploading ${file.name} (${(file.size/1024/1024).toFixed(1)} MB)…`);
       const path=await uploadFile(selectedResourceId,file);
       const {error}=await client.from("toolkit_resources").update({storage_path:path,file_name:file.name,status:"active"}).eq("id",selectedResourceId);
       if(error){await client.storage.from("toolkit-resources").remove([path]);throw error;}
       msg("resource-admin-message","Resource attached and published.","success");selectedResourceId=null;await loadResources();
-    }catch(err){msg("resource-admin-message",err.message,"error");}
+    }catch(err){
+      console.error("[Toolkit Resource Upload]", err);
+      msg("resource-admin-message", err?.message || "Resource upload failed.", "error");
+    }finally{
+      selectedResourceId = null;
+      e.target.value = "";
+    }
   }
 
   async function createResource(e){
