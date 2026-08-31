@@ -1,5 +1,7 @@
 
 (() => {
+  // Lets portal.html distinguish a JS loading problem from an auth/data problem.
+  window.__TOOLKIT_PORTAL_JS_LOADED__ = true;
   const cfg = window.APP_CONFIG || {};
   const url = cfg.SUPABASE_URL || "";
   const key = cfg.SUPABASE_ANON_KEY || "";
@@ -13,6 +15,33 @@
   let communities = [];
   let projects = [];
   let handovers = [];
+
+  function withTimeout(promise, milliseconds, label) {
+    let timer;
+    const timeout = new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        reject(new Error(`${label} timed out after ${Math.round(milliseconds / 1000)} seconds.`));
+      }, milliseconds);
+    });
+
+    return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+  }
+
+  function showBootstrapError(title, error, detail = "") {
+    console.error("[Toolkit Portal]", title, error);
+    setLoadingCard({
+      title,
+      text: error?.message || String(error || "Unknown error"),
+      detail: detail || "Refresh once. If this continues, verify supabase-config.js and the browser console.",
+      action: `
+        <div class="pending-actions">
+          <button id="portal-retry" class="button button-green" type="button">Retry</button>
+          <a class="button button-outline-maroon" href="index.html">Back to Login</a>
+        </div>
+      `
+    });
+    document.getElementById("portal-retry")?.addEventListener("click", () => window.location.reload());
+  }
 
   function configMissing() {
     return !url || !key || url.includes("PASTE_YOUR") || key.includes("PASTE_YOUR");
@@ -354,148 +383,203 @@
   }
 
   async function start() {
-    if (configMissing() || !window.supabase?.createClient) {
-      if (loading) {
-        loading.innerHTML = `
-          <strong>Supabase setup required.</strong>
-          <span>Edit <code>supabase-config.js</code> and add your Supabase project URL and publishable/anon key.</span>
-          <a href="index.html">Return to login</a>
-        `;
-        loading.classList.add("portal-error");
+    try {
+      if (configMissing() || !window.supabase?.createClient) {
+        if (loading) {
+          loading.innerHTML = `
+            <img src="assets/shs-logo.png" alt="UPM-SHS">
+            <strong>Supabase setup required.</strong>
+            <span>Check <code>supabase-config.js</code> and make sure the Supabase browser client loaded.</span>
+            <a href="index.html">Return to login</a>
+          `;
+          loading.classList.add("portal-error");
+        }
+        return;
       }
-      return;
-    }
 
-    client = window.supabase.createClient(url, key);
-    const { data: userData, error: userError } = await client.auth.getUser();
-    const user = userData?.user;
+      client = window.supabase.createClient(url, key);
 
-    if (userError || !user) {
-      window.location.replace("index.html");
-      return;
-    }
+      // Use the browser's persisted session first.
+      // This avoids blocking the whole portal on auth.getUser() after a successful login.
+      const sessionResult = await withTimeout(
+        client.auth.getSession(),
+        8000,
+        "Supabase session check"
+      );
 
-    currentUser = user;
+      const session = sessionResult?.data?.session;
+      const sessionError = sessionResult?.error;
 
-    const { data: profile, error: profileError } = await client
-      .from("profiles")
-      .select("id,email,full_name,student_number,year_level,batch,role,status")
-      .eq("id", user.id)
-      .single();
+      if (sessionError) throw sessionError;
 
-    if (profileError || !profile) {
-      setLoadingCard({
-        title: "Profile setup incomplete",
-        text: "Your authenticated account exists, but the Toolkit profile could not be loaded.",
-        detail: "Ask the program coordinator to verify the profiles table.",
-        action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
+      if (!session?.user) {
+        setLoadingCard({
+          title: "Your login session was not found",
+          text: "Please sign in again.",
+          detail: "This can happen after changing Supabase projects or clearing browser storage.",
+          action: `<a class="button button-maroon" href="index.html">Go to Login</a>`
+        });
+        return;
+      }
+
+      const user = session.user;
+      currentUser = user;
+
+      // Load the Toolkit profile with a timeout so the UI never spins forever.
+      const profileResult = await withTimeout(
+        client
+          .from("profiles")
+          .select("id,email,full_name,student_number,year_level,batch,role,status")
+          .eq("id", user.id)
+          .maybeSingle(),
+        10000,
+        "Toolkit profile lookup"
+      );
+
+      const profile = profileResult?.data;
+      const profileError = profileResult?.error;
+
+      if (profileError) {
+        showBootstrapError(
+          "Profile lookup failed",
+          profileError,
+          "Your Supabase login worked, but the profiles table could not be read. Check the Phase 1 schema/RLS."
+        );
+        return;
+      }
+
+      if (!profile) {
+        setLoadingCard({
+          title: "Profile setup incomplete",
+          text: "Your authenticated account exists, but there is no matching row in public.profiles.",
+          detail: `Auth user: ${user.email || user.id}`,
+          action: `
+            <div class="pending-actions">
+              <button id="status-signout" class="button button-maroon" type="button">Sign out</button>
+            </div>
+          `
+        });
+        document.getElementById("status-signout")?.addEventListener("click", signOut);
+        return;
+      }
+
+      currentProfile = profile;
+
+      if (profile.status === "pending") {
+        setLoadingCard({
+          title: "Registration received",
+          text: "Your account is verified but is still Pending Approval.",
+          detail: `${profile.full_name || "Toolkit user"} · ${profile.email || user.email || ""}${profile.batch ? ` · ${profile.batch}` : ""}`,
+          action: `
+            <div class="pending-actions">
+              <a class="button button-green" href="index.html">Return to public site</a>
+              <button id="status-signout" class="button button-outline-maroon" type="button">Sign out</button>
+            </div>
+          `
+        });
+        document.getElementById("status-signout")?.addEventListener("click", signOut);
+        return;
+      }
+
+      if (profile.status === "suspended") {
+        setLoadingCard({
+          title: "Account suspended",
+          text: "Your Toolkit access has been temporarily suspended.",
+          detail: "Please contact the program coordinator if you believe this is an error.",
+          action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
+        });
+        document.getElementById("status-signout")?.addEventListener("click", signOut);
+        return;
+      }
+
+      if (profile.status === "archived") {
+        setLoadingCard({
+          title: "Account archived",
+          text: "This Toolkit account is archived and no longer has active access.",
+          action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
+        });
+        document.getElementById("status-signout")?.addEventListener("click", signOut);
+        return;
+      }
+
+      if (profile.status !== "active") {
+        setLoadingCard({
+          title: "Access unavailable",
+          text: `Your account status is “${profile.status || "unknown"}”.`,
+          detail: "The account must be Active before the Toolkit dashboard can open.",
+          action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
+        });
+        document.getElementById("status-signout")?.addEventListener("click", signOut);
+        return;
+      }
+
+      const fullName = profile.full_name || user.email || "Authorized user";
+      const email = profile.email || user.email || "";
+      const role = profile.role || "student";
+
+      document.querySelectorAll("[data-user-name]").forEach(el => el.textContent = fullName);
+      document.querySelectorAll("[data-user-email]").forEach(el => el.textContent = email);
+      document.querySelectorAll("[data-user-role]").forEach(el => el.textContent = role.charAt(0).toUpperCase() + role.slice(1));
+      document.querySelectorAll("[data-user-batch]").forEach(el => el.textContent = profile.batch || "—");
+      document.querySelectorAll("[data-user-year]").forEach(el => el.textContent = profile.year_level || "—");
+
+      const initials = fullName
+        .split(/[\s._-]+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part.charAt(0).toUpperCase())
+        .join("") || "UP";
+      document.querySelectorAll("[data-user-initials]").forEach(el => el.textContent = initials);
+
+      const adminLink = document.getElementById("admin-link");
+      if (adminLink && ["admin","coordinator"].includes(role)) adminLink.hidden = false;
+
+      const reviewLink = document.getElementById("review-link");
+      if (reviewLink && ["admin","coordinator","faculty","preceptor"].includes(role)) reviewLink.hidden = false;
+
+      const knowledgeLink = document.getElementById("knowledge-link");
+      if (knowledgeLink && ["admin","coordinator","faculty"].includes(role)) knowledgeLink.hidden = false;
+
+      document.querySelectorAll("[data-sign-out]").forEach(button => {
+        button.addEventListener("click", async () => {
+          button.disabled = true;
+          button.textContent = "Signing out…";
+          await signOut();
+        });
       });
-      document.getElementById("status-signout")?.addEventListener("click", signOut);
-      return;
-    }
 
-    currentProfile = profile;
+      document.getElementById("portal-handover-form")?.addEventListener("submit", submitPortalHandover);
 
-    if (profile.status === "pending") {
-      setLoadingCard({
-        title: "Registration received",
-        text: "Your account is verified but is still Pending Approval.",
-        detail: `${profile.full_name} · ${profile.email}${profile.batch ? ` · ${profile.batch}` : ""}`,
-        action: `
-          <div class="pending-actions">
-            <a class="button button-green" href="index.html">Return to public site</a>
-            <button id="status-signout" class="button button-outline-maroon" type="button">Sign out</button>
-          </div>
-        `
+      // Show the dashboard immediately once auth + profile are valid.
+      if (loading) loading.hidden = true;
+      if (app) app.hidden = false;
+
+      // The rest of the dashboard data should not be allowed to block opening.
+      const settled = await Promise.allSettled([
+        loadCurrentRotation(user.id),
+        loadCommunities(),
+        loadResourceCount()
+      ]);
+
+      settled.forEach(result => {
+        if (result.status === "rejected") console.warn("[Toolkit Portal] non-blocking dashboard load:", result.reason);
       });
-      document.getElementById("status-signout")?.addEventListener("click", signOut);
-      return;
+
+      try { await loadProjects(); } catch (error) { console.warn("[Toolkit Portal] projects:", error); }
+      try { await loadHandovers(); } catch (error) { console.warn("[Toolkit Portal] handovers:", error); }
+
+      // Optional server verification AFTER the UI is already open.
+      client.auth.getUser().then(({ error }) => {
+        if (error) console.warn("[Toolkit Portal] background auth verification:", error.message);
+      }).catch(() => {});
+
+    } catch (error) {
+      showBootstrapError(
+        "The Toolkit could not finish opening",
+        error,
+        "The page is no longer allowed to stay on an infinite loading screen."
+      );
     }
-
-    if (profile.status === "suspended") {
-      setLoadingCard({
-        title: "Account suspended",
-        text: "Your Toolkit access has been temporarily suspended.",
-        detail: "Please contact the program coordinator if you believe this is an error.",
-        action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
-      });
-      document.getElementById("status-signout")?.addEventListener("click", signOut);
-      return;
-    }
-
-    if (profile.status === "archived") {
-      setLoadingCard({
-        title: "Account archived",
-        text: "This Toolkit account is archived and no longer has active access.",
-        action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
-      });
-      document.getElementById("status-signout")?.addEventListener("click", signOut);
-      return;
-    }
-
-    if (profile.status !== "active") {
-      setLoadingCard({
-        title: "Access unavailable",
-        text: "Your account does not currently have active Toolkit access.",
-        action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
-      });
-      document.getElementById("status-signout")?.addEventListener("click", signOut);
-      return;
-    }
-
-    const fullName = profile.full_name || user.email || "Authorized user";
-    const email = profile.email || user.email || "";
-    const role = profile.role || "student";
-
-    document.querySelectorAll("[data-user-name]").forEach(el => el.textContent = fullName);
-    document.querySelectorAll("[data-user-email]").forEach(el => el.textContent = email);
-    document.querySelectorAll("[data-user-role]").forEach(el => el.textContent = role.charAt(0).toUpperCase() + role.slice(1));
-    document.querySelectorAll("[data-user-batch]").forEach(el => el.textContent = profile.batch || "—");
-    document.querySelectorAll("[data-user-year]").forEach(el => el.textContent = profile.year_level || "—");
-
-    const initials = fullName
-      .split(/[\s._-]+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map(part => part.charAt(0).toUpperCase())
-      .join("") || "UP";
-    document.querySelectorAll("[data-user-initials]").forEach(el => el.textContent = initials);
-
-    const adminLink = document.getElementById("admin-link");
-    if (adminLink && ["admin","coordinator"].includes(role)) {
-      adminLink.hidden = false;
-    }
-
-    const reviewLink = document.getElementById("review-link");
-    if (reviewLink && ["admin","coordinator","faculty","preceptor"].includes(role)) {
-      reviewLink.hidden = false;
-    }
-
-    const knowledgeLink = document.getElementById("knowledge-link");
-    if (knowledgeLink && ["admin","coordinator","faculty"].includes(role)) {
-      knowledgeLink.hidden = false;
-    }
-
-    document.querySelectorAll("[data-sign-out]").forEach(button => {
-      button.addEventListener("click", async () => {
-        button.disabled = true;
-        button.textContent = "Signing out…";
-        await signOut();
-      });
-    });
-
-    document.getElementById("portal-handover-form")?.addEventListener("submit", submitPortalHandover);
-
-    if (loading) loading.hidden = true;
-    if (app) app.hidden = false;
-
-    await loadCurrentRotation(user.id);
-    await Promise.all([
-      loadCommunities(),
-      loadResourceCount()
-    ]);
-    await loadProjects();
-    await loadHandovers();
   }
 
   start();

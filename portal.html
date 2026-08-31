@@ -223,6 +223,23 @@
     </div>
   </div>
 
+
+  <script>
+    // If portal.js is missing/404/cached incorrectly, do not leave the user
+    // staring at an infinite static loading screen.
+    window.setTimeout(function () {
+      if (window.__TOOLKIT_PORTAL_JS_LOADED__) return;
+      var loading = document.getElementById("portal-loading");
+      if (!loading) return;
+      loading.innerHTML =
+        '<img src="assets/shs-logo.png" alt="UPM-SHS">' +
+        '<strong>Portal script did not load</strong>' +
+        '<span>portal.js may be missing, cached, or not yet deployed by GitHub Pages.</span>' +
+        '<small class="portal-status-detail">Replace portal.html and portal.js together, then hard-refresh the page.</small>' +
+        '<a class="button button-maroon" href="portal.html?reload=' + Date.now() + '">Reload without old cache</a>';
+    }, 6000);
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="portal.js"></script>
