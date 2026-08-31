@@ -169,6 +169,29 @@
     }
   }
 
+  async function loadResourceCount() {
+    const countEl = document.getElementById("dashboard-resource-count");
+    const detailEl = document.getElementById("dashboard-resource-detail");
+
+    const { count, error } = await client
+      .from("toolkit_resources")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "active");
+
+    if (error) {
+      if (countEl) countEl.textContent = "—";
+      if (detailEl) detailEl.textContent = "Approved resource count unavailable.";
+      return;
+    }
+
+    if (countEl) countEl.textContent = String(count || 0);
+    if (detailEl) {
+      detailEl.textContent = count
+        ? `${count} approved resource${count === 1 ? "" : "s"} available in the Library.`
+        : "Resources are being prepared for publication.";
+    }
+  }
+
   async function loadCommunities() {
     const { data, error } = await client
       .from("communities")
@@ -467,7 +490,10 @@
     if (app) app.hidden = false;
 
     await loadCurrentRotation(user.id);
-    await loadCommunities();
+    await Promise.all([
+      loadCommunities(),
+      loadResourceCount()
+    ]);
     await loadProjects();
     await loadHandovers();
   }
