@@ -1796,3 +1796,39 @@ body.portal-is-loading .portal-app {
     overflow: visible;
   }
 }
+
+
+/* =========================================================
+   TABLET SCROLL SCOPE FIX
+   Only portal.html uses the fixed dashboard shell.
+   Standalone Toolkit pages must scroll normally on tablet/desktop.
+   ========================================================= */
+@media (min-width: 641px) {
+  body.portal-body:not(.portal-dashboard-page):not(.portal-is-loading) {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  body.portal-body:not(.portal-dashboard-page):not(.portal-is-loading) > [id$="-app"] {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+  }
+
+  /* Standalone page headers remain visible naturally in document flow. */
+  body.portal-body:not(.portal-dashboard-page) .portal-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    min-height: 84px;
+  }
+}
+
+/* Main dashboard alone keeps the app-like fixed shell. */
+@media (min-width: 641px) {
+  body.portal-dashboard-page.portal-is-ready {
+    height: 100dvh !important;
+    overflow: hidden !important;
+  }
+}
