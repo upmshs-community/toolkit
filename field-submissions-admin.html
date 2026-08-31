@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Field Survey Manager | Community Health Toolkit</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page field-survey-admin-page portal-is-loading">
+  <div id="field-admin-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Field Survey Manager…</strong>
+    <span>Checking access and loading synced submissions.</span>
+  </div>
+
+  <div id="field-admin-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="admin.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Toolkit Administration</strong>
+          <span>Field Survey Manager</span>
+        </div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Administrator</strong>
+          <span data-user-email></span>
+        </div>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell">
+      <aside class="portal-sidebar admin-sidebar">
+        <div class="portal-sidebar-title">Administration</div>
+        <nav>
+          <a href="admin.html#users">User Management</a>
+          <a href="admin.html#communities">Communities</a>
+          <a href="admin.html#rotations">Rotations</a>
+          <a href="admin.html#projects">Projects</a>
+          <a href="admin.html#handovers">Handovers</a>
+          <a class="active" href="field-submissions-admin.html">Field Surveys</a>
+        </nav>
+        <div class="sidebar-note">
+          <strong>Restricted field data</strong>
+          <span>Household-level responses, GPS, and reference photos are shown only to authorized Toolkit managers.</span>
+        </div>
+      </aside>
+
+      <main class="portal-main admin-main field-admin-main">
+        <section class="portal-welcome admin-welcome field-admin-welcome">
+          <span class="portal-kicker">Field Forms Administration</span>
+          <h1>Household Survey Manager</h1>
+          <p>Review synced household surveys, monitor completion, inspect location data, and export authorized records.</p>
+        </section>
+
+        <section class="portal-stat-grid field-admin-stat-grid">
+          <article><span>Total synced</span><strong id="field-stat-total">—</strong><small>Server records</small></article>
+          <article><span>Draft</span><strong id="field-stat-draft">—</strong><small>Still in progress</small></article>
+          <article><span>Completed</span><strong id="field-stat-completed">—</strong><small>Ready for review</small></article>
+          <article><span>Reviewed</span><strong id="field-stat-reviewed">—</strong><small>Checked by faculty/admin</small></article>
+          <article><span>With GPS</span><strong id="field-stat-gps">—</strong><small>Location captured</small></article>
+        </section>
+
+        <section class="portal-panel field-admin-panel">
+          <div class="portal-panel-heading field-admin-heading">
+            <div>
+              <span class="portal-label">Synced database</span>
+              <h2>Household Surveys</h2>
+            </div>
+            <div class="field-admin-heading-actions">
+              <button id="refresh-submissions" class="button button-outline-maroon" type="button">Refresh</button>
+              <button id="export-submissions" class="button button-maroon" type="button">Export CSV</button>
+            </div>
+          </div>
+
+          <div class="field-admin-filters">
+            <label class="field-filter-search"><span>Search</span><input id="field-search" type="search" placeholder="Household #, barangay, interviewer…"></label>
+            <label><span>Community</span><select id="field-community-filter"><option value="">All communities</option></select></label>
+            <label><span>Barangay</span><select id="field-barangay-filter"><option value="">All barangays</option></select></label>
+            <label><span>Status</span><select id="field-status-filter"><option value="">All statuses</option><option value="draft">Draft</option><option value="completed">Completed</option><option value="reviewed">Reviewed</option><option value="archived">Archived</option></select></label>
+            <label><span>From</span><input id="field-date-from" type="date"></label>
+            <label><span>To</span><input id="field-date-to" type="date"></label>
+            <button id="clear-field-filters" class="mini-action field-clear-filters" type="button">Clear</button>
+          </div>
+
+          <div id="field-admin-message" class="admin-message" aria-live="polite"></div>
+
+          <div class="admin-table-wrap field-submission-table-wrap">
+            <table class="admin-table field-submission-table">
+              <thead><tr><th>Household</th><th>Community / Barangay</th><th>Interview</th><th>Enumerator</th><th>Status</th><th>GPS</th><th>Synced</th><th></th></tr></thead>
+              <tbody id="field-submissions-body"><tr><td colspan="8" class="table-loading">Loading household surveys…</td></tr></tbody>
+            </table>
+          </div>
+          <div class="field-table-footer"><span id="field-result-count">0 records</span></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="field-detail-backdrop" class="field-detail-backdrop" hidden></div>
+  <aside id="field-detail-drawer" class="field-detail-drawer" aria-hidden="true">
+    <header class="field-detail-header">
+      <div><span class="portal-label">Household survey</span><h2 id="detail-household-title">Submission</h2><p id="detail-subtitle"></p></div>
+      <button id="close-field-detail" class="field-detail-close" type="button" aria-label="Close">×</button>
+    </header>
+
+    <div class="field-detail-body">
+      <section class="field-detail-summary-grid" id="detail-summary-grid"></section>
+
+      <section class="field-detail-section" id="detail-map-section" hidden>
+        <div class="field-detail-section-heading"><h3>Household Location</h3><span id="detail-gps-copy"></span></div>
+        <div id="field-detail-map" class="field-detail-map"></div>
+      </section>
+
+      <section class="field-detail-section" id="detail-photo-section" hidden>
+        <div class="field-detail-section-heading"><h3>Reference Photo</h3><span>Restricted media</span></div>
+        <div id="detail-photo" class="field-detail-photo"></div>
+      </section>
+
+      <section class="field-detail-section">
+        <div class="field-detail-section-heading"><h3>Survey Responses</h3><span>Current synced version</span></div>
+        <div id="detail-responses" class="field-response-sections"></div>
+      </section>
+    </div>
+
+    <footer class="field-detail-footer">
+      <span id="detail-action-message"></span>
+      <div>
+        <button id="archive-submission" class="button button-outline-maroon" type="button">Archive</button>
+        <button id="mark-reviewed" class="button button-green" type="button">Mark Reviewed</button>
+      </div>
+    </footer>
+  </aside>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="field-submissions-admin.js"></script>
+</body>
+</html>
