@@ -6,8 +6,9 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Community Profile | Community Health Toolkit</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
-<body class="portal-body toolkit-scroll-page">
+<body class="portal-body toolkit-scroll-page community-phase6-page portal-is-loading">
   <div id="community-loading" class="portal-loading">
     <img src="assets/shs-logo.png" alt="UPM-SHS">
     <strong>Opening community profile…</strong>
@@ -30,50 +31,55 @@
       </div>
     </header>
 
-    <main class="knowledge-page-main">
-      <section class="community-profile-hero">
-        <span id="community-province" class="portal-kicker">Community learning site</span>
-        <h1 id="community-name">Loading…</h1>
-        <p id="community-overview">Please wait.</p>
-        <div class="community-verify-line">
-          <span>Last verified: <strong id="community-verified">Not recorded</strong></span>
-          <span id="community-source"></span>
+    <main class="knowledge-page-main community-phase6-main">
+      <section id="community-hero" class="community-profile-hero community-phase6-hero">
+        <div class="community-phase6-hero-inner">
+          <div class="community-phase6-breadcrumbs"><a href="portal.html#communities">Communities</a> <span>›</span> <strong id="community-name-breadcrumb">Loading…</strong></div>
+          <span id="community-province" class="portal-kicker">Community learning site</span>
+          <h1 id="community-name">Loading…</h1>
+          <p id="community-overview">Please wait.</p>
+          <div class="community-phase6-meta-row">
+            <span id="community-stat-barangays" class="community-meta-pill" hidden>Barangays: —</span>
+            <span id="community-stat-population" class="community-meta-pill" hidden>Population: —</span>
+            <span id="community-stat-rhu" class="community-meta-pill" hidden>RHU: —</span>
+            <span id="community-stat-region" class="community-meta-pill" hidden>Region: —</span>
+          </div>
+          <div class="community-verify-line"><span>Last verified: <strong id="community-verified">Not recorded</strong></span><span id="community-source"></span></div>
         </div>
       </section>
 
-      <div class="community-profile-grid">
-        <section class="portal-panel">
-          <div class="portal-panel-heading"><div><span class="portal-label">Catchment</span><h2>Community Context</h2></div></div>
-          <p id="community-catchment" class="project-long-text">No notes yet.</p>
+      <div class="community-phase6-top-grid">
+        <section class="portal-panel phase6-map-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Location</span><h2>Community Map</h2></div></div>
+          <div id="community-map" class="community-live-map"></div>
+          <p id="community-map-note" class="community-map-note">Map will appear when coordinates are available.</p>
         </section>
+
         <section class="portal-panel">
-          <div class="portal-panel-heading"><div><span class="portal-label">Health system</span><h2>Local Health System</h2></div></div>
-          <p id="community-health-system" class="project-long-text">No notes yet.</p>
-        </section>
-        <section class="portal-panel">
-          <div class="portal-panel-heading"><div><span class="portal-label">Priorities</span><h2>Priority Health Issues</h2></div></div>
-          <p id="community-priorities" class="project-long-text">No priority issues recorded.</p>
-        </section>
-        <section class="portal-panel">
-          <div class="portal-panel-heading"><div><span class="portal-label">Navigation</span><h2>Referral & Logistics</h2></div></div>
-          <p id="community-referral" class="project-long-text">No referral notes yet.</p>
-          <p id="community-logistics" class="project-long-text community-secondary-text"></p>
+          <div class="portal-panel-heading"><div><span class="portal-label">Overview</span><h2>Key Information</h2></div></div>
+          <div class="phase6-keyinfo-grid">
+            <article><span>RHU / Facility</span><strong id="community-rhu-name">—</strong></article>
+            <article><span>Region</span><strong id="community-region">—</strong></article>
+            <article><span>Barangays</span><strong id="community-barangays">—</strong></article>
+            <article><span>Population</span><strong id="community-population">—</strong></article>
+          </div>
+          <p id="community-catchment" class="project-long-text phase6-key-context">No notes yet.</p>
         </section>
       </div>
 
-      <section class="portal-panel">
-        <div class="portal-panel-heading"><div><span class="portal-label">Directory</span><h2>Local Health Leadership</h2></div></div>
-        <div id="community-directory" class="directory-list compact-directory"></div>
-      </section>
+      <div class="community-profile-grid">
+        <section class="portal-panel"><div class="portal-panel-heading"><div><span class="portal-label">Health system</span><h2>Local Health System</h2></div></div><p id="community-health-system" class="project-long-text">No notes yet.</p></section>
+        <section class="portal-panel"><div class="portal-panel-heading"><div><span class="portal-label">Priorities</span><h2>Priority Health Issues</h2></div></div><p id="community-priorities" class="project-long-text">No priority issues recorded.</p></section>
+        <section class="portal-panel"><div class="portal-panel-heading"><div><span class="portal-label">Navigation</span><h2>Referral &amp; Logistics</h2></div></div><p id="community-referral" class="project-long-text">No referral notes yet.</p><p id="community-logistics" class="project-long-text community-secondary-text"></p></section>
+      </div>
 
-      <section class="portal-panel">
-        <div class="portal-panel-heading"><div><span class="portal-label">Continuity</span><h2>Community Projects</h2></div></div>
-        <div id="community-projects" class="portal-project-grid"></div>
-      </section>
+      <section class="portal-panel"><div class="portal-panel-heading"><div><span class="portal-label">Directory</span><h2>Local Health Leadership</h2></div></div><div id="community-directory" class="directory-list compact-directory"></div></section>
+      <section class="portal-panel"><div class="portal-panel-heading"><div><span class="portal-label">Continuity</span><h2>Community Projects</h2></div></div><div id="community-projects" class="portal-project-grid"></div></section>
     </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="supabase-config.js"></script>
   <script src="community.js"></script>
 </body>

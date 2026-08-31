@@ -43,36 +43,56 @@
 
     <div class="portal-shell">
       <aside class="portal-sidebar">
-        <div class="portal-sidebar-title">Toolkit</div>
+        <div class="portal-sidebar-brand-block">
+          <img src="assets/shs-logo.png" alt="UPM-SHS seal">
+          <div>
+            <strong>Community Health Toolkit</strong>
+            <span>Community-Based Medical Education Resource Portal</span>
+          </div>
+        </div>
+
         <nav>
-          <a class="active" href="#dashboard">Dashboard</a>
-          <a href="#rotation">My Rotation</a>
+          <a class="active" href="#dashboard">Home</a>
           <a href="#communities">Communities</a>
           <a href="#projects">Projects</a>
+          <a href="library.html">Manual &amp; Modules</a>
+          <a href="library.html">Forms &amp; Templates</a>
+          <a href="directory.html">Resources</a>
+          <a href="#rotation">My Rotation</a>
           <a href="#handover">Handover</a>
-          <a href="library.html">Library</a>
-          <a href="directory.html">Directory</a>
           <a href="search.html">Search</a>
-          <a href="#resources">Resources</a>
         </nav>
 
-        <div class="sidebar-note">
-          <strong>Toolkit Online</strong>
-          <span>Community learning, projects, handovers, resources, and directory are connected.</span>
+        <div class="sidebar-note phase6-sidebar-note">
+          <strong>Honor. Excellence. Service.</strong>
+          <span>Continuing community learning, collaboration, and project continuity across learner batches.</span>
         </div>
       </aside>
 
-      <main class="portal-main" id="dashboard">
-        <section class="portal-welcome">
-          <span class="portal-kicker">Community workspace</span>
-          <h1>Welcome, <span data-user-name>authorized user</span>.</h1>
-          <p>
-            Continue your community work, review previous projects, access learning resources,
-            and prepare useful records for the next batch.
-          </p>
+      <main class="portal-main phase6-dashboard" id="dashboard">
+        <section class="phase6-hero">
+          <div class="phase6-hero-main">
+            <span class="portal-kicker">Community workspace</span>
+            <h1>Good day, <span data-user-name>authorized user</span>!</h1>
+            <p>
+              Welcome to the UPM-SHS Community Health Toolkit. Review your assigned community,
+              access learning resources, revisit previous projects, and prepare continuity outputs for the next batch.
+            </p>
+
+            <div id="current-rotation-summary" class="current-rotation-summary phase6-rotation-banner">
+              <strong>Loading current rotation…</strong>
+              <span>Please wait.</span>
+            </div>
+          </div>
+
+          <aside class="phase6-quote-card">
+            <span class="phase6-quote-line"></span>
+            <blockquote>“For the Filipino.<br>We heal as one.”</blockquote>
+            <small>UP Manila School of Health Sciences</small>
+          </aside>
         </section>
 
-        <section class="portal-stat-grid">
+        <section class="portal-stat-grid phase6-stats">
           <article>
             <span>Assigned community</span>
             <strong id="dashboard-community">To be assigned</strong>
@@ -95,26 +115,49 @@
           </article>
         </section>
 
-        <div class="portal-content-grid">
+        <section class="phase6-quick-grid">
+          <a class="phase6-quick-card" data-current-community-link href="portal.html#communities">
+            <span class="phase6-quick-icon">⌘</span>
+            <strong data-current-community-name>Community Profile</strong>
+            <small data-current-rotation-meta>Open your assigned community profile.</small>
+          </a>
+          <a class="phase6-quick-card" href="library.html">
+            <span class="phase6-quick-icon">📘</span>
+            <strong>Manual &amp; Modules</strong>
+            <small>Read learning modules, references, and Toolkit materials.</small>
+          </a>
+          <a class="phase6-quick-card" href="directory.html">
+            <span class="phase6-quick-icon">✚</span>
+            <strong>Health Directory</strong>
+            <small>Review RHU, MHO/CHO, preceptor, and referral records.</small>
+          </a>
+          <a class="phase6-quick-card" href="search.html">
+            <span class="phase6-quick-icon">⌕</span>
+            <strong>Global Search</strong>
+            <small>Search across communities, projects, documents, and resources.</small>
+          </a>
+        </section>
+
+        <div class="portal-content-grid phase6-dashboard-grid">
           <section class="portal-panel" id="rotation">
             <div class="portal-panel-heading">
               <div>
-                <span class="portal-label">Start here</span>
-                <h2>My Rotation</h2>
+                <span class="portal-label">Orientation</span>
+                <h2>My Orientation Checklist</h2>
               </div>
-              <span class="portal-chip">Connected</span>
-            </div>
-
-            <div id="current-rotation-summary" class="current-rotation-summary">
-              <strong>Loading current rotation…</strong>
-              <span>Please wait.</span>
+              <span class="portal-chip">Start here</span>
             </div>
 
             <div class="rotation-checklist">
-              <label><input type="checkbox"> Review your assigned community profile</label>
-              <label><input type="checkbox"> Review previous projects and latest handover</label>
-              <label><input type="checkbox"> Review scope, referral pathways, and safety notes</label>
-              <label><input type="checkbox"> Review community assessment and project forms</label>
+              <label><input type="checkbox"> Review your assigned community profile and local context.</label>
+              <label><input type="checkbox"> Review previous projects and continuity notes from the previous batch.</label>
+              <label><input type="checkbox"> Check referral pathways, preceptor information, and local health system notes.</label>
+              <label><input type="checkbox"> Open the Toolkit Library and review required forms and templates.</label>
+            </div>
+
+            <div class="phase6-inline-actions">
+              <a class="mini-action save" data-current-community-link href="portal.html#communities">View community profile</a>
+              <a class="mini-action" href="directory.html">Open directory</a>
             </div>
           </section>
 
@@ -125,10 +168,10 @@
                 <h2>Toolkit Resources</h2>
               </div>
             </div>
-            <div class="quick-resource-list">
-              <a href="library.html"><strong>Manual & Learning Modules</strong><span>Browse the approved Toolkit Library →</span></a>
-              <a href="library.html"><strong>Forms & Templates</strong><span>Worksheets, tools, and templates →</span></a>
-              <a href="directory.html"><strong>Health System Directory</strong><span>MHO/CHO and future DTTB/facility records →</span></a>
+            <div class="quick-resource-list phase6-quick-list">
+              <a href="library.html"><strong>Manual &amp; Learning Modules</strong><span>Browse official Toolkit learning resources →</span></a>
+              <a href="library.html"><strong>Forms &amp; Templates</strong><span>Open worksheets, tools, and downloadable forms →</span></a>
+              <a href="directory.html"><strong>Health System Directory</strong><span>Review local contacts, facilities, and referral pathways →</span></a>
             </div>
           </section>
         </div>
@@ -140,7 +183,6 @@
               <h2>Current Learning Sites</h2>
             </div>
           </div>
-
           <div id="portal-communities" class="portal-community-grid">
             <article><span>01</span><strong>Loading…</strong><small>Please wait</small></article>
           </div>
@@ -153,12 +195,8 @@
               <h2>Community Projects</h2>
             </div>
           </div>
-
           <div id="portal-projects" class="portal-project-grid">
-            <article class="project-portal-card">
-              <h3>Loading projects…</h3>
-              <p>Please wait while the registry is loaded.</p>
-            </article>
+            <article class="project-portal-card"><h3>Loading projects…</h3><p>Please wait while the registry is loaded.</p></article>
           </div>
         </section>
 
@@ -171,45 +209,26 @@
             <span class="portal-chip">Structured</span>
           </div>
 
-          <div id="portal-handover-eligibility" class="portal-mini-note">
-            Loading handover access…
-          </div>
+          <div id="portal-handover-eligibility" class="portal-mini-note">Loading handover access…</div>
 
           <form id="portal-handover-form" class="portal-handover-form" hidden>
             <label class="form-wide">
               <span>Project</span>
-              <select id="portal-handover-project" required>
-                <option value="">Select project</option>
-              </select>
+              <select id="portal-handover-project" required><option value="">Select project</option></select>
             </label>
             <label>
               <span>Outgoing batch</span>
               <input id="portal-handover-batch" type="text" placeholder="e.g. MD24">
             </label>
-            <label class="form-wide">
-              <span>Accomplishments</span>
-              <textarea id="portal-handover-accomplishments" rows="3" placeholder="What has already been done?"></textarea>
-            </label>
-            <label class="form-wide">
-              <span>Pending tasks</span>
-              <textarea id="portal-handover-pending" rows="3" placeholder="What should the next batch continue?"></textarea>
-            </label>
-            <label class="form-wide">
-              <span>Recommendations</span>
-              <textarea id="portal-handover-recommendations" rows="3" placeholder="Recommendations, reminders, and risks"></textarea>
-            </label>
-            <div class="admin-form-actions form-wide">
-              <button class="button button-maroon" type="submit">Submit Handover</button>
-            </div>
+            <label class="form-wide"><span>Accomplishments</span><textarea id="portal-handover-accomplishments" rows="3" placeholder="What has already been done?"></textarea></label>
+            <label class="form-wide"><span>Pending tasks</span><textarea id="portal-handover-pending" rows="3" placeholder="What should the next batch continue?"></textarea></label>
+            <label class="form-wide"><span>Recommendations</span><textarea id="portal-handover-recommendations" rows="3" placeholder="Recommendations, reminders, and risks"></textarea></label>
+            <div class="admin-form-actions form-wide"><button class="button button-maroon" type="submit">Submit Handover</button></div>
           </form>
 
           <div id="portal-handover-message" class="admin-message" aria-live="polite"></div>
-
           <div id="portal-handover-list" class="portal-handover-list">
-            <article class="portal-handover-card">
-              <strong>Loading handovers…</strong>
-              <span>Please wait.</span>
-            </article>
+            <article class="portal-handover-card"><strong>Loading handovers…</strong><span>Please wait.</span></article>
           </div>
         </section>
 
@@ -222,23 +241,6 @@
       </main>
     </div>
   </div>
-
-
-  <script>
-    // If portal.js is missing/404/cached incorrectly, do not leave the user
-    // staring at an infinite static loading screen.
-    window.setTimeout(function () {
-      if (window.__TOOLKIT_PORTAL_JS_LOADED__) return;
-      var loading = document.getElementById("portal-loading");
-      if (!loading) return;
-      loading.innerHTML =
-        '<img src="assets/shs-logo.png" alt="UPM-SHS">' +
-        '<strong>Portal script did not load</strong>' +
-        '<span>portal.js may be missing, cached, or not yet deployed by GitHub Pages.</span>' +
-        '<small class="portal-status-detail">Replace portal.html and portal.js together, then hard-refresh the page.</small>' +
-        '<a class="button button-maroon" href="portal.html?reload=' + Date.now() + '">Reload without old cache</a>';
-    }, 6000);
-  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>

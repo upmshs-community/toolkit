@@ -1,7 +1,4 @@
-
 (() => {
-  // Lets portal.html distinguish a JS loading problem from an auth/data problem.
-  window.__TOOLKIT_PORTAL_JS_LOADED__ = true;
   const cfg = window.APP_CONFIG || {};
   const url = cfg.SUPABASE_URL || "";
   const key = cfg.SUPABASE_ANON_KEY || "";
@@ -16,53 +13,49 @@
   let projects = [];
   let handovers = [];
 
-  function withTimeout(promise, milliseconds, label) {
-    let timer;
-    const timeout = new Promise((_, reject) => {
-      timer = setTimeout(() => {
-        reject(new Error(`${label} timed out after ${Math.round(milliseconds / 1000)} seconds.`));
-      }, milliseconds);
-    });
-
-    return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
-  }
-
-  function showBootstrapError(title, error, detail = "") {
-    console.error("[Toolkit Portal]", title, error);
-    setLoadingCard({
-      title,
-      text: error?.message || String(error || "Unknown error"),
-      detail: detail || "Refresh once. If this continues, verify supabase-config.js and the browser console.",
-      action: `
-        <div class="pending-actions">
-          <button id="portal-retry" class="button button-green" type="button">Retry</button>
-          <a class="button button-outline-maroon" href="index.html">Back to Login</a>
-        </div>
-      `
-    });
-    document.getElementById("portal-retry")?.addEventListener("click", () => window.location.reload());
-  }
-
   function configMissing() {
     return !url || !key || url.includes("PASTE_YOUR") || key.includes("PASTE_YOUR");
   }
 
   function safe(value = "") {
     return String(value)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function prettyCommunityName(value = "") {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+    if (/^alangalang$/i.test(raw)) return "Alang-alang";
+    return raw;
+  }
+
+  function updatePhase6CurrentCommunity() {
+    const link = currentRotation?.community_id
+      ? `community.html?id=${encodeURIComponent(currentRotation.community_id)}`
+      : "portal.html#communities";
+    const communityName = currentRotation?.community_name || "Community Profile";
+    const meta = currentRotation
+      ? [currentRotation.rotation_type, currentRotation.course_code, currentRotation.batch].filter(Boolean).join(" · ") || "Open your assigned community profile."
+      : "Open your assigned community profile.";
+
+    document.querySelectorAll("[data-current-community-link]").forEach(el => {
+      if (el.tagName === "A") el.setAttribute("href", link);
+    });
+    document.querySelectorAll("[data-current-community-name]").forEach(el => {
+      el.textContent = communityName;
+    });
+    document.querySelectorAll("[data-current-rotation-meta]").forEach(el => {
+      el.textContent = meta;
+    });
   }
 
   function setLoadingCard({title, text, detail = "", action = ""}) {
     if (!loading) return;
-    document.body.classList.add("portal-is-loading");
-    document.body.classList.remove("portal-is-ready");
-    if (app) app.hidden = true;
     loading.hidden = false;
-    loading.removeAttribute("aria-hidden");
     loading.innerHTML = `
       <img src="assets/shs-logo.png" alt="UPM-SHS">
       <strong>${safe(title)}</strong>
@@ -77,12 +70,6 @@
     window.location.replace("index.html");
   }
 
-  function formatDate(value) {
-    if (!value) return "—";
-    const d = new Date(value);
-    return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
-  }
-
   function renderCommunities() {
     const target = document.getElementById("portal-communities");
     if (!target) return;
@@ -93,8 +80,8 @@
     target.innerHTML = communities.map((c, index) => `
       <a class="portal-community-link" href="community.html?id=${encodeURIComponent(c.id)}">
         <article>
-          <span>${String(index + 1).padStart(2,"0")}</span>
-          <strong>${safe(c.name)}</strong>
+          <span>${String(index + 1).padStart(2, "0")}</span>
+          <strong>${safe(prettyCommunityName(c.name))}</strong>
           <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
         </article>
       </a>
@@ -120,7 +107,7 @@
     target.innerHTML = projects.map(p => `
       <article class="project-portal-card">
         <div class="project-card-top">
-          <span class="project-pill status-${safe(p.status)}">${safe((p.status || "").replaceAll("_"," "))}</span>
+          <span class="project-pill status-${safe(p.status)}">${safe((p.status || "").replaceAll("_", " "))}</span>
           <small>${safe(p.community_name || "")}</small>
         </div>
         <h3>${safe(p.title)}</h3>
@@ -134,7 +121,7 @@
       </article>
     `).join("");
 
-    document.getElementById("dashboard-project-count").textContent = String(projects.filter(p => ["active","for_handover","planning"].includes(p.status)).length);
+    document.getElementById("dashboard-project-count").textContent = String(projects.filter(p => ["active", "for_handover", "planning"].includes(p.status)).length);
     document.getElementById("dashboard-project-detail").textContent =
       currentRotation ? `Projects linked to ${currentRotation.community_name}.` : "Showing accessible project records.";
   }
@@ -158,7 +145,7 @@
     target.innerHTML = handovers.map(h => `
       <article class="portal-handover-card">
         <div class="project-card-top">
-          <span class="project-pill status-${safe(h.status)}">${safe((h.status || "").replaceAll("_"," "))}</span>
+          <span class="project-pill status-${safe(h.status)}">${safe((h.status || "").replaceAll("_", " "))}</span>
           <small>${safe(h.project_title)}</small>
         </div>
         <strong>${safe(h.community_name || "Community project")}</strong>
@@ -167,7 +154,7 @@
       </article>
     `).join("");
 
-    document.getElementById("dashboard-handover-count").textContent = String(handovers.filter(h => ["submitted","returned"].includes(h.status)).length);
+    document.getElementById("dashboard-handover-count").textContent = String(handovers.filter(h => ["submitted", "returned"].includes(h.status)).length);
     document.getElementById("dashboard-handover-detail").textContent =
       currentRotation ? `Recent handovers for ${currentRotation.community_name}.` : "Showing accessible handover notes.";
   }
@@ -184,7 +171,7 @@
     const form = document.getElementById("portal-handover-form");
     if (!note || !form) return;
 
-    const elevated = ["admin","coordinator","faculty","preceptor"].includes(currentProfile.role);
+    const elevated = ["admin", "coordinator", "faculty", "preceptor"].includes(currentProfile.role);
     const canSubmit = elevated || !!currentRotation;
 
     if (canSubmit && projects.length) {
@@ -253,6 +240,7 @@
 
     if (error || !data?.length) {
       currentRotation = null;
+      updatePhase6CurrentCommunity();
       if (summary) {
         summary.innerHTML = `
           <strong>No active rotation assigned yet.</strong>
@@ -268,12 +256,14 @@
     currentRotation = {
       id: rotation.id,
       community_id: rotation.community_id,
-      community_name: rotation.communities?.name || "Assigned community",
+      community_name: prettyCommunityName(rotation.communities?.name || "Assigned community"),
       preceptor_name: rotation.communities?.preceptor_name || "",
       course_code: rotation.course_code,
       rotation_type: rotation.rotation_type,
       batch: rotation.batch
     };
+
+    updatePhase6CurrentCommunity();
 
     const details = [rotation.rotation_type, rotation.course_code, rotation.batch].filter(Boolean).join(" · ");
     if (communityEl) communityEl.textContent = currentRotation.community_name;
@@ -301,7 +291,7 @@
       `)
       .order("created_at", { ascending: false });
 
-    const elevated = ["admin","coordinator","faculty","preceptor"].includes(currentProfile.role);
+    const elevated = ["admin", "coordinator", "faculty", "preceptor"].includes(currentProfile.role);
     if (!elevated && currentRotation?.community_id) {
       query = query.eq("community_id", currentRotation.community_id);
     }
@@ -315,7 +305,7 @@
 
     projects = (data || []).map(p => ({
       ...p,
-      community_name: p.communities?.name || "Unknown community"
+      community_name: prettyCommunityName(p.communities?.name || "Unknown community")
     }));
     renderProjects();
     populatePortalHandoverProjects();
@@ -332,7 +322,7 @@
       .order("updated_at", { ascending: false })
       .limit(8);
 
-    const elevated = ["admin","coordinator","faculty","preceptor"].includes(currentProfile.role);
+    const elevated = ["admin", "coordinator", "faculty", "preceptor"].includes(currentProfile.role);
     if (!elevated && currentRotation?.community_id) {
       query = query.eq("projects.community_id", currentRotation.community_id);
     }
@@ -347,7 +337,7 @@
     handovers = (data || []).map(h => ({
       ...h,
       project_title: h.projects?.title || "Unknown project",
-      community_name: h.projects?.communities?.name || ""
+      community_name: prettyCommunityName(h.projects?.communities?.name || "")
     }));
     renderHandovers();
   }
@@ -387,212 +377,142 @@
   }
 
   async function start() {
-    try {
-      if (configMissing() || !window.supabase?.createClient) {
-        document.body.classList.add("portal-is-loading");
-        if (app) app.hidden = true;
-        if (loading) {
-          loading.innerHTML = `
-            <img src="assets/shs-logo.png" alt="UPM-SHS">
-            <strong>Supabase setup required.</strong>
-            <span>Check <code>supabase-config.js</code> and make sure the Supabase browser client loaded.</span>
-            <a href="index.html">Return to login</a>
-          `;
-          loading.classList.add("portal-error");
-        }
-        return;
-      }
-
-      client = window.supabase.createClient(url, key);
-
-      // Use the browser's persisted session first.
-      // This avoids blocking the whole portal on auth.getUser() after a successful login.
-      const sessionResult = await withTimeout(
-        client.auth.getSession(),
-        8000,
-        "Supabase session check"
-      );
-
-      const session = sessionResult?.data?.session;
-      const sessionError = sessionResult?.error;
-
-      if (sessionError) throw sessionError;
-
-      if (!session?.user) {
-        setLoadingCard({
-          title: "Your login session was not found",
-          text: "Please sign in again.",
-          detail: "This can happen after changing Supabase projects or clearing browser storage.",
-          action: `<a class="button button-maroon" href="index.html">Go to Login</a>`
-        });
-        return;
-      }
-
-      const user = session.user;
-      currentUser = user;
-
-      // Load the Toolkit profile with a timeout so the UI never spins forever.
-      const profileResult = await withTimeout(
-        client
-          .from("profiles")
-          .select("id,email,full_name,student_number,year_level,batch,role,status")
-          .eq("id", user.id)
-          .maybeSingle(),
-        10000,
-        "Toolkit profile lookup"
-      );
-
-      const profile = profileResult?.data;
-      const profileError = profileResult?.error;
-
-      if (profileError) {
-        showBootstrapError(
-          "Profile lookup failed",
-          profileError,
-          "Your Supabase login worked, but the profiles table could not be read. Check the Phase 1 schema/RLS."
-        );
-        return;
-      }
-
-      if (!profile) {
-        setLoadingCard({
-          title: "Profile setup incomplete",
-          text: "Your authenticated account exists, but there is no matching row in public.profiles.",
-          detail: `Auth user: ${user.email || user.id}`,
-          action: `
-            <div class="pending-actions">
-              <button id="status-signout" class="button button-maroon" type="button">Sign out</button>
-            </div>
-          `
-        });
-        document.getElementById("status-signout")?.addEventListener("click", signOut);
-        return;
-      }
-
-      currentProfile = profile;
-
-      if (profile.status === "pending") {
-        setLoadingCard({
-          title: "Registration received",
-          text: "Your account is verified but is still Pending Approval.",
-          detail: `${profile.full_name || "Toolkit user"} · ${profile.email || user.email || ""}${profile.batch ? ` · ${profile.batch}` : ""}`,
-          action: `
-            <div class="pending-actions">
-              <a class="button button-green" href="index.html">Return to public site</a>
-              <button id="status-signout" class="button button-outline-maroon" type="button">Sign out</button>
-            </div>
-          `
-        });
-        document.getElementById("status-signout")?.addEventListener("click", signOut);
-        return;
-      }
-
-      if (profile.status === "suspended") {
-        setLoadingCard({
-          title: "Account suspended",
-          text: "Your Toolkit access has been temporarily suspended.",
-          detail: "Please contact the program coordinator if you believe this is an error.",
-          action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
-        });
-        document.getElementById("status-signout")?.addEventListener("click", signOut);
-        return;
-      }
-
-      if (profile.status === "archived") {
-        setLoadingCard({
-          title: "Account archived",
-          text: "This Toolkit account is archived and no longer has active access.",
-          action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
-        });
-        document.getElementById("status-signout")?.addEventListener("click", signOut);
-        return;
-      }
-
-      if (profile.status !== "active") {
-        setLoadingCard({
-          title: "Access unavailable",
-          text: `Your account status is “${profile.status || "unknown"}”.`,
-          detail: "The account must be Active before the Toolkit dashboard can open.",
-          action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
-        });
-        document.getElementById("status-signout")?.addEventListener("click", signOut);
-        return;
-      }
-
-      const fullName = profile.full_name || user.email || "Authorized user";
-      const email = profile.email || user.email || "";
-      const role = profile.role || "student";
-
-      document.querySelectorAll("[data-user-name]").forEach(el => el.textContent = fullName);
-      document.querySelectorAll("[data-user-email]").forEach(el => el.textContent = email);
-      document.querySelectorAll("[data-user-role]").forEach(el => el.textContent = role.charAt(0).toUpperCase() + role.slice(1));
-      document.querySelectorAll("[data-user-batch]").forEach(el => el.textContent = profile.batch || "—");
-      document.querySelectorAll("[data-user-year]").forEach(el => el.textContent = profile.year_level || "—");
-
-      const initials = fullName
-        .split(/[\s._-]+/)
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(part => part.charAt(0).toUpperCase())
-        .join("") || "UP";
-      document.querySelectorAll("[data-user-initials]").forEach(el => el.textContent = initials);
-
-      const adminLink = document.getElementById("admin-link");
-      if (adminLink && ["admin","coordinator"].includes(role)) adminLink.hidden = false;
-
-      const reviewLink = document.getElementById("review-link");
-      if (reviewLink && ["admin","coordinator","faculty","preceptor"].includes(role)) reviewLink.hidden = false;
-
-      const knowledgeLink = document.getElementById("knowledge-link");
-      if (knowledgeLink && ["admin","coordinator","faculty"].includes(role)) knowledgeLink.hidden = false;
-
-      document.querySelectorAll("[data-sign-out]").forEach(button => {
-        button.addEventListener("click", async () => {
-          button.disabled = true;
-          button.textContent = "Signing out…";
-          await signOut();
-        });
-      });
-
-      document.getElementById("portal-handover-form")?.addEventListener("submit", submitPortalHandover);
-
-      // Switch atomically from the full-screen loader to the app.
-      // The CSS also has explicit [hidden] rules so loader and dashboard can never show together.
-      if (app) app.hidden = false;
+    if (configMissing() || !window.supabase?.createClient) {
       if (loading) {
-        loading.hidden = true;
-        loading.setAttribute("aria-hidden", "true");
+        loading.innerHTML = `
+          <strong>Supabase setup required.</strong>
+          <span>Edit <code>supabase-config.js</code> and add your Supabase project URL and publishable/anon key.</span>
+          <a href="index.html">Return to login</a>
+        `;
+        loading.classList.add("portal-error");
       }
-      document.body.classList.remove("portal-is-loading");
-      document.body.classList.add("portal-is-ready");
-      window.scrollTo(0, 0);
-
-      // The rest of the dashboard data should not be allowed to block opening.
-      const settled = await Promise.allSettled([
-        loadCurrentRotation(user.id),
-        loadCommunities(),
-        loadResourceCount()
-      ]);
-
-      settled.forEach(result => {
-        if (result.status === "rejected") console.warn("[Toolkit Portal] non-blocking dashboard load:", result.reason);
-      });
-
-      try { await loadProjects(); } catch (error) { console.warn("[Toolkit Portal] projects:", error); }
-      try { await loadHandovers(); } catch (error) { console.warn("[Toolkit Portal] handovers:", error); }
-
-      // Optional server verification AFTER the UI is already open.
-      client.auth.getUser().then(({ error }) => {
-        if (error) console.warn("[Toolkit Portal] background auth verification:", error.message);
-      }).catch(() => {});
-
-    } catch (error) {
-      showBootstrapError(
-        "The Toolkit could not finish opening",
-        error,
-        "The page is no longer allowed to stay on an infinite loading screen."
-      );
+      return;
     }
+
+    client = window.supabase.createClient(url, key);
+    const { data: userData, error: userError } = await client.auth.getUser();
+    const user = userData?.user;
+
+    if (userError || !user) {
+      window.location.replace("index.html");
+      return;
+    }
+
+    currentUser = user;
+
+    const { data: profile, error: profileError } = await client
+      .from("profiles")
+      .select("id,email,full_name,student_number,year_level,batch,role,status")
+      .eq("id", user.id)
+      .single();
+
+    if (profileError || !profile) {
+      setLoadingCard({
+        title: "Profile setup incomplete",
+        text: "Your authenticated account exists, but the Toolkit profile could not be loaded.",
+        detail: "Ask the program coordinator to verify the profiles table.",
+        action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
+      });
+      document.getElementById("status-signout")?.addEventListener("click", signOut);
+      return;
+    }
+
+    currentProfile = profile;
+
+    if (profile.status === "pending") {
+      setLoadingCard({
+        title: "Registration received",
+        text: "Your account is verified but is still Pending Approval.",
+        detail: `${profile.full_name} · ${profile.email}${profile.batch ? ` · ${profile.batch}` : ""}`,
+        action: `
+          <div class="pending-actions">
+            <a class="button button-green" href="index.html">Return to public site</a>
+            <button id="status-signout" class="button button-outline-maroon" type="button">Sign out</button>
+          </div>
+        `
+      });
+      document.getElementById("status-signout")?.addEventListener("click", signOut);
+      return;
+    }
+
+    if (profile.status === "suspended") {
+      setLoadingCard({
+        title: "Account suspended",
+        text: "Your Toolkit access has been temporarily suspended.",
+        detail: "Please contact the program coordinator if you believe this is an error.",
+        action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
+      });
+      document.getElementById("status-signout")?.addEventListener("click", signOut);
+      return;
+    }
+
+    if (profile.status === "archived") {
+      setLoadingCard({
+        title: "Account archived",
+        text: "This Toolkit account is archived and no longer has active access.",
+        action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
+      });
+      document.getElementById("status-signout")?.addEventListener("click", signOut);
+      return;
+    }
+
+    if (profile.status !== "active") {
+      setLoadingCard({
+        title: "Access unavailable",
+        text: "Your account does not currently have active Toolkit access.",
+        action: `<button id="status-signout" class="button button-maroon" type="button">Sign out</button>`
+      });
+      document.getElementById("status-signout")?.addEventListener("click", signOut);
+      return;
+    }
+
+    const fullName = profile.full_name || user.email || "Authorized user";
+    const email = profile.email || user.email || "";
+    const role = profile.role || "student";
+
+    document.querySelectorAll("[data-user-name]").forEach(el => el.textContent = fullName);
+    document.querySelectorAll("[data-user-email]").forEach(el => el.textContent = email);
+    document.querySelectorAll("[data-user-role]").forEach(el => el.textContent = role.charAt(0).toUpperCase() + role.slice(1));
+    document.querySelectorAll("[data-user-batch]").forEach(el => el.textContent = profile.batch || "—");
+    document.querySelectorAll("[data-user-year]").forEach(el => el.textContent = profile.year_level || "—");
+
+    const initials = fullName
+      .split(/[\s._-]+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part.charAt(0).toUpperCase())
+      .join("") || "UP";
+    document.querySelectorAll("[data-user-initials]").forEach(el => el.textContent = initials);
+
+    const adminLink = document.getElementById("admin-link");
+    if (adminLink && ["admin", "coordinator"].includes(role)) adminLink.hidden = false;
+
+    const reviewLink = document.getElementById("review-link");
+    if (reviewLink && ["admin", "coordinator", "faculty", "preceptor"].includes(role)) reviewLink.hidden = false;
+
+    const knowledgeLink = document.getElementById("knowledge-link");
+    if (knowledgeLink && ["admin", "coordinator", "faculty"].includes(role)) knowledgeLink.hidden = false;
+
+    document.querySelectorAll("[data-sign-out]").forEach(button => {
+      button.addEventListener("click", async () => {
+        button.disabled = true;
+        button.textContent = "Signing out…";
+        await signOut();
+      });
+    });
+
+    document.getElementById("portal-handover-form")?.addEventListener("submit", submitPortalHandover);
+
+    if (loading) loading.hidden = true;
+    if (app) app.hidden = false;
+    document.body.classList.remove("portal-is-loading");
+    document.body.classList.add("portal-is-ready");
+    updatePhase6CurrentCommunity();
+
+    await loadCurrentRotation(user.id);
+    await Promise.all([loadCommunities(), loadResourceCount()]);
+    await loadProjects();
+    await loadHandovers();
   }
 
   start();
