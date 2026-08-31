@@ -3090,3 +3090,621 @@ html.public-scroll-document body.public-landing-page {
     width: 100%;
   }
 }
+
+
+/* =========================================================
+   PHASE 7B — OFFLINE FIELD FORMS / HOUSEHOLD SURVEY
+   ========================================================= */
+
+.field-forms-main,
+.household-main {
+  width: min(1380px, calc(100% - 42px));
+  margin: 0 auto;
+  padding: 30px 0 68px;
+}
+
+.field-forms-hero,
+.household-form-hero {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 300px;
+  gap: 22px;
+  align-items: end;
+  margin-bottom: 22px;
+}
+
+.field-forms-hero h1,
+.household-form-hero h1 {
+  margin: 5px 0 8px;
+  font-family: var(--serif);
+  font-size: clamp(44px, 5vw, 68px);
+  line-height: .98;
+  color: #181410;
+}
+
+.field-forms-hero p,
+.household-form-hero p {
+  margin: 0;
+  max-width: 860px;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.6;
+  color: #625a52;
+}
+
+.offline-status-card,
+.household-hero-status {
+  border: 1px solid #ded4c7;
+  border-radius: 18px;
+  background: #fffdf8;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.network-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #a65e33;
+  box-shadow: 0 0 0 5px rgba(166,94,51,.10);
+  flex: 0 0 auto;
+}
+.network-dot.online {
+  background: #1f7b47;
+  box-shadow: 0 0 0 5px rgba(31,123,71,.10);
+}
+
+.offline-status-card div,
+.household-hero-status {
+  font-family: var(--serif);
+}
+
+.offline-status-card div {
+  display: grid;
+  gap: 2px;
+}
+
+.offline-status-card strong,
+.household-hero-status strong {
+  color: var(--green);
+}
+
+.offline-status-card small,
+.household-hero-status small {
+  color: #6c645c;
+}
+
+.field-sync-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr)) auto;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.field-sync-summary article {
+  border: 1px solid #dfd7cc;
+  border-radius: 16px;
+  background: #fff;
+  padding: 16px;
+  display: grid;
+  gap: 3px;
+}
+.field-sync-summary article span {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 900;
+  color: #746d65;
+}
+.field-sync-summary article strong {
+  font-family: var(--serif);
+  font-size: 28px;
+  color: var(--maroon);
+}
+.field-sync-summary article small {
+  font-family: var(--serif);
+  color: #756e66;
+}
+
+.field-template-panel { margin-bottom: 18px; }
+.field-template-card {
+  display: grid;
+  grid-template-columns: 72px minmax(0,1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 6px 0 4px;
+}
+.field-template-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: #f2e8df;
+  color: var(--maroon);
+  font-size: 28px;
+}
+.field-template-copy h3 {
+  margin: 0 0 5px;
+  font-family: var(--serif);
+  font-size: 24px;
+  color: var(--green);
+}
+.field-template-copy p {
+  margin: 0;
+  font-family: var(--serif);
+  line-height: 1.5;
+  color: #665e56;
+}
+.field-template-tags {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.field-template-tags span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f3eee7;
+  font-size: 8px;
+  font-weight: 900;
+  color: #6d655e;
+}
+
+.local-survey-list {
+  display: grid;
+}
+.local-survey-row {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto 24px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 2px;
+  border-bottom: 1px solid #eee7de;
+  text-decoration: none;
+  color: inherit;
+}
+.local-survey-row > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+.local-survey-row strong {
+  font-family: var(--serif);
+  color: var(--green);
+  font-size: 18px;
+}
+.local-survey-row small { color: #70685f; }
+.local-survey-status {
+  width: max-content;
+  padding: 4px 7px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 900;
+  text-transform: capitalize;
+}
+.local-survey-status.sync-synced { background:#def1e4; color:#1a6739; }
+.local-survey-status.sync-pending { background:#fff0d5; color:#8b5d00; }
+.local-survey-status.sync-error { background:#f8dedf; color:#8b2429; }
+.local-survey-meta {
+  display: grid;
+  grid-template-columns: repeat(2,auto);
+  gap: 4px 10px;
+  text-align: right;
+  font-size: 9px;
+  color: #69625b;
+}
+.local-survey-meta small { grid-column: 1 / -1; }
+.local-survey-arrow { color: var(--maroon); font-size: 18px; }
+
+.field-offline-note {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1px solid #ded5ca;
+  background: #f7f1e7;
+}
+.field-offline-note strong {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--maroon);
+}
+.field-offline-note p {
+  margin: 6px 0 0;
+  font-family: var(--serif);
+  line-height: 1.55;
+  color: #685f57;
+}
+
+/* Household survey */
+.household-form-hero { align-items:center; }
+.household-hero-status {
+  display:grid;
+  grid-template-columns:14px 1fr;
+}
+.household-hero-status small { grid-column:2; }
+
+.survey-sync-chip {
+  display:inline-flex;
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:8px;
+  font-weight:900;
+}
+.survey-sync-chip.is-synced { background:#dff2e5; color:#17643a; }
+.survey-sync-chip.is-pending,
+.survey-sync-chip.is-local { background:#fff0d6; color:#8a5a00; }
+.survey-sync-chip.is-error { background:#f8dfe0; color:#8b2429; }
+
+.fieldwork-context-card {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  border:1px solid #ddd3c7;
+  border-radius:18px;
+  background:linear-gradient(180deg,#fffdf9,#f7efe3);
+  margin-bottom:18px;
+  overflow:hidden;
+}
+.fieldwork-context-card > div {
+  padding:16px 18px;
+  display:grid;
+  gap:4px;
+}
+.fieldwork-context-card > div + div { border-left:1px solid #e0d6ca; }
+.fieldwork-context-card span {
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:900;
+  color:#746b62;
+}
+.fieldwork-context-card strong {
+  font-family:var(--serif);
+  font-size:20px;
+  color:var(--green);
+}
+.fieldwork-context-card small { color:#6f675f; }
+
+.household-form {
+  display:grid;
+  gap:14px;
+}
+.survey-section {
+  border:1px solid #ded6cc;
+  border-radius:20px;
+  background:#fff;
+  overflow:hidden;
+}
+.survey-section[open] { box-shadow:0 10px 24px rgba(0,0,0,.025); }
+
+.survey-section summary {
+  list-style:none;
+  cursor:pointer;
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr);
+  gap:12px;
+  align-items:center;
+  padding:16px 18px;
+  background:#fbf7f1;
+}
+.survey-section summary::-webkit-details-marker { display:none; }
+.survey-section summary > span {
+  width:36px;
+  height:36px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:var(--maroon);
+  color:#fff;
+  font-family:var(--serif);
+  font-weight:900;
+}
+.survey-section summary > strong {
+  font-family:var(--serif);
+  font-size:22px;
+  color:#2b261f;
+}
+.survey-section-body,
+.survey-cover-section {
+  padding:20px;
+}
+.survey-cover-section { background:#fff; }
+.survey-section-heading h2 {
+  margin:4px 0 16px;
+  font-family:var(--serif);
+  font-size:28px;
+  color:var(--maroon);
+}
+.survey-section-number {
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:900;
+  color:var(--green);
+}
+.survey-section-body h3 {
+  margin:20px 0 10px;
+  font-family:var(--serif);
+  color:var(--green);
+  font-size:20px;
+}
+
+.survey-grid {
+  display:grid;
+  gap:12px;
+}
+.survey-grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.survey-grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.survey-grid.four { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.survey-grid.six { grid-template-columns:repeat(6,minmax(0,1fr)); }
+.survey-span-2 { grid-column:span 2; }
+.survey-full { display:grid; gap:6px; margin:10px 0; }
+
+.household-form label,
+.repeat-row {
+  font-family:var(--serif);
+}
+.household-form label {
+  display:grid;
+  gap:6px;
+}
+.household-form label > span,
+.survey-choice-group legend {
+  font-size:10px;
+  font-weight:800;
+  color:#5e574f;
+}
+.household-form input,
+.household-form select,
+.household-form textarea,
+.repeat-row input,
+.repeat-row select,
+.repeat-row textarea {
+  width:100%;
+  box-sizing:border-box;
+  min-height:42px;
+  border:1px solid #cfc7bd;
+  border-radius:9px;
+  background:#fff;
+  padding:9px 10px;
+  font:inherit;
+  color:#2b2722;
+}
+.household-form textarea,
+.repeat-row textarea { resize:vertical; }
+
+.survey-choice-group {
+  display:flex;
+  gap:8px 18px;
+  flex-wrap:wrap;
+  margin:12px 0;
+  padding:14px;
+  border:1px solid #e2dbd1;
+  border-radius:12px;
+  background:#fbf8f3;
+}
+.survey-choice-group legend {
+  padding:0 6px;
+}
+.survey-choice-group label {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:6px;
+}
+.survey-choice-group input[type="checkbox"] {
+  width:16px;
+  min-height:16px;
+}
+
+.digital-fieldwork-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin-top:18px;
+}
+.digital-field-card {
+  padding:17px;
+  border-radius:16px;
+  border:1px solid #ddd4c8;
+  background:linear-gradient(180deg,#fbf8f2,#f4eee4);
+  display:grid;
+  gap:12px;
+}
+.digital-field-card h3 {
+  margin:3px 0;
+  font-family:var(--serif);
+  color:var(--green);
+}
+.digital-field-card p {
+  margin:0;
+  font-family:var(--serif);
+  line-height:1.45;
+  font-size:11px;
+  color:#675f57;
+}
+.gps-readout {
+  min-height:58px;
+  border-radius:12px;
+  background:#fff;
+  border:1px dashed #d5cbc0;
+  display:grid;
+  align-content:center;
+  gap:2px;
+  padding:10px;
+  font-family:var(--serif);
+  font-size:11px;
+  color:#6e665f;
+}
+.gps-readout strong { color:#1d6d40; }
+.gps-readout small { color:#7b736b; }
+.household-photo-preview {
+  min-height:110px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:#fff;
+  border:1px dashed #d5cbc0;
+  overflow:hidden;
+  font-family:var(--serif);
+  color:#716960;
+}
+.household-photo-preview img {
+  width:100%;
+  max-height:220px;
+  object-fit:cover;
+}
+.household-photo-preview small {
+  width:100%;
+  box-sizing:border-box;
+  padding:7px 9px;
+}
+.digital-photo-actions {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.repeat-block {
+  margin:13px 0;
+  border:1px solid #e1d9cf;
+  border-radius:14px;
+  overflow:hidden;
+}
+.repeat-block-heading {
+  padding:10px 12px;
+  background:#f8f3ec;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+.repeat-block-heading strong {
+  font-family:var(--serif);
+  color:#5a3027;
+}
+.repeat-rows {
+  display:grid;
+  gap:8px;
+  padding:10px;
+  overflow-x:auto;
+}
+.repeat-row {
+  display:grid;
+  gap:7px;
+  align-items:start;
+}
+.repeat-row-2 { grid-template-columns:repeat(2,minmax(220px,1fr)) 36px; }
+.repeat-row-3 { grid-template-columns:repeat(3,minmax(150px,1fr)) 36px; }
+.repeat-row-4 { grid-template-columns:repeat(4,minmax(140px,1fr)) 36px; }
+.repeat-row-5 { grid-template-columns:repeat(5,minmax(130px,1fr)) 36px; }
+.repeat-row-6 { grid-template-columns:repeat(6,minmax(130px,1fr)) 36px; }
+.repeat-row-7 { grid-template-columns:repeat(7,minmax(120px,1fr)) 36px; }
+.repeat-row-8 { grid-template-columns:repeat(8,minmax(115px,1fr)) 36px; }
+.repeat-row-immunization { grid-template-columns:repeat(17,minmax(90px,1fr)) 36px; min-width:1720px; }
+.remove-row {
+  min-height:40px;
+  border:0;
+  border-radius:9px;
+  background:#f6e2e3;
+  color:var(--maroon);
+  font-size:20px;
+  cursor:pointer;
+}
+.survey-help {
+  margin:0;
+  padding:0 12px 12px;
+  font-family:var(--serif);
+  font-size:10px;
+  line-height:1.45;
+  color:#716960;
+}
+
+.matrix-table-wrap {
+  overflow-x:auto;
+  margin:10px 0;
+  border:1px solid #ded7ce;
+  border-radius:12px;
+}
+.survey-matrix {
+  width:100%;
+  border-collapse:collapse;
+  min-width:680px;
+}
+.survey-matrix th,
+.survey-matrix td {
+  border-bottom:1px solid #e7e0d7;
+  padding:9px;
+  text-align:center;
+  font-family:var(--serif);
+  font-size:10px;
+}
+.survey-matrix th:first-child { text-align:left; }
+.survey-matrix input[type="radio"],
+.survey-matrix input[type="checkbox"] {
+  width:16px;
+  min-height:16px;
+}
+
+.household-form-actions {
+  position:sticky;
+  bottom:10px;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 16px;
+  border:1px solid #d8cdbf;
+  border-radius:16px;
+  background:rgba(255,253,249,.96);
+  backdrop-filter:blur(12px);
+  box-shadow:0 14px 34px rgba(0,0,0,.10);
+}
+.household-form-actions > div:first-child {
+  display:grid;
+  gap:3px;
+  font-family:var(--serif);
+}
+.household-form-actions > div:first-child strong { color:var(--green); }
+.household-form-actions > div:first-child small { color:#716960; }
+.household-action-buttons {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+@media (max-width:1100px) {
+  .field-sync-summary { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .field-sync-summary .button { grid-column:1 / -1; }
+  .survey-grid.four { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .survey-grid.six { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .survey-grid.three { grid-template-columns:1fr; }
+}
+
+@media (max-width:760px) {
+  .field-forms-main,
+  .household-main { width:min(100% - 24px,1380px); padding-top:20px; }
+  .field-forms-hero,
+  .household-form-hero { grid-template-columns:1fr; }
+  .field-sync-summary { grid-template-columns:1fr; }
+  .field-template-card { grid-template-columns:56px minmax(0,1fr); }
+  .field-template-card > .button { grid-column:1 / -1; }
+  .local-survey-row { grid-template-columns:minmax(0,1fr) 22px; }
+  .local-survey-meta { grid-column:1; text-align:left; grid-row:2; }
+  .survey-grid.two,
+  .survey-grid.four,
+  .survey-grid.six,
+  .digital-fieldwork-grid,
+  .fieldwork-context-card { grid-template-columns:1fr; }
+  .survey-span-2 { grid-column:auto; }
+  .fieldwork-context-card > div + div { border-left:0; border-top:1px solid #e0d6ca; }
+  .household-form-actions {
+    position:static;
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .household-action-buttons { flex-direction:column; }
+  .household-action-buttons .button { width:100%; }
+}

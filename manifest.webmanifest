@@ -1,0 +1,17 @@
+{
+  "name": "UPM-SHS Community Health Toolkit",
+  "short_name": "SHS Toolkit",
+  "start_url": "./field-forms.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f0e6",
+  "theme_color": "#7b1113",
+  "icons": [
+    {
+      "src": "assets/shs-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

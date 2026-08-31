@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Household Survey | Community Health Toolkit</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body toolkit-scroll-page household-survey-page portal-is-loading">
+  <div id="household-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Household Survey…</strong>
+    <span>Loading the offline draft and fieldwork context.</span>
+  </div>
+
+  <div id="household-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="field-forms.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Household Survey</strong>
+          <span>UPM-SHS · Offline Field Form</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <span id="survey-sync-chip" class="survey-sync-chip is-local">Saved locally</span>
+        <a class="portal-signout admin-return-link" href="field-forms.html">Forms</a>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+      </div>
+    </header>
+
+    <main class="household-main">
+      <section class="household-form-hero">
+        <div>
+          <span class="portal-kicker">Household Survey Form · 2023 version</span>
+          <h1>Household Survey</h1>
+          <p>
+            Complete every applicable item. Use <strong>NA</strong> where the current paper form
+            instructs that a question is not applicable.
+          </p>
+        </div>
+        <div class="household-hero-status">
+          <span id="household-network-dot" class="network-dot"></span>
+          <strong id="household-network-text">Checking connection…</strong>
+          <small id="autosave-status">Autosave ready</small>
+        </div>
+      </section>
+
+      <section class="fieldwork-context-card">
+        <div>
+          <span>Assigned community</span>
+          <strong id="assigned-community-name">Not loaded</strong>
+          <small id="assigned-rotation-meta">The form can still be completed offline.</small>
+        </div>
+        <div>
+          <span>Local record</span>
+          <strong id="local-record-code">—</strong>
+          <small>This ID follows the draft on this device.</small>
+        </div>
+      </section>
+
+      <form id="household-form" class="household-form" autocomplete="off">
+        <section class="survey-section survey-cover-section" data-section="cover">
+          <div class="survey-section-heading">
+            <div><span class="survey-section-number">Fieldwork metadata</span><h2>Household &amp; Visit Information</h2></div>
+          </div>
+
+          <div class="survey-grid four">
+            <label><span>Household #</span><input name="household_number" type="text" placeholder="Household number"></label>
+            <label><span>Date of Interview</span><input name="interview_date" type="date"></label>
+            <label><span>Barangay</span><input name="barangay" type="text"></label>
+            <label><span>Zone</span><input name="zone" type="text"></label>
+            <label class="survey-span-2"><span>Interviewer</span><input name="interviewer" type="text"></label>
+          </div>
+
+          <div class="digital-fieldwork-grid">
+            <article class="digital-field-card">
+              <div>
+                <span class="portal-label">Toolkit addition</span>
+                <h3>Household Location</h3>
+                <p>Capture device GPS coordinates at the household, if allowed by the field protocol.</p>
+              </div>
+              <div id="gps-readout" class="gps-readout">No location captured.</div>
+              <button id="capture-location-btn" class="button button-outline-maroon" type="button">📍 Capture GPS Location</button>
+            </article>
+
+            <article class="digital-field-card">
+              <div>
+                <span class="portal-label">Optional Toolkit addition</span>
+                <h3>Reference Photo</h3>
+                <p>Use only when approved. Prefer an exterior/context photo and avoid faces or unnecessary identifiers.</p>
+              </div>
+              <input id="household-photo-input" type="file" accept="image/*" capture="environment" hidden>
+              <div id="household-photo-preview" class="household-photo-preview">No photo saved.</div>
+              <div class="digital-photo-actions">
+                <button id="take-photo-btn" class="button button-outline-maroon" type="button">📷 Take / Choose Photo</button>
+                <button id="remove-photo-btn" class="mini-action" type="button" hidden>Remove</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <details class="survey-section" open data-section="family">
+          <summary><span>I</span><strong>Family Members and Characteristics</strong></summary>
+          <div class="survey-section-body">
+            <h3>A. Basic Information About Head of the Family</h3>
+            <div class="survey-grid four">
+              <label class="survey-span-2"><span>Name</span><input name="head_name" type="text"></label>
+              <label><span>Age</span><input name="head_age" type="number" min="0"></label>
+              <label><span>Sex</span><select name="head_sex"><option value=""></option><option>Male</option><option>Female</option><option>Other / specify</option></select></label>
+              <label><span>Highest Educational Attainment</span><input name="head_education" type="text"></label>
+              <label><span>Occupation</span><input name="head_occupation" type="text"></label>
+              <label><span>Monthly Income</span><input name="head_monthly_income" type="text" inputmode="decimal"></label>
+              <label><span>Civil Status</span>
+                <select name="head_civil_status">
+                  <option value=""></option><option>Married - Legally</option><option>Married - Common Law</option>
+                  <option>Widowed</option><option>Separated</option><option>Single</option>
+                </select>
+              </label>
+              <label><span>Employment Status</span>
+                <select name="head_employment_status">
+                  <option value=""></option><option>Permanent - Private</option><option>Permanent - Public</option>
+                  <option>Temporary - Casual</option><option>Temporary - Contractual</option>
+                  <option>Self Employed</option><option>Unemployed</option>
+                </select>
+              </label>
+            </div>
+
+            <h3>B. Other Family Members</h3>
+            <div class="survey-grid six compact-grid">
+              <label><span>Children - Total</span><input name="children_total" type="number" min="0"></label>
+              <label><span>Children - Male</span><input name="children_male" type="number" min="0"></label>
+              <label><span>Children - Female</span><input name="children_female" type="number" min="0"></label>
+              <label><span>Other Dependents - Total</span><input name="dependents_total" type="number" min="0"></label>
+              <label><span>Other Dependents - Male</span><input name="dependents_male" type="number" min="0"></label>
+              <label><span>Other Dependents - Female</span><input name="dependents_female" type="number" min="0"></label>
+            </div>
+
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>Other Family Members</strong><button type="button" class="mini-action add-row" data-repeater="family_members">+ Add member</button></div>
+              <div id="family_members_rows" class="repeat-rows"></div>
+              <template id="family_members_template">
+                <div class="repeat-row repeat-row-8">
+                  <input data-field="name" placeholder="Name">
+                  <input data-field="relation" placeholder="Relation to head">
+                  <input data-field="age" type="number" min="0" placeholder="Age">
+                  <select data-field="sex"><option value="">Sex</option><option>Male</option><option>Female</option><option>Other</option></select>
+                  <input data-field="civil_status" placeholder="Civil status">
+                  <input data-field="education" placeholder="Education">
+                  <input data-field="occupation" placeholder="Occupation">
+                  <input data-field="monthly_income" placeholder="Monthly income">
+                  <button type="button" class="remove-row" aria-label="Remove row">×</button>
+                </div>
+              </template>
+              <p class="survey-help">For ages 3–5, note daycare attendance; for ages 6–12 and 13–16, note whether currently studying or not, consistent with the current paper form.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="survey-section" data-section="socioeconomic">
+          <summary><span>II</span><strong>Socio-Economic and Cultural Characteristics</strong></summary>
+          <div class="survey-section-body">
+            <div class="survey-grid two">
+              <label><span>A. Religion (specify)</span><input name="religion" type="text"></label>
+              <label><span>B. Primary Dialect/Language Spoken at Home</span><input name="primary_language" type="text"></label>
+            </div>
+
+            <h3>C. Income</h3>
+            <label class="survey-full"><span>C.1 Estimated Average Family Income per month</span>
+              <select name="family_income_bracket">
+                <option value=""></option>
+                <option>Above 50,000</option><option>45,001-50,000</option><option>40,001-45,000</option>
+                <option>35,001-40,000</option><option>30,001-35,000</option><option>25,001-30,000</option>
+                <option>20,001-25,000</option><option>15,001-20,000</option><option>10,001-15,000</option>
+                <option>5,001-10,000</option><option>1,001-5,000</option><option>1,000 & below</option>
+              </select>
+            </label>
+
+            <fieldset class="survey-choice-group">
+              <legend>C.2 Primary Source of Livelihood (check all that apply)</legend>
+              <label><input type="checkbox" name="livelihood" value="Farming - Owned"> Farming - Owned</label>
+              <label><input type="checkbox" name="livelihood" value="Farming - Tenanted"> Farming - Tenanted</label>
+              <label><input type="checkbox" name="livelihood" value="Laborer"> Laborer</label>
+              <label><input type="checkbox" name="livelihood" value="Carpentry"> Carpentry</label>
+              <label><input type="checkbox" name="livelihood" value="Fishing"> Fishing</label>
+              <label><input type="checkbox" name="livelihood" value="Peddling"> Peddling</label>
+              <label><input type="checkbox" name="livelihood" value="Government Employee"> Government Employee</label>
+              <label><input type="checkbox" name="livelihood" value="Small Industries"> Small Industries</label>
+            </fieldset>
+            <label class="survey-full"><span>Other livelihood (specify)</span><input name="livelihood_other" type="text"></label>
+
+            <h3>C.3 Food Production Engaged In</h3>
+            <div class="survey-grid two">
+              <label><span>Engaged in food production?</span><select name="food_production_engaged"><option value=""></option><option>Yes</option><option>No</option></select></label>
+              <label><span>Other resource (specify)</span><input name="food_production_other" type="text"></label>
+            </div>
+            <div class="matrix-table-wrap">
+              <table class="survey-matrix">
+                <thead><tr><th>Resource</th><th>Family Consumption</th><th>Selling</th><th>Both</th></tr></thead>
+                <tbody>
+                  <tr><th>Vegetable Gardening</th><td><input type="radio" name="foodprod_vegetable" value="Family Consumption"></td><td><input type="radio" name="foodprod_vegetable" value="Selling"></td><td><input type="radio" name="foodprod_vegetable" value="Both"></td></tr>
+                  <tr><th>Piggery</th><td><input type="radio" name="foodprod_piggery" value="Family Consumption"></td><td><input type="radio" name="foodprod_piggery" value="Selling"></td><td><input type="radio" name="foodprod_piggery" value="Both"></td></tr>
+                  <tr><th>Poultry</th><td><input type="radio" name="foodprod_poultry" value="Family Consumption"></td><td><input type="radio" name="foodprod_poultry" value="Selling"></td><td><input type="radio" name="foodprod_poultry" value="Both"></td></tr>
+                  <tr><th>Fruit trees</th><td><input type="radio" name="foodprod_fruit" value="Family Consumption"></td><td><input type="radio" name="foodprod_fruit" value="Selling"></td><td><input type="radio" name="foodprod_fruit" value="Both"></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>D. Real Property / Housing / Facilities</h3>
+            <fieldset class="survey-choice-group">
+              <legend>D.1 Type of Property Owned</legend>
+              <label><input type="checkbox" name="property_owned" value="Farm Land"> Farm Land (rice, coconut, others)</label>
+              <label><input type="checkbox" name="property_owned" value="Residential Lot"> Residential Lot</label>
+              <label><input type="checkbox" name="property_owned" value="Residential House without Lot"> Residential House without Lot</label>
+              <label><input type="checkbox" name="property_owned" value="Residential lot with house"> Residential lot with house</label>
+              <label><input type="checkbox" name="property_owned" value="Commercial Lot with Building"> Commercial Lot with Building</label>
+            </fieldset>
+            <label class="survey-full"><span>Other property (specify)</span><input name="property_other" type="text"></label>
+
+            <div class="survey-grid two">
+              <label><span>D.2.a Housing Ownership</span><select name="housing_ownership"><option value=""></option><option>Owned</option><option>Rented</option><option>Shared</option></select></label>
+              <label><span>D.2.b Type of Construction</span><select name="housing_construction"><option value=""></option><option>Light</option><option>Medium</option><option>Heavy</option></select></label>
+            </div>
+
+            <fieldset class="survey-choice-group">
+              <legend>D.3.a Appliances Owned</legend>
+              <label><input type="checkbox" name="appliances" value="Radio"> Radio</label><label><input type="checkbox" name="appliances" value="CD"> CD</label>
+              <label><input type="checkbox" name="appliances" value="Electric fan"> Electric fan</label><label><input type="checkbox" name="appliances" value="Cassette"> Cassette</label>
+              <label><input type="checkbox" name="appliances" value="DVD"> DVD</label><label><input type="checkbox" name="appliances" value="Refrigerator"> Refrigerator</label>
+              <label><input type="checkbox" name="appliances" value="TV"> TV</label><label><input type="checkbox" name="appliances" value="Gas burner"> Gas burner</label>
+              <label><input type="checkbox" name="appliances" value="Computer set"> Computer set</label><label><input type="checkbox" name="appliances" value="Laptop"> Laptop</label>
+              <label><input type="checkbox" name="appliances" value="None"> None</label>
+            </fieldset>
+            <label class="survey-full"><span>Other appliance (specify)</span><input name="appliance_other" type="text"></label>
+
+            <fieldset class="survey-choice-group">
+              <legend>D.3.b Transportation Owned</legend>
+              <label><input type="checkbox" name="transport" value="Car"> Car</label><label><input type="checkbox" name="transport" value="Tricycle"> Tricycle</label>
+              <label><input type="checkbox" name="transport" value="Private jeep"> Private jeep</label><label><input type="checkbox" name="transport" value="Motorcycle"> Motorcycle</label>
+              <label><input type="checkbox" name="transport" value="Truck"> Truck</label><label><input type="checkbox" name="transport" value="Kuliglig"> Kuliglig</label>
+              <label><input type="checkbox" name="transport" value="None"> None</label>
+            </fieldset>
+            <label class="survey-full"><span>Other transportation (specify)</span><input name="transport_other" type="text"></label>
+
+            <fieldset class="survey-choice-group">
+              <legend>D.3.c Utilities</legend>
+              <label><input type="checkbox" name="utilities" value="Electrical Connection"> Electrical Connection</label>
+              <label><input type="checkbox" name="utilities" value="Telephone/cellphone"> Telephone/cellphone</label>
+            </fieldset>
+
+            <div class="survey-grid two">
+              <label><span>D.4 All family members have at least 3 sets of external/internal clothing</span><select name="basic_clothing"><option value=""></option><option>Yes</option><option>No</option></select></label>
+              <label><span>D.5 Family Food Consumption</span>
+                <select name="food_consumption">
+                  <option value=""></option><option>Eat 4 times or more - Adequate</option><option>Eat 4 times or more - Inadequate</option>
+                  <option>Eat 3 times a day - Adequate</option><option>Eat 3 times a day - Inadequate</option>
+                  <option>Eat twice a day - Adequate</option><option>Eat twice a day - Inadequate</option>
+                  <option>Eat once a day - Adequate</option><option>Eat once a day - Inadequate</option>
+                </select>
+              </label>
+            </div>
+
+            <h3>E. Decision Making Pattern</h3>
+            <div class="matrix-table-wrap">
+              <table class="survey-matrix">
+                <thead><tr><th>Decision Area</th><th>Father</th><th>Mother</th><th>Children</th><th>Single</th><th>Others</th></tr></thead>
+                <tbody id="decision_matrix"></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <details class="survey-section" data-section="health">
+          <summary><span>III</span><strong>Health Status and Practices</strong></summary>
+          <div class="survey-section-body">
+            <h3>A. Food, Nutrition and Immunization Status</h3>
+
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>A.1 Infants exclusively breastfed for six months (0–24 months)</strong><button type="button" class="mini-action add-row" data-repeater="breastfeeding">+ Add child</button></div>
+              <div id="breastfeeding_rows" class="repeat-rows"></div>
+              <template id="breastfeeding_template">
+                <div class="repeat-row repeat-row-3">
+                  <input data-field="child_name" placeholder="Name of child">
+                  <select data-field="exclusive_6mo"><option value="">Breastfed 6 months?</option><option>Yes</option><option>No</option><option>NA</option></select>
+                  <input data-field="if_no_reason" placeholder="If no, reason">
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>A.2 Supplementary Feeding (0–24 months)</strong><button type="button" class="mini-action add-row" data-repeater="supplementary_feeding">+ Add child</button></div>
+              <div id="supplementary_feeding_rows" class="repeat-rows"></div>
+              <template id="supplementary_feeding_template">
+                <div class="repeat-row repeat-row-4">
+                  <input data-field="child_name" placeholder="Name of child">
+                  <select data-field="supplementary_feeding"><option value="">Supplementary feeding?</option><option>Yes</option><option>No</option><option>NA</option></select>
+                  <input data-field="food_types" placeholder="Types of food given">
+                  <input data-field="age_started" placeholder="Age started">
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>A.3 Nutritional Status of Children 0–59 months</strong><button type="button" class="mini-action add-row" data-repeater="nutrition_children">+ Add child</button></div>
+              <div id="nutrition_children_rows" class="repeat-rows"></div>
+              <template id="nutrition_children_template">
+                <div class="repeat-row repeat-row-7">
+                  <input data-field="name" placeholder="Name">
+                  <input data-field="birthdate" type="date">
+                  <input data-field="weighing_date" type="date">
+                  <input data-field="weight" placeholder="Weight">
+                  <input data-field="weight_status" placeholder="Weight status">
+                  <input data-field="height" placeholder="Height">
+                  <input data-field="height_status" placeholder="Height status">
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>A.4 Immunization Status (Children 0–12 months)</strong><button type="button" class="mini-action add-row" data-repeater="immunization_children">+ Add child</button></div>
+              <div id="immunization_children_rows" class="repeat-rows"></div>
+              <template id="immunization_children_template">
+                <div class="repeat-row repeat-row-immunization">
+                  <input data-field="name" placeholder="Name">
+                  <input data-field="age_months" type="number" min="0" placeholder="Age mos">
+                  <input data-field="hepa1" placeholder="Hepa1">
+                  <input data-field="bcg" placeholder="BCG">
+                  <input data-field="opv1" placeholder="OPV1">
+                  <input data-field="opv2" placeholder="OPV2">
+                  <input data-field="opv3" placeholder="OPV3">
+                  <input data-field="ipv" placeholder="IPV">
+                  <input data-field="penta1" placeholder="Penta1">
+                  <input data-field="penta2" placeholder="Penta2">
+                  <input data-field="penta3" placeholder="Penta3">
+                  <input data-field="pcv1" placeholder="PCV1">
+                  <input data-field="pcv2" placeholder="PCV2">
+                  <input data-field="pcv3" placeholder="PCV3">
+                  <input data-field="mmr1" placeholder="MMR1">
+                  <input data-field="mmr2" placeholder="MMR2">
+                  <select data-field="status"><option value="">Status</option><option>Fully</option><option>Ongoing</option><option>None</option></select>
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+
+            <h3>B. Prenatal, Natal and Postnatal Care</h3>
+            <div class="survey-grid two">
+              <label><span>Iron and iodine supplementation</span><select name="pn_iron_iodine"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>Folic Acid and Calcium</span><select name="pn_folic_calcium"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>First pregnancy: 2 doses Td vaccination</span><select name="pn_td_first"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>2nd or more pregnancy: at least 3 doses Td (Td2 plus)</span><select name="pn_td_repeat"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>Prenatal care received</span><select name="pn_prenatal_care"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>First visit made in first trimester</span><select name="pn_first_trimester"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>At least 1 visit per trimester</span><select name="pn_visit_each_trimester"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>Total Number of prenatal visits</span><input name="pn_total_visits" type="text"></label>
+              <label><span>Postnatal visit within 4–6 weeks postpartum</span><select name="pn_postnatal_visit"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>Delivery handled by trained health personnel</span><select name="delivery_trained_personnel"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>If yes, personnel</span><select name="delivery_personnel_type"><option value=""></option><option>RHM</option><option>Nurse</option><option>Physician</option><option>NA</option></select></label>
+              <label><span>If no, who handled delivery</span><input name="delivery_other_personnel" type="text"></label>
+              <label><span>Accredited health facility</span><select name="delivery_facility"><option value=""></option><option>Government Hospital</option><option>Private Hospital</option><option>RHU Birthing Center</option><option>Private lying in</option><option>NA</option></select></label>
+            </div>
+
+            <h3>C. Family Planning</h3>
+            <div class="survey-grid two">
+              <label><span>Couples with access to family planning services</span><select name="fp_access"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>Couples practicing family planning</span><select name="fp_practicing"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+              <label><span>If yes, method</span><input name="fp_method" type="text"></label>
+              <label><span>If no, reason</span><input name="fp_reason_no" type="text"></label>
+            </div>
+
+            <h3>D. Morbidity</h3>
+            <label class="survey-full"><span>Any child below 6 years had more than 1 diarrheal episode?</span><select name="morbidity_diarrhea"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>Other illnesses experienced by family members</strong><button type="button" class="mini-action add-row" data-repeater="illnesses">+ Add illness</button></div>
+              <div id="illnesses_rows" class="repeat-rows"></div>
+              <template id="illnesses_template">
+                <div class="repeat-row repeat-row-5">
+                  <input data-field="illness" placeholder="Type of illness">
+                  <input data-field="age" type="number" min="0" placeholder="Age">
+                  <select data-field="sex"><option value="">Sex</option><option>Male</option><option>Female</option><option>Other</option></select>
+                  <input data-field="health_worker_attended" placeholder="Health worker attended">
+                  <input data-field="treatment_used" placeholder="Treatment used">
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+
+            <h3>E. Mortality</h3>
+            <label class="survey-full"><span>Deaths in the family due to preventable diseases?</span><select name="mortality_preventable"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>Causes / deaths</strong><button type="button" class="mini-action add-row" data-repeater="deaths">+ Add record</button></div>
+              <div id="deaths_rows" class="repeat-rows"></div>
+              <template id="deaths_template">
+                <div class="repeat-row repeat-row-5">
+                  <input data-field="cause" placeholder="Cause of disease/death">
+                  <input data-field="age" type="number" min="0" placeholder="Age">
+                  <select data-field="sex"><option value="">Sex</option><option>Male</option><option>Female</option><option>Other</option></select>
+                  <input data-field="health_worker_attended" placeholder="Health worker attended">
+                  <input data-field="treatment_used" placeholder="Treatment used">
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+
+            <h3>F. Health Seeking Behavior and Utilization of Health Services</h3>
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>Family Members with PhilHealth</strong><button type="button" class="mini-action add-row" data-repeater="philhealth_members">+ Add member</button></div>
+              <div id="philhealth_members_rows" class="repeat-rows"></div>
+              <template id="philhealth_members_template">
+                <div class="repeat-row repeat-row-3">
+                  <input data-field="name" placeholder="Name">
+                  <select data-field="type"><option value="">PhilHealth type</option><option>Employed Sector Program</option><option>Individually Paying Program</option><option>Sponsored Programs (4Ps/PWD)</option><option>OFWs</option><option>Senior citizens</option><option>Lifetime members</option><option>Qualified dependents</option><option>Indigent</option></select>
+                  <select data-field="remarks"><option value="">Remarks</option><option>Active</option><option>Inactive</option></select>
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+
+            <div class="survey-grid two">
+              <label><span>Family Members avail of Health Services</span><select name="avail_health_services"><option value=""></option><option>Yes</option><option>No</option></select></label>
+              <label><span>Solo parent availing health services</span><select name="solo_parent_services"><option value=""></option><option>Yes</option><option>No</option><option>NA</option></select></label>
+            </div>
+
+            <fieldset class="survey-choice-group">
+              <legend>Delays in Accessing Health Care — Decision to Seek Care</legend>
+              <label><input type="checkbox" name="delay_decision" value="Failure to recognize danger signs"> Failure to recognize danger signs</label>
+              <label><input type="checkbox" name="delay_decision" value="Lack of Money to pay Expenses"> Lack of Money to pay Expenses</label>
+              <label><input type="checkbox" name="delay_decision" value="No Available person to take care of the children and Home"> No available person to take care of children/home</label>
+              <label><input type="checkbox" name="delay_decision" value="Lack of Companion in going to the Health Facility"> Lack of companion</label>
+            </fieldset>
+            <label class="survey-full"><span>Other reason for delaying decision</span><input name="delay_decision_other" type="text"></label>
+
+            <fieldset class="survey-choice-group">
+              <legend>Delays — Reaching Appropriate Care in a Health Facility</legend>
+              <label><input type="checkbox" name="delay_reaching" value="Distance of Home to a Health Facility"> Distance of Home to a Health Facility</label>
+              <label><input type="checkbox" name="delay_reaching" value="Lack of Transportation"> Lack of Transportation</label>
+            </fieldset>
+            <label class="survey-full"><span>Other reason for delay reaching care</span><input name="delay_reaching_other" type="text"></label>
+
+            <fieldset class="survey-choice-group">
+              <legend>Delays — Receiving Appropriate Care in a Facility</legend>
+              <label><input type="checkbox" name="delay_receiving" value="Shortages of supplies and basic equipment"> Shortages of supplies and basic equipment</label>
+              <label><input type="checkbox" name="delay_receiving" value="Lack of skilled health personnel"> Lack of skilled health personnel</label>
+              <label><input type="checkbox" name="delay_receiving" value="Poor skills of Health Care Providers"> Poor skills of Health Care Providers</label>
+            </fieldset>
+            <label class="survey-full"><span>Other reason for delay receiving care</span><input name="delay_receiving_other" type="text"></label>
+
+            <div class="survey-grid three">
+              <label><span>Health Services Most Frequently Availed (ranking/text)</span><textarea name="health_services_rank" rows="4" placeholder="e.g. 1 RHU, 2 BHS, 3 Public Hospital…"></textarea></label>
+              <label><span>Health Worker Preferences During Illness (ranking/text)</span><textarea name="health_worker_rank" rows="4" placeholder="Medicine man, midwife, nurse, doctor, other"></textarea></label>
+              <label><span>Health Interventions During Illness (ranking/text)</span><textarea name="health_interventions_rank" rows="4" placeholder="Self medication, albularyo, RHM, nurse, hospital…"></textarea></label>
+            </div>
+
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>Family Members Received COVID-19 Vaccine</strong><button type="button" class="mini-action add-row" data-repeater="covid_vaccines">+ Add member</button></div>
+              <div id="covid_vaccines_rows" class="repeat-rows"></div>
+              <template id="covid_vaccines_template">
+                <div class="repeat-row repeat-row-6">
+                  <input data-field="name" placeholder="Name">
+                  <input data-field="age" type="number" min="0" placeholder="Age">
+                  <input data-field="first_dose" placeholder="First dose: brand/date">
+                  <input data-field="second_dose" placeholder="Second dose: brand/date">
+                  <input data-field="first_booster" placeholder="First booster: brand/date">
+                  <input data-field="second_booster" placeholder="Second booster: brand/date">
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+            <label class="survey-full"><span>If no COVID-19 vaccine, reason/s</span><input name="covid_no_reason" type="text"></label>
+          </div>
+        </details>
+
+        <details class="survey-section" data-section="environment">
+          <summary><span>IV</span><strong>Environmental Condition</strong></summary>
+          <div class="survey-section-body">
+            <h3>A. Safe Water</h3>
+            <div class="survey-grid two">
+              <label><span>1.1 Source of Water for Domestic Use</span>
+                <select name="water_domestic">
+                  <option value=""></option><option>Level 1 - Protected well</option><option>Level 1 - Developed spring</option>
+                  <option>Level 2 - Piped distribution network and communal faucet</option>
+                  <option>Level 3 - Waterworks system for individual households</option>
+                  <option>Shallow dug well</option><option>Unprotected spring</option><option>Other</option>
+                </select>
+              </label>
+              <label><span>1.2 Source of Drinking Water</span>
+                <select name="water_drinking">
+                  <option value=""></option><option>Level 1 - Protected well</option><option>Level 1 - Developed spring</option>
+                  <option>Level 2 - Piped distribution network and communal faucet</option>
+                  <option>Level 3 - Waterworks system for individual households</option>
+                  <option>Shallow dug well</option><option>Unprotected spring</option><option>Other</option>
+                </select>
+              </label>
+              <label><span>Other water source (specify)</span><input name="water_other" type="text"></label>
+              <label><span>Method of Water Storage</span><select name="water_storage"><option value=""></option><option>Open container</option><option>Covered container</option><option>Both</option></select></label>
+              <label><span>Method of Water Treatment</span><select name="water_treatment"><option value=""></option><option>Chlorination</option><option>Boiling</option><option>No treatment</option></select></label>
+            </div>
+
+            <fieldset class="survey-choice-group">
+              <legend>B. Food Storage</legend>
+              <label><input type="checkbox" name="food_storage" value="Cabinet"> Cabinet</label>
+              <label><input type="checkbox" name="food_storage" value="Covered plates"> Covered plates</label>
+              <label><input type="checkbox" name="food_storage" value="Covered basket"> Covered basket</label>
+              <label><input type="checkbox" name="food_storage" value="Refrigerator"> Refrigerator</label>
+              <label><input type="checkbox" name="food_storage" value="Others"> Others</label>
+            </fieldset>
+            <label class="survey-full"><span>Other food storage (specify)</span><input name="food_storage_other" type="text"></label>
+
+            <h3>C. Method of Excreta Disposal</h3>
+            <div class="survey-grid two">
+              <label><span>With toilet</span><select name="with_toilet"><option value=""></option><option>Yes</option><option>No</option></select></label>
+              <label><span>Type of Toilet</span><select name="toilet_type"><option value=""></option><option>Pour/flush toilet connected to septic tank</option><option>Ventilated improved pit latrine (VIP)</option><option>None</option></select></label>
+              <label><span>If no toilet, reason/s</span><input name="toilet_no_reason" type="text"></label>
+              <label><span>Ownership / Function</span><select name="toilet_ownership_function"><option value=""></option><option>Owned - Functional</option><option>Owned - Non-functional</option><option>Shared - Functional</option><option>Shared - Non-functional</option></select></label>
+            </div>
+
+            <div class="survey-grid two">
+              <label><span>D. Domestic Water Waste Disposal</span><select name="wastewater_disposal"><option value=""></option><option>Blind Drainage</option><option>Open Drainage</option></select></label>
+              <label><span>E. Garbage Collection</span><select name="garbage_collection"><option value=""></option><option>Open receptacle</option><option>Covered receptacle</option><option>None</option></select></label>
+            </div>
+            <fieldset class="survey-choice-group">
+              <legend>Garbage Disposal</legend>
+              <label><input type="checkbox" name="garbage_disposal" value="Composting"> Composting</label>
+              <label><input type="checkbox" name="garbage_disposal" value="Burying"> Burying</label>
+              <label><input type="checkbox" name="garbage_disposal" value="Burning"> Burning</label>
+              <label><input type="checkbox" name="garbage_disposal" value="Open Dumping"> Open Dumping</label>
+              <label><input type="checkbox" name="garbage_disposal" value="Riverside Dumping"> Riverside Dumping</label>
+              <label><input type="checkbox" name="garbage_disposal" value="Others"> Others</label>
+            </fieldset>
+
+            <h3>F. Animal Management</h3>
+            <div class="survey-grid two">
+              <label><span>With animals</span><select name="with_animals"><option value=""></option><option>Yes</option><option>No</option></select></label>
+              <label><span>Kind of animals</span><input name="animal_kind" type="text" placeholder="Domestic / Agricultural / specify"></label>
+            </div>
+            <fieldset class="survey-choice-group">
+              <legend>Method of Animal Management</legend>
+              <label><input type="checkbox" name="animal_management" value="Tied"> Tied</label>
+              <label><input type="checkbox" name="animal_management" value="Fenced"> Fenced</label>
+              <label><input type="checkbox" name="animal_management" value="Astray"> Astray</label>
+            </fieldset>
+          </div>
+        </details>
+
+        <details class="survey-section" data-section="participation">
+          <summary><span>V</span><strong>People's Participation in Community Development</strong></summary>
+          <div class="survey-section-body">
+            <div class="survey-grid two">
+              <label><span>Family members involved in at least one legitimate organization/association/community development group</span><select name="community_org_involvement"><option value=""></option><option>Yes</option><option>No</option></select></label>
+              <label><span>Number of family members involved</span><input name="community_org_member_count" type="number" min="0"></label>
+              <label class="survey-span-2"><span>Name/s of organization involved in</span><textarea name="community_org_names" rows="3"></textarea></label>
+              <label class="survey-span-2"><span>Awareness in Existing Organizations — organizations known even if not a member</span><textarea name="known_organizations" rows="3"></textarea></label>
+              <label class="survey-span-2"><span>Participation in other community activities/projects</span><textarea name="community_projects_participated" rows="3"></textarea></label>
+            </div>
+          </div>
+        </details>
+
+        <details class="survey-section" data-section="resources">
+          <summary><span>VI</span><strong>Community Resources, Needs and Problems</strong></summary>
+          <div class="survey-section-body">
+            <h3>A. Manpower</h3>
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>Recognized Leaders / Community Members</strong><button type="button" class="mini-action add-row" data-repeater="community_leaders">+ Add leader</button></div>
+              <div id="community_leaders_rows" class="repeat-rows"></div>
+              <template id="community_leaders_template">
+                <div class="repeat-row repeat-row-3">
+                  <input data-field="name" placeholder="Name">
+                  <input data-field="position" placeholder="Position">
+                  <input data-field="specialization" placeholder="Specialization">
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+
+            <h3>B. Material</h3>
+            <label class="survey-full"><span>Available material resources that can be used for community projects</span><textarea name="material_resources" rows="5"></textarea></label>
+
+            <h3>C. Needs and Problems</h3>
+            <p class="survey-help">Identify at least three important problems and possible solutions/recommendations affecting community health and development.</p>
+            <div class="repeat-block">
+              <div class="repeat-block-heading"><strong>Problems &amp; Recommendations</strong><button type="button" class="mini-action add-row" data-repeater="problems">+ Add problem</button></div>
+              <div id="problems_rows" class="repeat-rows"></div>
+              <template id="problems_template">
+                <div class="repeat-row repeat-row-2">
+                  <textarea data-field="problem" rows="2" placeholder="Problem"></textarea>
+                  <textarea data-field="recommendation" rows="2" placeholder="Recommendation / possible solution"></textarea>
+                  <button type="button" class="remove-row">×</button>
+                </div>
+              </template>
+            </div>
+          </div>
+        </details>
+
+        <section class="household-form-actions">
+          <div>
+            <strong id="bottom-save-status">Saved locally</strong>
+            <small id="bottom-sync-detail">This draft remains available on this device.</small>
+          </div>
+          <div class="household-action-buttons">
+            <button id="save-draft-btn" class="button button-outline-maroon" type="button">Save Draft Offline</button>
+            <button id="complete-queue-btn" class="button button-green" type="button">Complete &amp; Queue</button>
+            <button id="sync-now-btn" class="button button-maroon" type="button">Sync Now</button>
+          </div>
+        </section>
+      </form>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="offline-db.js"></script>
+  <script src="household-survey.js"></script>
+</body>
+</html>
