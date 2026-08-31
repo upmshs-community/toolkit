@@ -1,4 +1,4 @@
-const CACHE_NAME = "upm-shs-fieldwork-v1";
+const CACHE_NAME = "upm-shs-fieldwork-v2";
 const APP_SHELL = [
   "./field-forms.html",
   "./household-survey.html",

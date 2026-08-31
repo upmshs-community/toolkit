@@ -224,6 +224,7 @@
   function scheduleSave() {
     clearTimeout(saveTimer);
     document.getElementById("autosave-status").textContent = "Saving…";
+    updateSectionNavigator();
     saveTimer = setTimeout(() => saveLocal().catch(console.error), 450);
   }
 
@@ -273,6 +274,7 @@
         captured_at: new Date().toISOString()
       };
       updateGpsUI();
+      updateSectionNavigator();
       await saveLocal();
       btn.disabled = false;
       btn.textContent = "📍 Retake GPS Location";
@@ -303,6 +305,7 @@
       updated_at: new Date().toISOString()
     });
     await renderPhoto();
+    updateSectionNavigator();
     await saveLocal();
   }
 
@@ -328,6 +331,7 @@
   async function removePhoto() {
     await db.deleteMedia(`${localId}:household_photo`);
     await renderPhoto();
+    updateSectionNavigator();
     await saveLocal();
   }
 
@@ -501,6 +505,129 @@
     );
   }
 
+
+  const surveySectionOrder = [
+    "cover",
+    "family",
+    "socioeconomic",
+    "health",
+    "environment",
+    "participation",
+    "resources"
+  ];
+
+  function meaningfulValue(el) {
+    if (!el || el.disabled) return false;
+    if (el.type === "checkbox" || el.type === "radio") return el.checked;
+    if (el.type === "file") return !!el.files?.length;
+    return String(el.value ?? "").trim() !== "";
+  }
+
+  function sectionHasData(sectionId) {
+    const section = document.querySelector(`[data-section="${sectionId}"]`);
+    if (!section) return false;
+
+    // Any ordinary field with a meaningful value counts as "started".
+    if ([...section.querySelectorAll("input,select,textarea")]
+      .filter(el => !el.closest("template"))
+      .some(meaningfulValue)) return true;
+
+    // GPS/photo are digital fieldwork additions and also count as activity.
+    if (sectionId === "cover") {
+      if (currentRecord?.gps?.latitude) return true;
+      const preview = document.getElementById("household-photo-preview");
+      if (preview?.querySelector("img")) return true;
+    }
+
+    return false;
+  }
+
+  function updateSectionNavigator() {
+    const started = surveySectionOrder.filter(sectionHasData).length;
+    const percent = Math.round((started / surveySectionOrder.length) * 100);
+
+    const label = document.getElementById("survey-progress-label");
+    const bar = document.getElementById("survey-progress-bar");
+    if (label) label.textContent = `${started} of ${surveySectionOrder.length} sections started`;
+    if (bar) bar.style.width = `${percent}%`;
+
+    document.querySelectorAll("[data-jump-section]").forEach(button => {
+      const id = button.dataset.jumpSection;
+      button.classList.toggle("has-data", sectionHasData(id));
+    });
+  }
+
+  function setActiveSurveySection(sectionId) {
+    document.querySelectorAll("[data-jump-section]").forEach(button => {
+      const active = button.dataset.jumpSection === sectionId;
+      button.classList.toggle("active", active);
+      if (active) {
+        button.setAttribute("aria-current", "step");
+        // On narrow screens, keep the active tab visible.
+        button.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  function jumpToSurveySection(sectionId) {
+    const section = document.querySelector(`[data-section="${sectionId}"]`);
+    if (!section) return;
+
+    if (section.tagName === "DETAILS") section.open = true;
+    setActiveSurveySection(sectionId);
+
+    const nav = document.getElementById("survey-section-nav");
+    const topOffset = (document.querySelector(".portal-topbar")?.offsetHeight || 0)
+      + (nav?.offsetHeight || 0)
+      + 18;
+
+    const y = section.getBoundingClientRect().top + window.scrollY - topOffset;
+    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+  }
+
+  function setupSectionNavigator() {
+    document.querySelectorAll("[data-jump-section]").forEach(button => {
+      button.addEventListener("click", () => jumpToSurveySection(button.dataset.jumpSection));
+    });
+
+    const sections = surveySectionOrder
+      .map(id => document.querySelector(`[data-section="${id}"]`))
+      .filter(Boolean);
+
+    // IntersectionObserver keeps the sticky navigator aligned with scroll position.
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible[0]) {
+          setActiveSurveySection(visible[0].target.dataset.section);
+        }
+      }, {
+        root: null,
+        rootMargin: "-28% 0px -58% 0px",
+        threshold: [0, 0.01, 0.1, 0.25]
+      });
+
+      sections.forEach(section => observer.observe(section));
+    } else {
+      const onScroll = () => {
+        const anchor = window.scrollY + 220;
+        let active = sections[0]?.dataset.section || "cover";
+        sections.forEach(section => {
+          if (section.offsetTop <= anchor) active = section.dataset.section;
+        });
+        setActiveSurveySection(active);
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
+
+    updateSectionNavigator();
+  }
+
   function attachEvents() {
     form.querySelectorAll("input,select,textarea").forEach(el => {
       if (el.closest("template")) return;
@@ -567,6 +694,8 @@
       await loadRecord();
       ensureStarterRows();
       attachEvents();
+      setupSectionNavigator();
+      updateSectionNavigator();
 
       loading.hidden = true;
       app.hidden = false;
