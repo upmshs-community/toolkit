@@ -2178,3 +2178,42 @@ html.toolkit-scroll-document:has(body.portal-is-loading) {
     aspect-ratio: 16 / 8;
   }
 }
+
+
+/* =========================================================
+   PHASE 6 — PUBLIC LANDING PAGE TABLET SCROLL FIX
+   The fixed Toolkit app-shell must never lock index.html.
+   ========================================================= */
+
+html.public-scroll-document {
+  height: auto !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.public-landing-page {
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  overscroll-behavior-y: auto !important;
+}
+
+/* Extra safeguard against the shared portal tablet lock. */
+@media (min-width: 641px) {
+  html.public-scroll-document {
+    height: auto !important;
+    overflow-y: auto !important;
+  }
+
+  body.public-landing-page {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: visible !important;
+  }
+}
