@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Community Diagnosis | Community Health Toolkit</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <link rel="stylesheet" href="styles.css?v=7c3a">
+</head>
+<body class="portal-body toolkit-scroll-page student-diagnosis-page portal-is-loading">
+  <div id="diagnosis-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Community Diagnosis Workspace…</strong>
+    <span>Loading your active community rotation and field data.</span>
+  </div>
+
+  <div id="diagnosis-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Community Health Toolkit</strong>
+          <span>Community Diagnosis Workspace</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Student</strong>
+          <span data-user-email></span>
+          <small class="portal-user-role"><span data-user-role>Student</span> · <span data-user-batch>—</span></small>
+        </div>
+        <a class="portal-signout admin-return-link" href="field-forms.html">Field Forms</a>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell student-diagnosis-shell">
+      <aside class="portal-sidebar student-workspace-sidebar">
+        <div class="portal-sidebar-brand-block">
+          <img src="assets/shs-logo.png" alt="UPM-SHS seal">
+          <div>
+            <strong>Community Diagnosis</strong>
+            <span>Field evidence to community priorities</span>
+          </div>
+        </div>
+
+        <nav>
+          <a href="portal.html">Home</a>
+          <a href="field-forms.html">New Field Survey</a>
+          <a class="active" href="community-diagnosis.html">Diagnosis Workspace</a>
+          <a href="modules.html">Manual &amp; Modules</a>
+          <a href="directory.html">Health Directory</a>
+          <a href="search.html">Search</a>
+        </nav>
+
+        <div class="sidebar-note">
+          <strong>Assigned community only</strong>
+          <span>Community-wide map and analytics are scoped to your active rotation.</span>
+        </div>
+      </aside>
+
+      <main class="portal-main student-diagnosis-main">
+        <section class="diagnosis-hero">
+          <div>
+            <span class="portal-kicker">Community fieldwork</span>
+            <h1 id="diagnosis-community-title">Community Diagnosis</h1>
+            <p id="diagnosis-rotation-copy">Loading your active rotation…</p>
+          </div>
+          <aside class="diagnosis-privacy-card">
+            <span>Student access</span>
+            <strong>Scoped community evidence</strong>
+            <small>Full responses: your own surveys. Community-wide map and analytics: de-identified/sanitized fields.</small>
+          </aside>
+        </section>
+
+        <nav class="diagnosis-tabs" aria-label="Community diagnosis workspace">
+          <button class="active" type="button" data-diagnosis-tab="overview">Overview</button>
+          <button type="button" data-diagnosis-tab="surveys">My Surveys</button>
+          <button type="button" data-diagnosis-tab="map">Field Map</button>
+          <button type="button" data-diagnosis-tab="analytics">Analytics</button>
+          <button type="button" data-diagnosis-tab="diagnosis">Diagnosis &amp; Priorities</button>
+        </nav>
+
+        <!-- OVERVIEW -->
+        <section class="diagnosis-tab-panel active" data-diagnosis-panel="overview">
+          <div class="diagnosis-stat-grid">
+            <article>
+              <span>My synced surveys</span>
+              <strong id="diag-stat-my-surveys">0</strong>
+              <small>Submitted by you</small>
+            </article>
+            <article>
+              <span>Community surveys</span>
+              <strong id="diag-stat-community-surveys">0</strong>
+              <small>Completed/reviewed records</small>
+            </article>
+            <article>
+              <span>With GPS</span>
+              <strong id="diag-stat-gps">0</strong>
+              <small>Mapped household records</small>
+            </article>
+            <article>
+              <span>Barangays represented</span>
+              <strong id="diag-stat-barangays">0</strong>
+              <small>In community dataset</small>
+            </article>
+            <article>
+              <span>Priority problems</span>
+              <strong id="diag-stat-priorities">0</strong>
+              <small>Draft/proposed diagnoses</small>
+            </article>
+          </div>
+
+          <div class="diagnosis-overview-grid">
+            <section class="portal-panel diagnosis-workflow-card">
+              <span class="portal-label">Community diagnosis workflow</span>
+              <h2>From household data to priority problems</h2>
+              <div class="diagnosis-flow">
+                <article><span>1</span><div><strong>Collect</strong><small>Household and community field data</small></div></article>
+                <i>→</i>
+                <article><span>2</span><div><strong>Review</strong><small>Survey records and mapped coverage</small></div></article>
+                <i>→</i>
+                <article><span>3</span><div><strong>Analyze</strong><small>Describe patterns with clear denominators</small></div></article>
+                <i>→</i>
+                <article><span>4</span><div><strong>Diagnose</strong><small>Synthesize evidence into community priorities</small></div></article>
+              </div>
+            </section>
+
+            <section class="portal-panel diagnosis-next-actions">
+              <span class="portal-label">Quick actions</span>
+              <h2>Continue fieldwork</h2>
+              <a href="field-forms.html"><strong>+ New Household Survey</strong><span>Collect data offline →</span></a>
+              <button type="button" data-open-tab="map"><strong>Open Field Map</strong><span>Check mapped household coverage →</span></button>
+              <button type="button" data-open-tab="analytics"><strong>Review Analytics</strong><span>Describe selected community patterns →</span></button>
+              <button type="button" data-open-tab="diagnosis"><strong>Add Priority Problem</strong><span>Synthesize evidence and recommendations →</span></button>
+            </section>
+          </div>
+
+          <section class="portal-panel diagnosis-method-card">
+            <div class="portal-panel-heading">
+              <div>
+                <span class="portal-label">Use of evidence</span>
+                <h2>What the workspace does</h2>
+              </div>
+            </div>
+            <p>
+              The workspace helps organize field evidence for community diagnosis. It does not automatically declare a community health problem,
+              calculate an official SHS/DOH indicator, or replace validation with the community, preceptor, or faculty.
+            </p>
+          </section>
+        </section>
+
+        <!-- MY SURVEYS -->
+        <section class="diagnosis-tab-panel" data-diagnosis-panel="surveys">
+          <section class="portal-panel diagnosis-section-card">
+            <div class="portal-panel-heading">
+              <div>
+                <span class="portal-label">Your field records</span>
+                <h2>My Household Surveys</h2>
+                <p>These are synced survey records submitted by your account in the assigned community.</p>
+              </div>
+              <a class="button button-maroon" href="field-forms.html">+ New Survey</a>
+            </div>
+
+            <div class="diagnosis-filter-row">
+              <label><span>Status</span>
+                <select id="my-survey-status">
+                  <option value="">All statuses</option>
+                  <option value="draft">Draft</option>
+                  <option value="completed">Completed</option>
+                  <option value="reviewed">Reviewed</option>
+                </select>
+              </label>
+              <label><span>Barangay</span><select id="my-survey-barangay"><option value="">All barangays</option></select></label>
+            </div>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table student-survey-table">
+                <thead>
+                  <tr><th>Household</th><th>Barangay / Zone</th><th>Interview</th><th>Status</th><th>GPS</th><th></th></tr>
+                </thead>
+                <tbody id="my-surveys-body">
+                  <tr><td colspan="6" class="table-loading">Loading your surveys…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- FIELD MAP -->
+        <section class="diagnosis-tab-panel" data-diagnosis-panel="map">
+          <section class="diagnosis-access-note">
+            <div>
+              <span class="portal-label">Privacy-aware map</span>
+              <strong>Household codes and fieldwork metadata only.</strong>
+            </div>
+            <small>Exact household coordinates are limited to your assigned community workspace.</small>
+          </section>
+
+          <section class="diagnosis-map-stats">
+            <article><span>Mapped</span><strong id="student-map-count">0</strong><small>Households with GPS</small></article>
+            <article><span>Reviewed</span><strong id="student-map-reviewed">0</strong><small>Survey records</small></article>
+            <article><span>Barangays</span><strong id="student-map-barangays">0</strong><small>Mapped coverage</small></article>
+          </section>
+
+          <section class="portal-panel student-map-panel">
+            <div class="student-map-heading">
+              <div>
+                <span class="portal-label">Assigned community</span>
+                <h2>Household &amp; Community Field Map</h2>
+              </div>
+              <div class="field-map-layer-toggles">
+                <label><input id="student-layer-households" type="checkbox" checked> Households</label>
+                <label><input id="student-layer-health" type="checkbox" checked> Health system</label>
+                <label><input id="student-layer-projects" type="checkbox" checked> Projects</label>
+                <label><input id="student-layer-resources" type="checkbox" checked> Resources</label>
+              </div>
+            </div>
+            <div id="student-community-map" class="student-community-map"></div>
+            <div class="field-map-legend">
+              <span><i class="legend-dot reviewed"></i>Reviewed</span>
+              <span><i class="legend-dot completed"></i>Completed</span>
+              <span><i class="legend-dot draft"></i>Draft</span>
+              <span><i class="legend-square health"></i>Health system</span>
+              <span><i class="legend-square project"></i>Project</span>
+              <span><i class="legend-square resource"></i>Community resource</span>
+            </div>
+          </section>
+        </section>
+
+        <!-- ANALYTICS -->
+        <section class="diagnosis-tab-panel" data-diagnosis-panel="analytics">
+          <section class="diagnosis-access-note">
+            <div>
+              <span class="portal-label">Descriptive analytics</span>
+              <strong>Completed + reviewed surveys are included by default.</strong>
+            </div>
+            <label class="diagnosis-dataset-select"><span>Dataset</span>
+              <select id="student-analytics-dataset">
+                <option value="completed_reviewed">Completed + Reviewed</option>
+                <option value="reviewed">Reviewed only</option>
+              </select>
+            </label>
+          </section>
+
+          <div class="student-analytics-kpis">
+            <article><span>Households</span><strong id="student-analytics-n">0</strong><small>Current dataset</small></article>
+            <article><span>With toilet</span><strong id="student-analytics-toilet">—</strong><small id="student-analytics-toilet-n">0 answered</small></article>
+            <article><span>Avail health services</span><strong id="student-analytics-services">—</strong><small id="student-analytics-services-n">0 answered</small></article>
+            <article><span>Organization involvement</span><strong id="student-analytics-participation">—</strong><small id="student-analytics-participation-n">0 answered</small></article>
+          </div>
+
+          <div class="student-analytics-grid">
+            <section class="portal-panel analytics-panel">
+              <div class="portal-panel-heading"><div><span class="portal-label">Environmental condition</span><h2>Drinking Water Source</h2></div></div>
+              <div id="student-water-source" class="analytics-bars"></div>
+              <small id="student-water-source-n" class="analytics-denominator"></small>
+            </section>
+
+            <section class="portal-panel analytics-panel">
+              <div class="portal-panel-heading"><div><span class="portal-label">Environmental condition</span><h2>Water Treatment</h2></div></div>
+              <div id="student-water-treatment" class="analytics-bars"></div>
+              <small id="student-water-treatment-n" class="analytics-denominator"></small>
+            </section>
+
+            <section class="portal-panel analytics-panel">
+              <div class="portal-panel-heading"><div><span class="portal-label">Health-seeking behavior</span><h2>Recorded Delay Reasons</h2></div></div>
+              <p class="analytics-panel-note">Counts only. Empty checkbox groups are not treated as “no delay.”</p>
+              <div id="student-delay-reasons" class="analytics-ranked-list"></div>
+            </section>
+
+            <section class="portal-panel analytics-panel">
+              <div class="portal-panel-heading"><div><span class="portal-label">Environmental practices</span><h2>Garbage Disposal Selections</h2></div></div>
+              <p class="analytics-panel-note">Counts of selected practices; multiple selections are possible.</p>
+              <div id="student-garbage-list" class="analytics-ranked-list"></div>
+            </section>
+          </div>
+
+          <section class="portal-panel student-denominator-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Data quality</span><h2>Answered Denominators</h2></div>
+            </div>
+            <div id="student-denominator-grid" class="analytics-quality-grid"></div>
+          </section>
+        </section>
+
+        <!-- DIAGNOSIS -->
+        <section class="diagnosis-tab-panel" data-diagnosis-panel="diagnosis">
+          <div class="diagnosis-priority-layout">
+            <section class="portal-panel diagnosis-priority-form-card">
+              <div class="portal-panel-heading">
+                <div>
+                  <span class="portal-label">Community diagnosis</span>
+                  <h2>Add Priority Problem</h2>
+                  <p>Summarize the evidence, proposed recommendation, and relative priority for discussion with the community/preceptor.</p>
+                </div>
+              </div>
+
+              <form id="community-diagnosis-form" class="community-diagnosis-form">
+                <label>
+                  <span>Problem / priority health concern</span>
+                  <input id="diagnosis-problem-title" type="text" required placeholder="e.g. Limited access to safe drinking water">
+                </label>
+                <label>
+                  <span>Evidence / basis</span>
+                  <textarea id="diagnosis-evidence" rows="5" required placeholder="Summarize relevant survey findings, observations, secondary data, or community input. Include denominators where applicable."></textarea>
+                </label>
+                <label>
+                  <span>Recommendation / possible action</span>
+                  <textarea id="diagnosis-recommendation" rows="4" placeholder="Possible solution or action for community discussion"></textarea>
+                </label>
+                <label>
+                  <span>Priority rank</span>
+                  <input id="diagnosis-priority-rank" type="number" min="1" max="20" placeholder="1 = highest priority">
+                </label>
+                <div class="diagnosis-form-actions">
+                  <button id="save-diagnosis-draft" class="button button-outline-maroon" type="button">Save Draft</button>
+                  <button class="button button-maroon" type="submit">Propose for Review</button>
+                </div>
+              </form>
+              <div id="diagnosis-form-message" class="admin-message" aria-live="polite"></div>
+            </section>
+
+            <section class="portal-panel diagnosis-priority-list-card">
+              <div class="portal-panel-heading">
+                <div>
+                  <span class="portal-label">Working priorities</span>
+                  <h2>Community Health Problems</h2>
+                  <p>Shared within the assigned community workspace.</p>
+                </div>
+              </div>
+              <div id="community-diagnosis-list" class="community-diagnosis-list">
+                <div class="table-loading">Loading priorities…</div>
+              </div>
+            </section>
+          </div>
+
+          <section class="field-map-method-note diagnosis-review-note">
+            <strong>Diagnosis is a synthesis step</strong>
+            <p>
+              A statistical pattern alone is not automatically a community diagnosis. Triangulate household survey findings with community observations,
+              secondary data, stakeholder input, and preceptor/faculty review before finalizing priorities.
+            </p>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Own-survey response drawer -->
+  <div id="student-survey-backdrop" class="field-detail-backdrop" hidden></div>
+  <aside id="student-survey-drawer" class="field-detail-drawer" aria-hidden="true">
+    <header class="field-detail-header">
+      <div>
+        <span class="portal-label">My household survey</span>
+        <h2 id="student-survey-detail-title">Household Survey</h2>
+        <p id="student-survey-detail-subtitle"></p>
+      </div>
+      <button id="student-survey-detail-close" class="field-detail-close" type="button" aria-label="Close">×</button>
+    </header>
+    <div class="field-detail-body">
+      <section class="field-detail-summary-grid" id="student-survey-detail-summary"></section>
+      <section class="field-detail-section">
+        <div class="field-detail-section-heading"><h3>Survey Responses</h3><span>Your synced response</span></div>
+        <div id="student-survey-detail-responses" class="field-response-sections"></div>
+      </section>
+    </div>
+    <footer class="field-detail-footer">
+      <span>Read-only synced record</span>
+      <div><button id="student-survey-detail-done" class="button button-maroon" type="button">Done</button></div>
+    </footer>
+  </aside>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="community-diagnosis.js"></script>
+</body>
+</html>
