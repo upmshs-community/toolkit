@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Project | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="project-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening project…</strong>
+    <span>Loading project records.</span>
+  </div>
+
+  <div id="project-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html#projects">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Project Workspace</strong>
+          <span>Community Health Toolkit</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Authorized user</strong>
+          <span data-user-email></span>
+        </div>
+        <a class="portal-signout admin-return-link" href="portal.html#projects">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="project-page-main">
+      <section class="project-hero-panel">
+        <div>
+          <span id="project-community-label" class="portal-kicker">Community project</span>
+          <h1 id="project-title">Loading project…</h1>
+          <p id="project-summary">Please wait.</p>
+        </div>
+        <div class="project-hero-meta">
+          <span id="project-status-pill" class="project-pill">—</span>
+          <span id="project-category">—</span>
+          <span id="project-school-year">—</span>
+          <span id="project-batch">—</span>
+        </div>
+      </section>
+
+      <div class="project-page-grid">
+        <section class="portal-panel">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Project record</span>
+              <h2>Objectives</h2>
+            </div>
+          </div>
+          <p id="project-objectives" class="project-long-text">No objectives recorded.</p>
+        </section>
+
+        <section class="portal-panel">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Monitoring</span>
+              <h2>Indicators</h2>
+            </div>
+            <button id="toggle-indicator-form" class="button button-green phase4-small-button" type="button">+ Add Indicator</button>
+          </div>
+
+          <form id="indicator-form" class="phase4-form" hidden>
+            <label class="form-wide">
+              <span>Indicator name</span>
+              <input id="indicator-name" type="text" required placeholder="Indicator name">
+            </label>
+            <label class="form-wide">
+              <span>Definition</span>
+              <textarea id="indicator-definition" rows="2" placeholder="How is this indicator defined?"></textarea>
+            </label>
+            <label>
+              <span>Unit</span>
+              <input id="indicator-unit" type="text" placeholder="persons, %, households">
+            </label>
+            <label>
+              <span>Baseline</span>
+              <input id="indicator-baseline" type="text" placeholder="0">
+            </label>
+            <label>
+              <span>Target</span>
+              <input id="indicator-target" type="text" placeholder="100">
+            </label>
+            <label>
+              <span>Current</span>
+              <input id="indicator-current" type="text" placeholder="0">
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="indicator-status">
+                <option value="not_started">Not Started</option>
+                <option value="on_track">On Track</option>
+                <option value="at_risk">At Risk</option>
+                <option value="achieved">Achieved</option>
+              </select>
+            </label>
+            <div class="admin-form-actions form-wide">
+              <button class="button button-maroon" type="submit">Save Indicator</button>
+              <button id="cancel-indicator-form" class="button button-outline-maroon" type="button">Cancel</button>
+            </div>
+          </form>
+
+          <div id="indicator-message" class="admin-message"></div>
+          <div id="indicator-list" class="indicator-list"></div>
+        </section>
+      </div>
+
+      <section class="portal-panel">
+        <div class="portal-panel-heading">
+          <div>
+            <span class="portal-label">Files</span>
+            <h2>Project Documents</h2>
+          </div>
+        </div>
+
+        <form id="document-upload-form" class="phase4-upload-form">
+          <label class="form-wide">
+            <span>Choose file</span>
+            <input id="document-file" type="file" required>
+          </label>
+          <label>
+            <span>Document type</span>
+            <select id="document-type">
+              <option value="assessment">Assessment</option>
+              <option value="proposal">Proposal</option>
+              <option value="implementation">Implementation</option>
+              <option value="monitoring">Monitoring</option>
+              <option value="handover">Handover</option>
+              <option value="report">Report</option>
+              <option value="form">Form / Template</option>
+              <option value="photo">Photo</option>
+              <option value="other" selected>Other</option>
+            </select>
+          </label>
+          <label class="form-wide">
+            <span>Description</span>
+            <input id="document-description" type="text" placeholder="Short description">
+          </label>
+          <div class="admin-form-actions">
+            <button class="button button-maroon" type="submit">Upload Document</button>
+          </div>
+        </form>
+
+        <div id="document-message" class="admin-message"></div>
+        <div id="document-list" class="document-list"></div>
+      </section>
+
+      <section class="portal-panel">
+        <div class="portal-panel-heading">
+          <div>
+            <span class="portal-label">Continuity</span>
+            <h2>Handovers</h2>
+          </div>
+        </div>
+        <div id="project-handover-list" class="portal-handover-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="project.js"></script>
+</body>
+</html>

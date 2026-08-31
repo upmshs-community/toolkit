@@ -58,11 +58,13 @@
       return;
     }
     target.innerHTML = communities.map((c, index) => `
-      <article>
-        <span>${String(index + 1).padStart(2,"0")}</span>
-        <strong>${safe(c.name)}</strong>
-        <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
-      </article>
+      <a class="portal-community-link" href="community.html?id=${encodeURIComponent(c.id)}">
+        <article>
+          <span>${String(index + 1).padStart(2,"0")}</span>
+          <strong>${safe(c.name)}</strong>
+          <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
+        </article>
+      </a>
     `).join("");
   }
 
@@ -95,6 +97,7 @@
           <span>${safe(p.school_year || "—")}</span>
           <span>${safe(p.batch || "—")}</span>
         </div>
+        <a class="mini-action save project-open-link" href="project.html?id=${encodeURIComponent(p.id)}">Open Project</a>
       </article>
     `).join("");
 
@@ -438,6 +441,16 @@
     const adminLink = document.getElementById("admin-link");
     if (adminLink && ["admin","coordinator"].includes(role)) {
       adminLink.hidden = false;
+    }
+
+    const reviewLink = document.getElementById("review-link");
+    if (reviewLink && ["admin","coordinator","faculty","preceptor"].includes(role)) {
+      reviewLink.hidden = false;
+    }
+
+    const knowledgeLink = document.getElementById("knowledge-link");
+    if (knowledgeLink && ["admin","coordinator","faculty"].includes(role)) {
+      knowledgeLink.hidden = false;
     }
 
     document.querySelectorAll("[data-sign-out]").forEach(button => {

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Knowledge Administration | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="knowledge-loading" class="portal-loading"><img src="assets/shs-logo.png" alt="UPM-SHS"><strong>Opening Knowledge Administration…</strong><span>Checking permissions.</span></div>
+  <div id="knowledge-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html"><img src="assets/up-upm-branding.png" alt="UP and UP Manila"><span class="portal-topbar-divider"></span><img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS"><div><strong>Knowledge Administration</strong><span>Community Health Toolkit</span></div></a>
+      <div class="portal-account"><div class="portal-avatar" data-user-initials>UP</div><div class="portal-user-copy"><strong data-user-name>User</strong><span data-user-email></span></div><a class="portal-signout admin-return-link" href="portal.html">Portal</a><button class="portal-signout" data-sign-out type="button">Sign out</button></div>
+    </header>
+
+    <main class="knowledge-page-main">
+      <section class="knowledge-hero">
+        <span class="portal-kicker">Phase 5 Administration</span>
+        <h1>Knowledge & Directory Manager</h1>
+        <p>Publish learning resources, maintain community profiles, and add or verify health-system directory records.</p>
+      </section>
+
+      <section class="portal-panel">
+        <div class="portal-panel-heading"><div><span class="portal-label">Library</span><h2>Resource Catalog</h2><p>Seeded references remain Draft until their actual file is attached.</p></div><button id="open-new-resource" class="button button-green" type="button">+ New Resource</button></div>
+
+        <form id="new-resource-form" class="phase5-admin-form" hidden>
+          <label class="form-wide"><span>Title</span><input id="new-resource-title" type="text" required></label>
+          <label><span>Type</span><select id="new-resource-type"><option>manual</option><option>module</option><option>form</option><option>worksheet</option><option>reference</option><option>curriculum</option><option>clinical_reference</option><option>orientation</option><option>sample_output</option><option>other</option></select></label>
+          <label><span>Source</span><select id="new-resource-source"><option value="upmshs_internal">UPM-SHS Internal</option><option value="external_reference">External Reference</option></select></label>
+          <label class="form-wide"><span>Organization</span><input id="new-resource-org" type="text"></label>
+          <label><span>Publication year</span><input id="new-resource-year" type="number" min="1900" max="2100"></label>
+          <label class="form-wide"><span>Tags</span><input id="new-resource-tags" type="text" placeholder="comma, separated, tags"></label>
+          <label class="form-wide"><span>Description</span><textarea id="new-resource-description" rows="3"></textarea></label>
+          <label class="form-wide"><span>File (max 25 MB)</span><input id="new-resource-file" type="file" required></label>
+          <div class="admin-form-actions form-wide"><button class="button button-maroon" type="submit">Create & Publish</button><button id="cancel-new-resource" class="button button-outline-maroon" type="button">Cancel</button></div>
+        </form>
+
+        <input id="attach-resource-file" type="file" hidden>
+        <div id="resource-admin-message" class="admin-message"></div>
+        <div id="resource-admin-grid" class="resource-admin-grid"></div>
+      </section>
+
+      <section id="community-admin-section" class="portal-panel">
+        <div class="portal-panel-heading"><div><span class="portal-label">Communities</span><h2>Community Profile Editor</h2><p>Maintain context, health-system, priority, referral, and verification notes.</p></div></div>
+        <div class="community-editor-layout">
+          <div id="community-editor-list" class="community-editor-list"></div>
+          <form id="community-profile-form" class="community-profile-form">
+            <input id="profile-community-id" type="hidden">
+            <label><span>Overview</span><textarea id="profile-overview" rows="4"></textarea></label>
+            <label><span>Catchment / community context</span><textarea id="profile-catchment" rows="4"></textarea></label>
+            <label><span>Local health system</span><textarea id="profile-health-system" rows="4"></textarea></label>
+            <label><span>Priority health issues</span><textarea id="profile-priorities" rows="4"></textarea></label>
+            <label><span>Referral notes</span><textarea id="profile-referral" rows="4"></textarea></label>
+            <label><span>Logistics notes</span><textarea id="profile-logistics" rows="4"></textarea></label>
+            <label><span>Verification source</span><input id="profile-source" type="text"></label>
+            <label><span>Last verified</span><input id="profile-verified" type="date"></label>
+            <button class="button button-maroon" type="submit">Save Community Profile</button>
+          </form>
+        </div>
+        <div id="profile-admin-message" class="admin-message"></div>
+      </section>
+
+      <section id="directory-admin-section" class="portal-panel">
+        <div class="portal-panel-heading"><div><span class="portal-label">Directory</span><h2>Add Health System Entry</h2><p>Add DTTB, facility, preceptor, referral, or updated personnel records.</p></div></div>
+        <form id="directory-entry-form" class="phase5-admin-form">
+          <label><span>Province</span><input id="dir-province" type="text" value="Leyte"></label>
+          <label><span>LGU</span><input id="dir-lgu" type="text" required></label>
+          <label><span>Entry type</span><select id="dir-type"><option value="mho_cho">MHO / CHO</option><option value="dttb">DTTB</option><option value="facility">Facility</option><option value="preceptor">Preceptor</option><option value="referral">Referral</option><option value="other">Other</option></select></label>
+          <label><span>Evidence level</span><select id="dir-evidence"><option value="high">High</option><option value="moderate">Moderate</option><option value="low">Low</option><option value="needs_confirmation" selected>Needs confirmation</option></select></label>
+          <label class="form-wide"><span>Person name</span><input id="dir-person" type="text"></label>
+          <label class="form-wide"><span>Organization / facility</span><input id="dir-org" type="text"></label>
+          <label class="form-wide"><span>Designation / status</span><input id="dir-designation" type="text"></label>
+          <label class="form-wide"><span>What source supports</span><textarea id="dir-support" rows="2"></textarea></label>
+          <label><span>Evidence date</span><input id="dir-evidence-date" type="text" placeholder="2026 / 2025-08-31"></label>
+          <label><span>Last verified</span><input id="dir-verified" type="date"></label>
+          <label class="form-wide"><span>Source URL</span><input id="dir-source-url" type="url"></label>
+          <label class="form-wide"><span>Research notes</span><textarea id="dir-notes" rows="2"></textarea></label>
+          <div class="admin-form-actions form-wide"><button class="button button-maroon" type="submit">Add Directory Entry</button></div>
+        </form>
+        <div id="directory-admin-message" class="admin-message"></div>
+      </section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="knowledge-admin.js"></script>
+</body>
+</html>

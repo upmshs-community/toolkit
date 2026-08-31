@@ -575,6 +575,7 @@
           <span>${escapeHtml(p.batch || "—")}</span>
         </div>
         <div class="community-card-actions">
+          <a class="mini-action save" href="project.html?id=${encodeURIComponent(p.id)}">Workspace</a>
           <button class="mini-action save" data-project-action="edit" data-project-id="${p.id}">Edit</button>
           <button class="mini-action approve" data-project-action="prefill-handover" data-project-id="${p.id}">Handover</button>
         </div>
@@ -745,13 +746,10 @@
     const status = document.querySelector(`.handover-status-select[data-handover-id="${id}"]`)?.value;
     if (!status) return;
 
-    const payload = { status };
-    if (["approved","returned"].includes(status)) {
-      payload.reviewed_by = currentUser.id;
-      payload.reviewed_at = new Date().toISOString();
-    }
-
-    const { error } = await client.from("project_handovers").update(payload).eq("id", id);
+    const { error } = await client.rpc("review_project_handover", {
+      target_handover: id,
+      new_status: status
+    });
     if (error) {
       setMessage("handover-message", error.message, "error");
       return;

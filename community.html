@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Community Profile | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="community-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening community profile…</strong>
+    <span>Loading local health system information.</span>
+  </div>
+
+  <div id="community-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html#communities">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div><strong>Community Profile</strong><span>Community Health Toolkit</span></div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy"><strong data-user-name>User</strong><span data-user-email></span></div>
+        <a class="portal-signout admin-return-link" href="portal.html#communities">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="knowledge-page-main">
+      <section class="community-profile-hero">
+        <span id="community-province" class="portal-kicker">Community learning site</span>
+        <h1 id="community-name">Loading…</h1>
+        <p id="community-overview">Please wait.</p>
+        <div class="community-verify-line">
+          <span>Last verified: <strong id="community-verified">Not recorded</strong></span>
+          <span id="community-source"></span>
+        </div>
+      </section>
+
+      <div class="community-profile-grid">
+        <section class="portal-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Catchment</span><h2>Community Context</h2></div></div>
+          <p id="community-catchment" class="project-long-text">No notes yet.</p>
+        </section>
+        <section class="portal-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Health system</span><h2>Local Health System</h2></div></div>
+          <p id="community-health-system" class="project-long-text">No notes yet.</p>
+        </section>
+        <section class="portal-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Priorities</span><h2>Priority Health Issues</h2></div></div>
+          <p id="community-priorities" class="project-long-text">No priority issues recorded.</p>
+        </section>
+        <section class="portal-panel">
+          <div class="portal-panel-heading"><div><span class="portal-label">Navigation</span><h2>Referral & Logistics</h2></div></div>
+          <p id="community-referral" class="project-long-text">No referral notes yet.</p>
+          <p id="community-logistics" class="project-long-text community-secondary-text"></p>
+        </section>
+      </div>
+
+      <section class="portal-panel">
+        <div class="portal-panel-heading"><div><span class="portal-label">Directory</span><h2>Local Health Leadership</h2></div></div>
+        <div id="community-directory" class="directory-list compact-directory"></div>
+      </section>
+
+      <section class="portal-panel">
+        <div class="portal-panel-heading"><div><span class="portal-label">Continuity</span><h2>Community Projects</h2></div></div>
+        <div id="community-projects" class="portal-project-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="community.js"></script>
+</body>
+</html>

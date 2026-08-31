@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Toolkit Library | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="library-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Toolkit Library…</strong>
+    <span>Loading approved learning resources.</span>
+  </div>
+
+  <div id="library-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div><strong>Toolkit Library</strong><span>Community Health Toolkit</span></div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Authorized user</strong>
+          <span data-user-email></span>
+        </div>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="knowledge-page-main">
+      <section class="knowledge-hero">
+        <span class="portal-kicker">Knowledge & Learning</span>
+        <h1>Toolkit Library</h1>
+        <p>Manuals, modules, worksheets, curriculum references, and approved learning materials for community-based medical education.</p>
+      </section>
+
+      <section class="knowledge-toolbar">
+        <input id="library-search" type="search" placeholder="Search title, tags, organization…">
+        <select id="library-type">
+          <option value="all">All resource types</option>
+          <option value="manual">Manuals</option>
+          <option value="module">Modules</option>
+          <option value="form">Forms</option>
+          <option value="worksheet">Worksheets</option>
+          <option value="reference">References</option>
+          <option value="curriculum">Curriculum</option>
+          <option value="clinical_reference">Clinical references</option>
+          <option value="orientation">Orientation</option>
+          <option value="sample_output">Sample outputs</option>
+        </select>
+        <select id="library-source">
+          <option value="all">All sources</option>
+          <option value="upmshs_internal">UPM-SHS Internal</option>
+          <option value="external_reference">External Reference</option>
+        </select>
+      </section>
+
+      <div id="library-message" class="admin-message"></div>
+      <section id="library-grid" class="library-grid"></section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="library.js"></script>
+</body>
+</html>

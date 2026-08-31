@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Health System Directory | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="directory-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Health System Directory…</strong>
+    <span>Loading verified and research-tracked entries.</span>
+  </div>
+
+  <div id="directory-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div><strong>Health System Directory</strong><span>Community Health Toolkit</span></div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy"><strong data-user-name>User</strong><span data-user-email></span></div>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="knowledge-page-main">
+      <section class="knowledge-hero">
+        <span class="portal-kicker">Local Health System</span>
+        <h1>Health System Directory</h1>
+        <p>MHO/CHO, DTTB, facility, preceptor, and referral records with source and verification status.</p>
+      </section>
+
+      <div class="directory-warning">
+        Personnel assignments can change. Use the evidence level, last-verified date, and source before treating an entry as current.
+      </div>
+
+      <section class="knowledge-toolbar directory-toolbar">
+        <input id="directory-search" type="search" placeholder="Search LGU, person, designation…">
+        <select id="directory-province"><option value="all">All provinces</option></select>
+        <select id="directory-type">
+          <option value="all">All entry types</option>
+          <option value="mho_cho">MHO / CHO</option>
+          <option value="dttb">DTTB</option>
+          <option value="facility">Facility</option>
+          <option value="preceptor">Preceptor</option>
+          <option value="referral">Referral</option>
+        </select>
+        <select id="directory-evidence">
+          <option value="all">All evidence levels</option>
+          <option value="high">High</option>
+          <option value="moderate">Moderate</option>
+          <option value="low">Low</option>
+          <option value="needs_confirmation">Needs confirmation</option>
+        </select>
+      </section>
+
+      <div id="directory-count" class="directory-count"></div>
+      <section id="directory-list" class="directory-list"></section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="directory.js"></script>
+</body>
+</html>

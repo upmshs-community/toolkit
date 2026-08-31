@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Review Center | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="review-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Review Center…</strong>
+    <span>Checking reviewer access.</span>
+  </div>
+
+  <div id="review-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Review Center</strong>
+          <span>Community Health Toolkit</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Reviewer</strong>
+          <span data-user-email></span>
+        </div>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="project-page-main">
+      <section class="portal-welcome">
+        <span class="portal-kicker">Faculty / Preceptor Workflow</span>
+        <h1>Review Center</h1>
+        <p>Review pending project documents and submitted handovers from community teams.</p>
+      </section>
+
+      <div class="review-grid">
+        <section class="portal-panel">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Documents</span>
+              <h2>Pending Review</h2>
+            </div>
+          </div>
+          <div id="review-documents-list" class="review-list"></div>
+        </section>
+
+        <section class="portal-panel">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Handovers</span>
+              <h2>Submitted for Review</h2>
+            </div>
+          </div>
+          <div id="review-handovers-list" class="review-list"></div>
+        </section>
+      </div>
+
+      <div id="review-message" class="admin-message"></div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="review.js"></script>
+</body>
+</html>

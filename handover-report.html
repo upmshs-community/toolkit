@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Handover Report | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="report-body">
+  <div id="report-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Preparing handover report…</strong>
+    <span>Loading continuity record.</span>
+  </div>
+
+  <main id="report-app" class="handover-report" hidden>
+    <div class="report-actions no-print">
+      <a href="portal.html#handover" class="button button-outline-maroon">Back</a>
+      <button id="print-report" class="button button-maroon" type="button">Print / Save as PDF</button>
+    </div>
+
+    <header class="report-header">
+      <div class="report-branding">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <img src="assets/shs-logo.png" alt="UPM-SHS">
+      </div>
+      <div>
+        <span>University of the Philippines Manila</span>
+        <h1>School of Health Sciences</h1>
+        <p>Community Health Toolkit · Structured Project Handover</p>
+      </div>
+    </header>
+
+    <section class="report-title-block">
+      <span id="report-community">Community</span>
+      <h2 id="report-project">Project</h2>
+      <div class="report-meta">
+        <span><strong>Status:</strong> <span id="report-status">—</span></span>
+        <span><strong>Outgoing batch:</strong> <span id="report-batch">—</span></span>
+        <span><strong>Submitted by:</strong> <span id="report-submitter">—</span></span>
+        <span><strong>Updated:</strong> <span id="report-date">—</span></span>
+      </div>
+    </section>
+
+    <section class="report-section">
+      <h3>Accomplishments</h3>
+      <p id="report-accomplishments">—</p>
+    </section>
+
+    <section class="report-section">
+      <h3>Pending Tasks</h3>
+      <p id="report-pending">—</p>
+    </section>
+
+    <section class="report-section">
+      <h3>Recommendations for the Next Batch</h3>
+      <p id="report-recommendations">—</p>
+    </section>
+
+    <footer class="report-footer">
+      <p>Generated from the UPM-SHS Community Health Toolkit.</p>
+      <p>For authorized academic and community-continuity use.</p>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="handover-report.js"></script>
+</body>
+</html>
