@@ -3708,3 +3708,329 @@ html.public-scroll-document body.public-landing-page {
   .household-action-buttons { flex-direction:column; }
   .household-action-buttons .button { width:100%; }
 }
+
+
+/* =========================================================
+   PHASE 7B UI REFRESH — cleaner UP-branded form styling
+   ========================================================= */
+
+.field-forms-main,
+.household-main {
+  width: min(1360px, calc(100% - 40px));
+  padding-top: 24px;
+}
+
+.field-forms-hero,
+.household-form-hero {
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.field-forms-hero h1,
+.household-form-hero h1 {
+  margin: 4px 0 6px;
+  font-family: var(--serif);
+  font-size: clamp(42px, 5vw, 70px);
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  color: #171310;
+}
+
+.field-forms-hero p,
+.household-form-hero p {
+  margin: 0;
+  max-width: 760px;
+  font-family: var(--serif);
+  font-size: 16px;
+  color: #5f5850;
+}
+
+.offline-status-card,
+.household-hero-status,
+.survey-quick-note,
+.fieldwork-context-card,
+.portal-panel,
+.survey-section,
+.field-offline-note,
+.household-form-actions {
+  box-shadow: 0 12px 30px rgba(28, 23, 18, 0.05);
+}
+
+.portal-kicker,
+.survey-section-number,
+.portal-label,
+.field-sync-summary article span,
+.fieldwork-context-card span,
+.local-survey-meta,
+.household-form label > span,
+.survey-choice-group legend {
+  letter-spacing: 0.11em;
+}
+
+.field-sync-summary {
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.field-sync-summary article,
+.offline-status-card,
+.household-hero-status {
+  border-radius: 20px;
+  background: #fffdfa;
+}
+
+.field-sync-summary article strong {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.field-template-panel,
+.portal-panel {
+  border-radius: 24px;
+  border: 1px solid #ded5ca;
+  background: #fffefb;
+}
+
+.field-template-card {
+  grid-template-columns: 88px minmax(0,1fr) auto;
+  gap: 22px;
+  padding-top: 2px;
+}
+
+.field-template-icon {
+  width: 82px;
+  height: 82px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #f6eee4, #efe3d4);
+  font-size: 34px;
+}
+
+.field-template-copy h3 {
+  font-size: 28px;
+  line-height: 1.05;
+}
+
+.field-template-copy p,
+.local-survey-row small,
+.field-offline-note p,
+.fieldwork-context-card small,
+.digital-field-card p,
+.survey-help,
+.household-form-actions > div:first-child small {
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.button {
+  min-height: 50px;
+  border-radius: 14px;
+  font-family: var(--sans);
+  font-weight: 800;
+  letter-spacing: .01em;
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+}
+
+.button-maroon { background: linear-gradient(180deg, #8c171b, #6f0f12); }
+.button-green { background: linear-gradient(180deg, #03542a, #014421); }
+.button-outline-maroon {
+  background: #fff;
+  color: var(--maroon);
+  border: 1px solid #cfa6a8;
+}
+.button-outline-maroon:hover {
+  background: #fcf4f4;
+}
+
+.local-survey-row {
+  padding: 16px 4px;
+}
+.local-survey-row strong {
+  font-size: 20px;
+}
+
+.field-offline-note {
+  border-radius: 22px;
+  background: linear-gradient(180deg,#faf5ed,#f5ecdf);
+}
+
+.household-hero-status {
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.survey-quick-note {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 15px 18px;
+  border: 1px solid #dfd3c5;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fbf7f0, #f6efe3);
+}
+.survey-quick-note span {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.survey-quick-note strong {
+  font-family: var(--serif);
+  color: var(--maroon);
+  font-size: 22px;
+}
+.survey-quick-note small {
+  color: #6f675f;
+  font-family: var(--serif);
+}
+
+.fieldwork-context-card {
+  margin-bottom: 16px;
+  border-radius: 20px;
+}
+
+.survey-section {
+  border-radius: 22px;
+  background: linear-gradient(180deg, #fffefc, #fffcf8);
+}
+
+.survey-section summary {
+  padding: 18px 20px;
+  background: linear-gradient(180deg,#fcf8f2,#f5eee3);
+  border-bottom: 1px solid #ebe2d6;
+}
+
+.survey-section summary > span {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #8b171a, #731114);
+  font-size: 18px;
+}
+
+.survey-section summary > strong,
+.survey-section-heading h2,
+.survey-section-body h3 {
+  font-family: var(--serif);
+}
+
+.survey-section summary > strong {
+  font-size: 24px;
+  color: #231d18;
+}
+
+.survey-section-body,
+.survey-cover-section {
+  padding: 22px;
+}
+
+.survey-section-heading h2 {
+  margin-bottom: 14px;
+  font-size: 30px;
+  color: var(--maroon);
+}
+
+.survey-section-body h3 {
+  margin-top: 18px;
+  margin-bottom: 10px;
+  font-size: 21px;
+  color: var(--green);
+}
+
+.household-form label > span,
+.survey-choice-group legend {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #5c534a;
+}
+
+.household-form input,
+.household-form select,
+.household-form textarea,
+.repeat-row input,
+.repeat-row select,
+.repeat-row textarea {
+  min-height: 46px;
+  border-radius: 12px;
+  border: 1px solid #d1c7bb;
+  background: #fffdfa;
+  padding: 10px 12px;
+  font-family: var(--serif);
+  font-size: 15px;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.household-form input:focus,
+.household-form select:focus,
+.household-form textarea:focus,
+.repeat-row input:focus,
+.repeat-row select:focus,
+.repeat-row textarea:focus {
+  outline: none;
+  border-color: #8b171a;
+  box-shadow: 0 0 0 4px rgba(123,17,19,.09);
+  background: #fff;
+}
+
+.survey-choice-group {
+  border-radius: 16px;
+  background: #fbf8f3;
+  padding: 16px;
+}
+
+.digital-field-card,
+.repeat-block,
+.matrix-table-wrap {
+  border-radius: 18px;
+}
+
+.repeat-block {
+  background: #fffdfa;
+}
+
+.repeat-block-heading {
+  padding: 12px 14px;
+  background: linear-gradient(180deg,#faf4ed,#f3eadf);
+}
+
+.repeat-block-heading strong {
+  font-size: 18px;
+}
+
+.mini-action,
+.add-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #d1c6b8;
+  background: #fff;
+  color: var(--green);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.remove-row {
+  border-radius: 12px;
+}
+
+.survey-matrix th,
+.survey-matrix td {
+  padding: 11px 10px;
+}
+
+.household-form-actions {
+  bottom: 12px;
+  border-radius: 20px;
+  padding: 16px 18px;
+}
+
+@media (max-width: 760px) {
+  .field-template-card { grid-template-columns: 64px minmax(0,1fr); }
+  .field-template-icon { width: 64px; height: 64px; border-radius: 18px; font-size: 28px; }
+  .field-template-copy h3 { font-size: 23px; }
+  .survey-quick-note strong { font-size: 18px; }
+  .survey-section summary > strong { font-size: 20px; }
+}
