@@ -1832,3 +1832,91 @@ body.portal-is-loading .portal-app {
     overflow: hidden !important;
   }
 }
+
+
+/* =========================================================
+   STANDALONE TOOLKIT PAGE SCROLL FIX — TABLET/DESKTOP
+   Only portal.html is an app-shell document.
+   Admin, Knowledge, Review, Library, Directory, Community,
+   Project and Search use normal document scrolling.
+   ========================================================= */
+
+html.toolkit-scroll-document {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+body.toolkit-scroll-page {
+  height: auto !important;
+  min-height: 100dvh !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+body.toolkit-scroll-page > [id$="-app"] {
+  display: block;
+  height: auto !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Standalone headers can remain visible while the document itself scrolls. */
+body.toolkit-scroll-page .portal-topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+}
+
+/* Admin is the only standalone page that still contains portal-shell. */
+body.toolkit-scroll-page .portal-shell {
+  height: auto !important;
+  min-height: calc(100dvh - 84px) !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+body.toolkit-scroll-page .portal-main {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  overscroll-behavior: auto !important;
+}
+
+/* Desktop/tablet admin sidebar may stay sticky, but must not lock the page. */
+@media (min-width: 821px) {
+  body.toolkit-scroll-page .portal-sidebar {
+    position: sticky !important;
+    top: 84px !important;
+    align-self: start !important;
+    height: calc(100dvh - 84px) !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+}
+
+/* Narrow tablets use the existing horizontal admin navigation. */
+@media (min-width: 641px) and (max-width: 820px) {
+  body.toolkit-scroll-page .portal-shell {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  body.toolkit-scroll-page .portal-sidebar {
+    position: static !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+}
+
+/* Keep true loading screens locked even on standalone pages. */
+body.toolkit-scroll-page.portal-is-loading,
+html.toolkit-scroll-document:has(body.portal-is-loading) {
+  overflow: hidden !important;
+  height: 100dvh !important;
+}
