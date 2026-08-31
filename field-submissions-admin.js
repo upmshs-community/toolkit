@@ -257,7 +257,19 @@
   }
 
   async function init(){
-    try{await authorize();bind();await loadData();loading.hidden=true;app.hidden=false;document.body.classList.remove('portal-is-loading');}
+    try{
+      await authorize();
+      bind();
+      await loadData();
+      loading.hidden=true;
+      app.hidden=false;
+      document.body.classList.remove('portal-is-loading');
+
+      const openId = new URLSearchParams(location.search).get('open');
+      if (openId && rows.some(r=>r.id===openId)) {
+        setTimeout(()=>openDetail(openId), 80);
+      }
+    }
     catch(err){console.error('[Field Survey Admin]',err);loading.innerHTML=`<img src="assets/shs-logo.png" alt="UPM-SHS"><strong>Unable to open Field Survey Manager</strong><span>${safe(err.message||err)}</span><a href="admin.html">Return to Administration</a>`;}
   }
   init();

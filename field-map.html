@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Community Field Map | Community Health Toolkit</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page field-map-admin-page portal-is-loading">
+  <div id="field-map-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Community Field Map…</strong>
+    <span>Loading authorized household locations and fieldwork analytics.</span>
+  </div>
+
+  <div id="field-map-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="admin.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Toolkit Administration</strong>
+          <span>Community Field Map</span>
+        </div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Toolkit Manager</strong>
+          <span data-user-email></span>
+        </div>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell">
+      <aside class="portal-sidebar admin-sidebar">
+        <div class="portal-sidebar-title">Administration</div>
+        <nav>
+          <a href="admin.html#users">User Management</a>
+          <a href="admin.html#communities">Communities</a>
+          <a href="admin.html#rotations">Rotations</a>
+          <a href="admin.html#projects">Projects</a>
+          <a href="admin.html#handovers">Handovers</a>
+          <a href="field-submissions-admin.html">Field Surveys</a>
+          <a class="active" href="field-map.html">Field Map</a>
+        </nav>
+        <div class="sidebar-note">
+          <strong>Restricted household map</strong>
+          <span>Exact household coordinates are visible only to authorized Toolkit managers.</span>
+        </div>
+      </aside>
+
+      <main class="portal-main admin-main field-map-main">
+        <section class="portal-welcome admin-welcome field-map-welcome">
+          <span class="portal-kicker">Phase 7C · Field Mapping</span>
+          <h1>Community Field Map</h1>
+          <p>Map synced household surveys and monitor fieldwork coverage without exposing household health responses on the map.</p>
+        </section>
+
+        <section class="field-map-privacy-note">
+          <div>
+            <span class="portal-label">Privacy by design</span>
+            <strong>Map popups show household code and fieldwork metadata only.</strong>
+          </div>
+          <a href="field-submissions-admin.html">Open Survey Manager →</a>
+        </section>
+
+        <section class="field-map-filter-bar">
+          <label><span>Community</span><select id="map-community-filter"><option value="">All communities</option></select></label>
+          <label><span>Barangay</span><select id="map-barangay-filter"><option value="">All barangays</option></select></label>
+          <label><span>Status</span><select id="map-status-filter"><option value="">All statuses</option><option value="draft">Draft</option><option value="completed">Completed</option><option value="reviewed">Reviewed</option><option value="archived">Archived</option></select></label>
+          <label><span>Enumerator</span><select id="map-enumerator-filter"><option value="">All enumerators</option></select></label>
+          <label><span>From</span><input id="map-date-from" type="date"></label>
+          <label><span>To</span><input id="map-date-to" type="date"></label>
+          <button id="map-clear-filters" class="mini-action" type="button">Clear</button>
+        </section>
+
+        <section class="field-map-stat-grid">
+          <article><span>Filtered surveys</span><strong id="map-stat-total">0</strong><small>Matching records</small></article>
+          <article><span>With GPS</span><strong id="map-stat-gps">0</strong><small id="map-stat-gps-rate">0% capture</small></article>
+          <article><span>Reviewed</span><strong id="map-stat-reviewed">0</strong><small id="map-stat-review-rate">0% reviewed</small></article>
+          <article><span>Barangays</span><strong id="map-stat-barangays">0</strong><small>Represented in filter</small></article>
+          <article><span>Enumerators</span><strong id="map-stat-enumerators">0</strong><small>With matching records</small></article>
+        </section>
+
+        <section class="field-map-layout">
+          <article class="portal-panel field-map-panel">
+            <div class="field-map-panel-heading">
+              <div>
+                <span class="portal-label">Interactive map</span>
+                <h2>Household &amp; Community Points</h2>
+              </div>
+              <div class="field-map-layer-toggles">
+                <label><input id="layer-households" type="checkbox" checked> Households</label>
+                <label><input id="layer-health" type="checkbox" checked> Health system</label>
+                <label><input id="layer-projects" type="checkbox" checked> Projects</label>
+                <label><input id="layer-resources" type="checkbox" checked> Resources</label>
+              </div>
+            </div>
+
+            <div id="field-map-message" class="admin-message" aria-live="polite"></div>
+            <div id="community-field-map" class="community-field-map"></div>
+            <div class="field-map-legend">
+              <span><i class="legend-dot reviewed"></i>Reviewed household</span>
+              <span><i class="legend-dot completed"></i>Completed</span>
+              <span><i class="legend-dot draft"></i>Draft</span>
+              <span><i class="legend-square health"></i>Health system</span>
+              <span><i class="legend-square project"></i>Project</span>
+              <span><i class="legend-square resource"></i>Community resource</span>
+            </div>
+          </article>
+
+          <aside class="field-map-side-stack">
+            <section class="portal-panel field-map-analytics-panel">
+              <div class="portal-panel-heading">
+                <div><span class="portal-label">Operational analytics</span><h2>Status Breakdown</h2></div>
+              </div>
+              <div id="map-status-bars" class="map-status-bars"></div>
+            </section>
+
+            <section class="portal-panel field-map-analytics-panel">
+              <div class="portal-panel-heading">
+                <div><span class="portal-label">By barangay</span><h2>Survey Activity</h2></div>
+              </div>
+              <div id="map-barangay-analytics" class="map-barangay-analytics"></div>
+            </section>
+          </aside>
+        </section>
+
+        <section class="portal-panel field-map-table-panel">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Filtered GPS records</span>
+              <h2>Mapped Households</h2>
+            </div>
+            <button id="map-fit-all" class="button button-outline-maroon" type="button">Fit Map to Results</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table field-map-table">
+              <thead><tr><th>Household</th><th>Community / Barangay</th><th>Status</th><th>Interview</th><th>Enumerator</th><th>GPS accuracy</th><th></th></tr></thead>
+              <tbody id="mapped-households-body"><tr><td colspan="7" class="table-loading">Loading mapped households…</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="field-map-method-note">
+          <strong>About these analytics</strong>
+          <p>This page reports fieldwork operations only—submission counts, review status, GPS capture, barangay distribution, and enumerator activity. It does not infer community health indicators from household answers.</p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="field-map.js"></script>
+</body>
+</html>
