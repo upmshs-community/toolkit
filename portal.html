@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7b1113">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Community Health Toolkit Portal | UPM-SHS</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="portal-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Community Health Toolkit…</strong>
+    <span>Checking your authorized session.</span>
+  </div>
+
+  <div id="portal-app" class="portal-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="index.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Community Health Toolkit</strong>
+          <span>UP Manila School of Health Sciences</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Authorized user</strong>
+          <span data-user-email></span>
+          <small class="portal-user-role"><span data-user-role>Student</span> · <span data-user-batch>—</span> · <span data-user-year>—</span></small>
+        </div>
+        <a id="admin-link" class="portal-signout admin-return-link" href="admin.html" hidden>Admin</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell">
+      <aside class="portal-sidebar">
+        <div class="portal-sidebar-title">Toolkit</div>
+        <nav>
+          <a class="active" href="#dashboard">Dashboard</a>
+          <a href="#rotation">My Rotation</a>
+          <a href="#communities">Communities</a>
+          <a href="#projects">Projects</a>
+          <a href="#handover">Handover</a>
+          <a href="#resources">Resources</a>
+        </nav>
+
+        <div class="sidebar-note">
+          <strong>Phase 3 live</strong>
+          <span>Project registry and continuity handovers are now available.</span>
+        </div>
+      </aside>
+
+      <main class="portal-main" id="dashboard">
+        <section class="portal-welcome">
+          <span class="portal-kicker">Community workspace</span>
+          <h1>Welcome, <span data-user-name>authorized user</span>.</h1>
+          <p>
+            Continue your community work, review previous projects, access learning resources,
+            and prepare useful records for the next batch.
+          </p>
+        </section>
+
+        <section class="portal-stat-grid">
+          <article>
+            <span>Assigned community</span>
+            <strong id="dashboard-community">To be assigned</strong>
+            <small id="dashboard-rotation-detail">No active rotation assignment yet.</small>
+          </article>
+          <article>
+            <span>Active projects</span>
+            <strong id="dashboard-project-count">—</strong>
+            <small id="dashboard-project-detail">Loading project registry…</small>
+          </article>
+          <article>
+            <span>Pending handovers</span>
+            <strong id="dashboard-handover-count">—</strong>
+            <small id="dashboard-handover-detail">Loading handover queue…</small>
+          </article>
+          <article>
+            <span>Toolkit resources</span>
+            <strong>6</strong>
+            <small>Starter categories prepared for upload.</small>
+          </article>
+        </section>
+
+        <div class="portal-content-grid">
+          <section class="portal-panel" id="rotation">
+            <div class="portal-panel-heading">
+              <div>
+                <span class="portal-label">Start here</span>
+                <h2>My Rotation</h2>
+              </div>
+              <span class="portal-chip">Connected</span>
+            </div>
+
+            <div id="current-rotation-summary" class="current-rotation-summary">
+              <strong>Loading current rotation…</strong>
+              <span>Please wait.</span>
+            </div>
+
+            <div class="rotation-checklist">
+              <label><input type="checkbox"> Review your assigned community profile</label>
+              <label><input type="checkbox"> Review previous projects and latest handover</label>
+              <label><input type="checkbox"> Review scope, referral pathways, and safety notes</label>
+              <label><input type="checkbox"> Review community assessment and project forms</label>
+            </div>
+          </section>
+
+          <section class="portal-panel" id="resources">
+            <div class="portal-panel-heading">
+              <div>
+                <span class="portal-label">Quick access</span>
+                <h2>Toolkit Resources</h2>
+              </div>
+            </div>
+            <div class="quick-resource-list">
+              <a href="#"><strong>Manual & Learning Modules</strong><span>Program guides and orientation resources →</span></a>
+              <a href="#"><strong>Forms & Templates</strong><span>Assessment, planning, M&E, and handover forms →</span></a>
+              <a href="#"><strong>Sample Outputs</strong><span>De-identified examples from previous community work →</span></a>
+            </div>
+          </section>
+        </div>
+
+        <section class="portal-panel" id="communities">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Community directory</span>
+              <h2>Current Learning Sites</h2>
+            </div>
+          </div>
+
+          <div id="portal-communities" class="portal-community-grid">
+            <article><span>01</span><strong>Loading…</strong><small>Please wait</small></article>
+          </div>
+        </section>
+
+        <section class="portal-panel" id="projects">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Project registry</span>
+              <h2>Community Projects</h2>
+            </div>
+          </div>
+
+          <div id="portal-projects" class="portal-project-grid">
+            <article class="project-portal-card">
+              <h3>Loading projects…</h3>
+              <p>Please wait while the registry is loaded.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="portal-panel" id="handover">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Continuity</span>
+              <h2>Structured Handover</h2>
+            </div>
+            <span class="portal-chip">Phase 3</span>
+          </div>
+
+          <div id="portal-handover-eligibility" class="portal-mini-note">
+            Loading handover access…
+          </div>
+
+          <form id="portal-handover-form" class="portal-handover-form" hidden>
+            <label class="form-wide">
+              <span>Project</span>
+              <select id="portal-handover-project" required>
+                <option value="">Select project</option>
+              </select>
+            </label>
+            <label>
+              <span>Outgoing batch</span>
+              <input id="portal-handover-batch" type="text" placeholder="e.g. MD24">
+            </label>
+            <label class="form-wide">
+              <span>Accomplishments</span>
+              <textarea id="portal-handover-accomplishments" rows="3" placeholder="What has already been done?"></textarea>
+            </label>
+            <label class="form-wide">
+              <span>Pending tasks</span>
+              <textarea id="portal-handover-pending" rows="3" placeholder="What should the next batch continue?"></textarea>
+            </label>
+            <label class="form-wide">
+              <span>Recommendations</span>
+              <textarea id="portal-handover-recommendations" rows="3" placeholder="Recommendations, reminders, and risks"></textarea>
+            </label>
+            <div class="admin-form-actions form-wide">
+              <button class="button button-maroon" type="submit">Submit Handover</button>
+            </div>
+          </form>
+
+          <div id="portal-handover-message" class="admin-message" aria-live="polite"></div>
+
+          <div id="portal-handover-list" class="portal-handover-list">
+            <article class="portal-handover-card">
+              <strong>Loading handovers…</strong>
+              <span>Please wait.</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="portal-next-step">
+          <div>
+            <span class="portal-label">Phase 3 complete</span>
+            <h2>Project registry and continuity workflows are now connected.</h2>
+            <p>
+              The next recommended phase is documents/uploads, richer monitoring indicators,
+              and faculty approval workflows on top of the project and handover modules.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="portal.js"></script>
+</body>
+</html>

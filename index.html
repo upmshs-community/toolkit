@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UP Manila School of Health Sciences Community-Based Medicine and Community Health Toolkit portal.">
+  <meta name="theme-color" content="#7b1113">
+  <title>Community-Based Medicine | UPM-SHS</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="topline">
+    <div class="wrap topline-inner">
+      <span>University of the Philippines Manila</span>
+      <div class="topline-links">
+        <a href="#about">Community-Based Medicine</a>
+        <a href="#toolkit">Community Health Toolkit</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="#home" class="institution-lockup" aria-label="UPM-SHS Community-Based Medicine Home">
+        <img src="assets/up-upm-branding.png" class="up-branding" alt="University of the Philippines and UP Manila branding">
+        <div class="lockup-rule"></div>
+        <img src="assets/shs-logo.png" class="shs-seal" alt="UP Manila School of Health Sciences seal">
+        <div class="institution-title">
+          <strong>School of Health Sciences</strong>
+          <span>Community-Based Medicine</span>
+        </div>
+      </a>
+
+      <button class="mobile-menu" type="button" aria-controls="main-nav" aria-expanded="false">Menu</button>
+
+      <nav id="main-nav" class="main-nav">
+        <a class="active" href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#pathway">Learning Pathway</a>
+        <a href="#communities">Communities</a>
+        <a href="#toolkit">Toolkit</a>
+        <a href="#resources">Resources</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero" aria-labelledby="hero-title">
+      <picture class="hero-picture">
+        <source media="(max-width: 900px)" srcset="assets/hero-group-1400.jpg">
+        <img src="assets/hero-group.jpg" alt="UP Manila School of Health Sciences faculty and students during the 50th Commitment Building and Candlelighting Ceremony">
+      </picture>
+      <div class="hero-overlay"></div>
+
+      <div class="wrap hero-layout">
+        <div class="hero-copy">
+          <span class="hero-kicker">UP Manila School of Health Sciences</span>
+          <h1 id="hero-title">Community-Based<br>Medical Education</h1>
+          <p class="hero-motto">A health worker for every village.</p>
+          <p class="hero-text">
+            Learning medicine with communities—understanding health in context,
+            serving alongside local partners, and building continuity across generations of learners.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-maroon" href="#about">Explore the Program <span>→</span></a>
+            <a class="button button-ghost" href="#communities">Our Communities <span>→</span></a>
+          </div>
+        </div>
+
+        <aside class="portal-card" aria-label="Community Health Toolkit portal">
+          <div class="portal-seal">
+            <img src="assets/shs-logo.png" alt="">
+          </div>
+          <span class="portal-eyebrow">Internal portal</span>
+          <h2>Community Health<br>Toolkit</h2>
+          <p>
+            Access community profiles, project history, forms, learning resources,
+            directories, and structured handovers.
+          </p>
+
+          <form id="login-form" class="login-form">
+            <label>
+              <span>Email address</span>
+              <input type="email" placeholder="name@up.edu.ph" autocomplete="email" required>
+            </label>
+            <label>
+              <span>Password</span>
+              <div class="password-wrap">
+                <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+                <button id="show-password" type="button">Show</button>
+              </div>
+            </label>
+            <div class="form-options">
+              <label class="remember"><input type="checkbox"> <span>Remember me</span></label>
+              <a href="#contact">Forgot password?</a>
+            </div>
+            <button class="button button-maroon button-full" type="submit">Sign In</button>
+            <div class="portal-divider"><span>or</span></div>
+            <button id="up-mail-login" class="up-mail-button" type="button">
+              <span class="mini-up">UP</span> Sign in with UP Mail
+            </button>
+            <p id="login-status" class="login-status" aria-live="polite"></p>
+            <p class="login-access-note">Access is limited to approved accounts.</p>
+          </form>
+
+          <div class="portal-footer">
+            <span>UPM-SHS student without an account?</span>
+            <a href="signup.html">Create a pending student account</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="pillars" aria-label="Program principles">
+      <div class="wrap pillar-grid">
+        <article>
+          <div class="pillar-icon">◎</div>
+          <div><strong>Community-partnered</strong><span>We work with communities as partners in health.</span></div>
+        </article>
+        <article>
+          <div class="pillar-icon">▤</div>
+          <div><strong>Student-centered</strong><span>Experiential learning across the continuum of care.</span></div>
+        </article>
+        <article>
+          <div class="pillar-icon">♡</div>
+          <div><strong>Service-oriented</strong><span>Grounded in compassion, service, and social responsibility.</span></div>
+        </article>
+        <article>
+          <div class="pillar-icon">✦</div>
+          <div><strong>Nation-building</strong><span>Preparing health workers for every village.</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="wrap three-feature-grid">
+        <article class="feature-block">
+          <span class="section-label">About the Program</span>
+          <h2>Community as classroom.</h2>
+          <p>
+            Community-based medical education immerses learners in real local health systems,
+            where clinical care, public health, families, livelihoods, governance, and access to services intersect.
+          </p>
+          <a href="#pathway">Learn more about CBM →</a>
+        </article>
+
+        <article class="feature-block feature-center">
+          <div class="feature-seal"><img src="assets/shs-logo.png" alt="UPM-SHS seal"></div>
+          <span class="section-label">The SHS Model</span>
+          <h2>Service, accountability, and continuity.</h2>
+          <p>
+            The SHS tradition links health professions education to the needs of underserved communities,
+            emphasizing socially accountable practice and local health-system strengthening.
+          </p>
+          <a href="#toolkit">Discover the toolkit →</a>
+        </article>
+
+        <article class="feature-block">
+          <span class="section-label">Learning Pathway</span>
+          <h2>Longitudinal by design.</h2>
+          <p>
+            Community learning builds over time: preparation, entry, assessment, planning,
+            implementation, monitoring, reflection, and useful handover to the next batch.
+          </p>
+          <a href="#pathway">View the pathway →</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="pathway" class="section pathway-section">
+      <div class="wrap">
+        <div class="section-heading">
+          <span class="section-label">Learning Pathway</span>
+          <h2>From community entry to continuity.</h2>
+          <p>The toolkit follows the actual workflow of community clerkship and internship.</p>
+        </div>
+
+        <div class="pathway-row">
+          <article><span class="step-icon">01</span><h3>Prepare</h3><p>Review the site, previous work, scope, and referral pathways.</p></article>
+          <div class="arrow">→</div>
+          <article><span class="step-icon">02</span><h3>Understand</h3><p>Know the community, stakeholders, health system, and local context.</p></article>
+          <div class="arrow">→</div>
+          <article><span class="step-icon">03</span><h3>Assess</h3><p>Identify needs, strengths, priorities, and evidence.</p></article>
+          <div class="arrow">→</div>
+          <article><span class="step-icon">04</span><h3>Act</h3><p>Plan and implement with community and health-system partners.</p></article>
+          <div class="arrow">→</div>
+          <article><span class="step-icon">05</span><h3>Monitor</h3><p>Track progress, outcomes, lessons, and sustainability.</p></article>
+          <div class="arrow">→</div>
+          <article><span class="step-icon">06</span><h3>Handover</h3><p>Document what matters so the next batch can continue the work.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="communities" class="section community-section">
+      <div class="wrap">
+        <div class="community-heading">
+          <div>
+            <span class="section-label">Current Community Sites</span>
+            <h2>Partner communities in Leyte</h2>
+          </div>
+          <p>
+            Initial sites included in the current community clerkship and internship toolkit planning.
+          </p>
+        </div>
+
+        <div class="community-cards">
+          <article class="community-card">
+            <span class="community-number">01</span>
+            <div class="community-monogram">P</div>
+            <h3>Palo</h3><p>Leyte</p><span class="community-role">Community learning site</span>
+          </article>
+          <article class="community-card highlighted">
+            <span class="community-number">02</span>
+            <div class="community-monogram">A</div>
+            <h3>Alangalang</h3><p>Leyte</p><span class="community-role">Preceptor: Dr. Angelita Jaya</span>
+          </article>
+          <article class="community-card">
+            <span class="community-number">03</span>
+            <div class="community-monogram">D</div>
+            <h3>Dagami</h3><p>Leyte</p><span class="community-role">Community learning site</span>
+          </article>
+          <article class="community-card highlighted">
+            <span class="community-number">04</span>
+            <div class="community-monogram">T</div>
+            <h3>Tolosa</h3><p>Leyte</p><span class="community-role">Preceptor: Dr. Maria Sheryl P. Indencia</span>
+          </article>
+          <article class="community-card">
+            <span class="community-number">05</span>
+            <div class="community-monogram">T</div>
+            <h3>Tanauan</h3><p>Leyte</p><span class="community-role">Community learning site</span>
+          </article>
+          <article class="community-card">
+            <span class="community-number">06</span>
+            <div class="community-monogram">D</div>
+            <h3>Dulag</h3><p>Leyte</p><span class="community-role">Community learning site</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="toolkit" class="toolkit-strip">
+      <div class="wrap toolkit-layout">
+        <div class="toolkit-intro">
+          <div class="toolkit-round-icon"><img src="assets/shs-logo.png" alt=""></div>
+          <div>
+            <span class="section-label">Community Health Toolkit</span>
+            <p>Your digital companion for community immersion, project continuity, and institutional memory.</p>
+          </div>
+        </div>
+
+        <div class="toolkit-items">
+          <article><span>▤</span><div><strong>Learning Resources</strong><small>Guides, modules, references</small></div></article>
+          <article><span>◎</span><div><strong>Community Projects</strong><small>Ongoing and completed work</small></div></article>
+          <article><span>▰</span><div><strong>Handover System</strong><small>Structured continuity records</small></div></article>
+          <article><span>▣</span><div><strong>Directory</strong><small>People, preceptors, partners</small></div></article>
+          <article><span>▤</span><div><strong>Forms & Templates</strong><small>Documents for community work</small></div></article>
+        </div>
+
+        <a class="button button-green" href="#home">Go to Toolkit Portal →</a>
+      </div>
+    </section>
+
+    <section id="resources" class="section resources-section">
+      <div class="wrap resources-grid">
+        <div>
+          <span class="section-label">Resources</span>
+          <h2>Built to support learning without losing institutional memory.</h2>
+        </div>
+        <div class="resource-columns">
+          <ul>
+            <li>Integrated community medicine manual</li>
+            <li>Orientation and predeployment guides</li>
+            <li>Community diagnosis templates</li>
+          </ul>
+          <ul>
+            <li>Monitoring and evaluation tools</li>
+            <li>Project continuity and handover forms</li>
+            <li>Verified health-system directory</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+      <div class="wrap contact-grid">
+        <div class="contact-brand">
+          <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+          <img src="assets/shs-logo.png" alt="UPM-SHS">
+        </div>
+        <div>
+          <span class="section-label light-label">UP Manila School of Health Sciences</span>
+          <h2>Community-Based Medicine</h2>
+          <p>Palo, Leyte · Community Health Toolkit working prototype</p>
+        </div>
+        <blockquote>“A health worker for every village.”</blockquote>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© 2026 University of the Philippines Manila – School of Health Sciences</span>
+      <span>Community Health Toolkit · Prototype</span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7b1113">
+  <title>Create Account | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page">
+  <div class="auth-page-bg"></div>
+
+  <header class="auth-header">
+    <a href="index.html" class="auth-brand">
+      <img src="assets/up-upm-branding.png" alt="University of the Philippines and UP Manila">
+      <span></span>
+      <img src="assets/shs-logo.png" alt="UP Manila School of Health Sciences">
+      <div>
+        <strong>Community Health Toolkit</strong>
+        <small>UP Manila School of Health Sciences</small>
+      </div>
+    </a>
+    <a class="auth-back" href="index.html">← Back to public site</a>
+  </header>
+
+  <main class="signup-shell">
+    <section class="signup-intro">
+      <span class="portal-kicker">Student Registration</span>
+      <h1>Create your<br>UPM-SHS account.</h1>
+      <p>
+        Student self-registration is allowed using a valid UP Mail address.
+        New accounts remain pending until approved by the program coordinator.
+      </p>
+
+      <div class="signup-flow">
+        <article><span>1</span><div><strong>Register</strong><small>Use your UP Mail and student details.</small></div></article>
+        <article><span>2</span><div><strong>Verify Email</strong><small>Confirm your email through Supabase Auth.</small></div></article>
+        <article><span>3</span><div><strong>Approval</strong><small>Coordinator verifies your account and assignment.</small></div></article>
+        <article><span>4</span><div><strong>Access</strong><small>Active accounts can enter the toolkit.</small></div></article>
+      </div>
+
+      <div class="signup-security-note">
+        <strong>Faculty / preceptor / admin?</strong>
+        <span>Privileged roles are not self-selectable. They are assigned by an authorized administrator.</span>
+      </div>
+    </section>
+
+    <section class="signup-card">
+      <div class="signup-card-heading">
+        <img src="assets/shs-logo.png" alt="">
+        <div>
+          <span>Community Health Toolkit</span>
+          <h2>Student Registration</h2>
+        </div>
+      </div>
+
+      <form id="signup-form" class="signup-form">
+        <div class="field-grid">
+          <label class="field-full">
+            <span>Full name</span>
+            <input id="signup-name" type="text" autocomplete="name" placeholder="Juan Dela Cruz" required>
+          </label>
+
+          <label>
+            <span>Student number</span>
+            <input id="signup-student-number" type="text" placeholder="2026-12345" required>
+          </label>
+
+          <label>
+            <span>UP Mail</span>
+            <input id="signup-email" type="email" autocomplete="email" placeholder="username@up.edu.ph" required>
+          </label>
+
+          <label>
+            <span>Year level</span>
+            <select id="signup-year-level" required>
+              <option value="">Select</option>
+              <option value="YL1">YL1</option>
+              <option value="YL2">YL2</option>
+              <option value="YL3">YL3</option>
+              <option value="YL4">YL4</option>
+              <option value="YL5">YL5</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Batch / Cohort</span>
+            <input id="signup-batch" type="text" placeholder="e.g. MD24" required>
+          </label>
+
+          <label>
+            <span>Password</span>
+            <input id="signup-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
+          </label>
+
+          <label>
+            <span>Confirm password</span>
+            <input id="signup-confirm-password" type="password" autocomplete="new-password" minlength="8" placeholder="Repeat password" required>
+          </label>
+        </div>
+
+        <label class="registration-consent">
+          <input id="signup-consent" type="checkbox" required>
+          <span>
+            I confirm that the information I provided is accurate and I understand that registration does not automatically grant access to protected community records.
+          </span>
+        </label>
+
+        <button id="signup-submit" class="button button-maroon button-full" type="submit">
+          Create Pending Account
+        </button>
+
+        <p id="signup-status" class="signup-status" aria-live="polite"></p>
+      </form>
+
+      <div class="signup-card-footer">
+        <span>Already registered?</span>
+        <a href="index.html#home">Sign in from the public homepage →</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="signup.js"></script>
+</body>
+</html>

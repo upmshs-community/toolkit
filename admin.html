@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Administration | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body">
+  <div id="admin-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening administration…</strong>
+    <span>Checking your account permissions.</span>
+  </div>
+
+  <div id="admin-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Toolkit Administration</strong>
+          <span>UP Manila School of Health Sciences</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Administrator</strong>
+          <span data-user-email></span>
+        </div>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell">
+      <aside class="portal-sidebar admin-sidebar">
+        <div class="portal-sidebar-title">Administration</div>
+        <nav>
+          <a class="active" href="#users">User Management</a>
+          <a href="#communities">Communities</a>
+          <a href="#rotations">Rotations</a>
+          <a href="#projects">Projects</a>
+          <a href="#handovers">Handovers</a>
+        </nav>
+
+        <div class="sidebar-note">
+          <strong>Phase 3</strong>
+          <span>Project registry and structured handover are now connected.</span>
+        </div>
+      </aside>
+
+      <main class="portal-main admin-main">
+        <section class="portal-welcome admin-welcome">
+          <span class="portal-kicker">Administration</span>
+          <h1>Manage the Toolkit.</h1>
+          <p>
+            Approve accounts, control roles and status, maintain community sites,
+            assign students to community rotations, register projects, and review handovers.
+          </p>
+        </section>
+
+        <section class="portal-stat-grid admin-stat-grid">
+          <article>
+            <span>Pending users</span>
+            <strong id="stat-pending">—</strong>
+            <small>Awaiting approval</small>
+          </article>
+          <article>
+            <span>Active users</span>
+            <strong id="stat-active">—</strong>
+            <small>Current portal access</small>
+          </article>
+          <article>
+            <span>Communities</span>
+            <strong id="stat-communities">—</strong>
+            <small>Active learning sites</small>
+          </article>
+          <article>
+            <span>Active rotations</span>
+            <strong id="stat-rotations">—</strong>
+            <small>Current assignments</small>
+          </article>
+          <article>
+            <span>Projects</span>
+            <strong id="stat-projects">—</strong>
+            <small>Registry entries</small>
+          </article>
+          <article>
+            <span>Pending handovers</span>
+            <strong id="stat-handovers">—</strong>
+            <small>Submitted / returned</small>
+          </article>
+        </section>
+
+        <section class="portal-panel admin-section" id="users">
+          <div class="portal-panel-heading admin-panel-heading">
+            <div>
+              <span class="portal-label">Accounts</span>
+              <h2>User Management</h2>
+              <p>Approve registrations and manage role/status without opening Supabase.</p>
+            </div>
+            <div class="admin-toolbar">
+              <input id="user-search" type="search" placeholder="Search name, email, batch…">
+              <select id="user-status-filter">
+                <option value="all">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="user-message" class="admin-message" aria-live="polite"></div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Student details</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-body">
+                <tr><td colspan="5" class="table-loading">Loading users…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="portal-panel admin-section" id="communities">
+          <div class="portal-panel-heading admin-panel-heading">
+            <div>
+              <span class="portal-label">Learning sites</span>
+              <h2>Community Management</h2>
+              <p>Maintain the sites shown across the Toolkit.</p>
+            </div>
+            <button id="open-community-form" class="button button-green" type="button">+ Add Community</button>
+          </div>
+
+          <form id="community-form" class="admin-inline-form" hidden>
+            <input id="community-id" type="hidden">
+            <label>
+              <span>Community name</span>
+              <input id="community-name" type="text" required placeholder="e.g. Palo">
+            </label>
+            <label>
+              <span>Province</span>
+              <input id="community-province" type="text" value="Leyte" required>
+            </label>
+            <label>
+              <span>Municipality</span>
+              <input id="community-municipality" type="text" placeholder="Municipality">
+            </label>
+            <label>
+              <span>Preceptor</span>
+              <input id="community-preceptor" type="text" placeholder="Optional">
+            </label>
+            <label class="form-wide">
+              <span>Description</span>
+              <input id="community-description" type="text" placeholder="Short site description">
+            </label>
+            <div class="admin-form-actions">
+              <button id="save-community" class="button button-maroon" type="submit">Save Community</button>
+              <button id="cancel-community" class="button button-outline-maroon" type="button">Cancel</button>
+            </div>
+          </form>
+
+          <div id="community-message" class="admin-message" aria-live="polite"></div>
+          <div id="admin-community-grid" class="admin-community-grid"></div>
+        </section>
+
+        <section class="portal-panel admin-section" id="rotations">
+          <div class="portal-panel-heading admin-panel-heading">
+            <div>
+              <span class="portal-label">Assignments</span>
+              <h2>Rotation Management</h2>
+              <p>Assign an active student to a community and rotation period.</p>
+            </div>
+          </div>
+
+          <form id="rotation-form" class="rotation-admin-form">
+            <label class="form-wide">
+              <span>Student</span>
+              <select id="rotation-user" required>
+                <option value="">Select active student</option>
+              </select>
+            </label>
+            <label>
+              <span>Community</span>
+              <select id="rotation-community" required>
+                <option value="">Select community</option>
+              </select>
+            </label>
+            <label>
+              <span>Rotation</span>
+              <select id="rotation-type" required>
+                <option value="clerkship">Community Clerkship</option>
+                <option value="internship">Community Internship</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+            <label>
+              <span>Course code / label</span>
+              <input id="rotation-course" type="text" value="Community Medicine" required>
+            </label>
+            <label>
+              <span>Batch</span>
+              <input id="rotation-batch" type="text" placeholder="e.g. MD24">
+            </label>
+            <label>
+              <span>Start date</span>
+              <input id="rotation-start" type="date">
+            </label>
+            <label>
+              <span>End date</span>
+              <input id="rotation-end" type="date">
+            </label>
+            <label class="form-wide">
+              <span>Notes</span>
+              <input id="rotation-notes" type="text" placeholder="Optional notes">
+            </label>
+            <div class="admin-form-actions form-wide">
+              <button class="button button-maroon" type="submit">Assign Rotation</button>
+            </div>
+          </form>
+
+          <div id="rotation-message" class="admin-message" aria-live="polite"></div>
+
+          <div class="admin-table-wrap rotation-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Community</th>
+                  <th>Rotation</th>
+                  <th>Dates</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="rotations-body">
+                <tr><td colspan="6" class="table-loading">Loading rotations…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="portal-panel admin-section" id="projects">
+          <div class="portal-panel-heading admin-panel-heading">
+            <div>
+              <span class="portal-label">Project registry</span>
+              <h2>Projects</h2>
+              <p>Create and update project records for each community.</p>
+            </div>
+            <button id="open-project-form" class="button button-green" type="button">+ Add Project</button>
+          </div>
+
+          <form id="project-form" class="project-admin-form" hidden>
+            <input id="project-id" type="hidden">
+            <label class="form-wide">
+              <span>Community</span>
+              <select id="project-community" required>
+                <option value="">Select community</option>
+              </select>
+            </label>
+            <label class="form-wide">
+              <span>Project title</span>
+              <input id="project-title" type="text" required placeholder="Project title">
+            </label>
+            <label>
+              <span>Category</span>
+              <input id="project-category" type="text" placeholder="e.g. NCD, Nutrition">
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="project-status" required>
+                <option value="planning">Planning</option>
+                <option value="active">Active</option>
+                <option value="for_handover">For Handover</option>
+                <option value="completed">Completed</option>
+                <option value="archived">Archived</option>
+              </select>
+            </label>
+            <label>
+              <span>School year</span>
+              <input id="project-school-year" type="text" placeholder="2026-2027">
+            </label>
+            <label>
+              <span>Batch</span>
+              <input id="project-batch" type="text" placeholder="MD24">
+            </label>
+            <label>
+              <span>Start date</span>
+              <input id="project-start" type="date">
+            </label>
+            <label>
+              <span>End date</span>
+              <input id="project-end" type="date">
+            </label>
+            <label class="form-wide">
+              <span>Summary</span>
+              <textarea id="project-summary" rows="3" placeholder="Short project summary"></textarea>
+            </label>
+            <label class="form-wide">
+              <span>Objectives</span>
+              <textarea id="project-objectives" rows="3" placeholder="Key objectives"></textarea>
+            </label>
+            <div class="admin-form-actions form-wide">
+              <button id="save-project" class="button button-maroon" type="submit">Save Project</button>
+              <button id="cancel-project" class="button button-outline-maroon" type="button">Cancel</button>
+            </div>
+          </form>
+
+          <div id="project-message" class="admin-message" aria-live="polite"></div>
+          <div id="admin-project-grid" class="admin-project-grid"></div>
+        </section>
+
+        <section class="portal-panel admin-section" id="handovers">
+          <div class="portal-panel-heading admin-panel-heading">
+            <div>
+              <span class="portal-label">Continuity</span>
+              <h2>Structured Handovers</h2>
+              <p>Review project transition notes and update approval status.</p>
+            </div>
+          </div>
+
+          <form id="handover-form" class="handover-admin-form">
+            <label class="form-wide">
+              <span>Project</span>
+              <select id="handover-project" required>
+                <option value="">Select project</option>
+              </select>
+            </label>
+            <label>
+              <span>Outgoing batch</span>
+              <input id="handover-batch" type="text" placeholder="e.g. MD24">
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="handover-status" required>
+                <option value="draft">Draft</option>
+                <option value="submitted" selected>Submitted</option>
+                <option value="approved">Approved</option>
+                <option value="returned">Returned</option>
+              </select>
+            </label>
+            <label class="form-wide">
+              <span>Accomplishments</span>
+              <textarea id="handover-accomplishments" rows="3" placeholder="What has already been done?"></textarea>
+            </label>
+            <label class="form-wide">
+              <span>Pending tasks</span>
+              <textarea id="handover-pending" rows="3" placeholder="What should the next batch continue?"></textarea>
+            </label>
+            <label class="form-wide">
+              <span>Recommendations</span>
+              <textarea id="handover-recommendations" rows="3" placeholder="Recommendations / reminders / risks"></textarea>
+            </label>
+            <div class="admin-form-actions form-wide">
+              <button class="button button-maroon" type="submit">Save Handover</button>
+            </div>
+          </form>
+
+          <div id="handover-message" class="admin-message" aria-live="polite"></div>
+
+          <div class="admin-table-wrap rotation-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Project</th>
+                  <th>Outgoing batch</th>
+                  <th>Submitted by</th>
+                  <th>Status</th>
+                  <th>Updated</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="handovers-body">
+                <tr><td colspan="6" class="table-loading">Loading handovers…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
