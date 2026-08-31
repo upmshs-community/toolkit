@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Manual & Modules | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body toolkit-scroll-page lms-page portal-is-loading">
+  <div id="lms-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Manual &amp; Modules…</strong>
+    <span>Loading your learning pathway and progress.</span>
+  </div>
+
+  <div id="lms-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="portal.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Manual &amp; Modules</strong>
+          <span>Community Health Toolkit · Learning System</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Toolkit user</strong>
+          <span data-user-email></span>
+          <small class="portal-user-role"><span data-user-role>Student</span> · <span data-user-batch>—</span></small>
+        </div>
+        <a class="portal-signout admin-return-link" href="library.html">Library</a>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="lms-main">
+      <section class="lms-page-hero">
+        <div>
+          <span class="portal-kicker">Learning pathway</span>
+          <h1>Manual &amp; Modules</h1>
+          <p>
+            Move through Community Clerkship and Internship modules at your own pace.
+            Your lesson progress is saved to the Toolkit so you can continue where you left off.
+          </p>
+        </div>
+
+        <aside class="lms-progress-summary">
+          <span>Overall progress</span>
+          <strong id="lms-overall-progress">0%</strong>
+          <div class="lms-progress-track">
+            <i id="lms-overall-progress-bar" style="width:0%"></i>
+          </div>
+          <small id="lms-overall-detail">Loading lesson progress…</small>
+        </aside>
+      </section>
+
+      <section class="lms-continue-card" id="lms-continue-card" hidden>
+        <div>
+          <span class="portal-label">Continue learning</span>
+          <h2 id="lms-continue-title">Continue your last lesson</h2>
+          <p id="lms-continue-copy">Resume where you left off.</p>
+        </div>
+        <a id="lms-continue-link" class="button button-maroon" href="#">Continue →</a>
+      </section>
+
+      <section class="lms-course-tabs" aria-label="Courses">
+        <button class="active" type="button" data-course-tab="CH205">
+          <span>CH205</span>
+          <strong>Community Clerkship</strong>
+        </button>
+        <button type="button" data-course-tab="CH240">
+          <span>CH240</span>
+          <strong>Internship</strong>
+        </button>
+      </section>
+
+      <section class="lms-course-header">
+        <div>
+          <span id="lms-course-code" class="lms-course-badge">CH205</span>
+          <h2 id="lms-course-title">Community Clerkship</h2>
+          <p id="lms-course-description">Loading course information…</p>
+        </div>
+        <div class="lms-course-progress">
+          <strong id="lms-course-progress">0%</strong>
+          <span id="lms-course-progress-copy">0 of 0 lessons complete</span>
+        </div>
+      </section>
+
+      <div id="lms-modules" class="lms-module-list">
+        <div class="table-empty">Loading modules…</div>
+      </div>
+
+      <section class="lms-library-strip">
+        <div>
+          <span class="portal-label">Toolkit Library</span>
+          <h2>Need the forms, manuals, or supporting references?</h2>
+          <p>The LMS keeps your learning pathway; the Library remains the repository for downloadable resources.</p>
+        </div>
+        <a class="button button-outline-maroon" href="library.html">Open Resource Library →</a>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="modules.js"></script>
+</body>
+</html>
