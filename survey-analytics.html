@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Community Health Analytics | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page survey-analytics-page portal-is-loading">
+  <div id="analytics-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Community Health Analytics…</strong>
+    <span>Preparing reviewed household survey indicators.</span>
+  </div>
+
+  <div id="analytics-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="admin.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Toolkit Administration</strong>
+          <span>Community Health Analytics</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Toolkit Manager</strong>
+          <span data-user-email></span>
+        </div>
+        <a class="portal-signout admin-return-link" href="field-map.html">Field Map</a>
+        <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell">
+      <aside class="portal-sidebar admin-sidebar">
+        <div class="portal-sidebar-title">Administration</div>
+        <nav>
+          <a href="admin.html#users">User Management</a>
+          <a href="admin.html#communities">Communities</a>
+          <a href="admin.html#rotations">Rotations</a>
+          <a href="admin.html#projects">Projects</a>
+          <a href="admin.html#handovers">Handovers</a>
+          <a href="field-submissions-admin.html">Field Surveys</a>
+          <a href="field-map.html">Field Map</a>
+          <a class="active" href="survey-analytics.html">Health Analytics</a>
+        </nav>
+
+        <div class="sidebar-note">
+          <strong>Descriptive analytics</strong>
+          <span>Rates use answered records only and are not labeled as official program indicators unless separately validated.</span>
+        </div>
+      </aside>
+
+      <main class="portal-main admin-main survey-analytics-main">
+        <section class="portal-welcome admin-welcome">
+          <span class="portal-kicker">Phase 7C.1 · Household Survey Analytics</span>
+          <h1>Community Health Analytics</h1>
+          <p>Summarize selected household survey responses while keeping denominators and missing answers visible.</p>
+        </section>
+
+        <section class="analytics-method-note">
+          <div>
+            <span class="portal-label">Dataset rule</span>
+            <strong>Reviewed surveys are used by default.</strong>
+            <p>Blank and NA responses are excluded from a rate denominator unless the card states otherwise.</p>
+          </div>
+          <button id="analytics-export-btn" class="button button-outline-maroon" type="button">Export Summary CSV</button>
+        </section>
+
+        <section class="analytics-filter-bar">
+          <label>
+            <span>Dataset</span>
+            <select id="analytics-dataset-filter">
+              <option value="reviewed">Reviewed only</option>
+              <option value="completed_reviewed">Completed + Reviewed</option>
+              <option value="all_non_archived">All non-archived</option>
+            </select>
+          </label>
+          <label><span>Community</span><select id="analytics-community-filter"><option value="">All communities</option></select></label>
+          <label><span>Barangay</span><select id="analytics-barangay-filter"><option value="">All barangays</option></select></label>
+          <label><span>From</span><input id="analytics-date-from" type="date"></label>
+          <label><span>To</span><input id="analytics-date-to" type="date"></label>
+          <button id="analytics-clear-filters" class="mini-action" type="button">Clear</button>
+        </section>
+
+        <section class="analytics-kpi-grid">
+          <article>
+            <span>Households in dataset</span>
+            <strong id="kpi-households">0</strong>
+            <small id="kpi-households-note">Reviewed surveys</small>
+          </article>
+          <article>
+            <span>Households with toilet</span>
+            <strong id="kpi-toilet">—</strong>
+            <small id="kpi-toilet-note">0 answered</small>
+          </article>
+          <article>
+            <span>Avail health services</span>
+            <strong id="kpi-services">—</strong>
+            <small id="kpi-services-note">0 answered</small>
+          </article>
+          <article>
+            <span>Family planning access</span>
+            <strong id="kpi-fp-access">—</strong>
+            <small id="kpi-fp-note">0 applicable/answered</small>
+          </article>
+          <article>
+            <span>Prenatal care received</span>
+            <strong id="kpi-prenatal">—</strong>
+            <small id="kpi-prenatal-note">0 applicable/answered</small>
+          </article>
+          <article>
+            <span>Community organization involvement</span>
+            <strong id="kpi-participation">—</strong>
+            <small id="kpi-participation-note">0 answered</small>
+          </article>
+        </section>
+
+        <section class="analytics-grid two-col">
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Environmental condition</span><h2>Drinking Water Source</h2></div>
+            </div>
+            <div id="chart-water-source" class="analytics-bars"></div>
+            <small id="water-source-denominator" class="analytics-denominator"></small>
+          </article>
+
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Environmental condition</span><h2>Water Treatment</h2></div>
+            </div>
+            <div id="chart-water-treatment" class="analytics-bars"></div>
+            <small id="water-treatment-denominator" class="analytics-denominator"></small>
+          </article>
+        </section>
+
+        <section class="analytics-grid three-col">
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Sanitation</span><h2>Toilet Access</h2></div>
+            </div>
+            <div id="chart-toilet-access" class="analytics-bars compact"></div>
+            <small id="toilet-denominator" class="analytics-denominator"></small>
+          </article>
+
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Health utilization</span><h2>Health Services</h2></div>
+            </div>
+            <div id="chart-services" class="analytics-bars compact"></div>
+            <small id="services-denominator" class="analytics-denominator"></small>
+          </article>
+
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Community participation</span><h2>Organization Involvement</h2></div>
+            </div>
+            <div id="chart-participation" class="analytics-bars compact"></div>
+            <small id="participation-denominator" class="analytics-denominator"></small>
+          </article>
+        </section>
+
+        <section class="analytics-grid two-col">
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Family planning</span><h2>Access & Practice</h2></div>
+            </div>
+            <div class="analytics-split-metrics">
+              <div><span>Access to services</span><strong id="fp-access-rate">—</strong><small id="fp-access-denom">0 answered</small></div>
+              <div><span>Practicing FP</span><strong id="fp-practice-rate">—</strong><small id="fp-practice-denom">0 answered</small></div>
+            </div>
+          </article>
+
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Maternal care</span><h2>Prenatal / Postnatal Care</h2></div>
+            </div>
+            <div class="analytics-split-metrics three">
+              <div><span>Prenatal care</span><strong id="maternal-prenatal-rate">—</strong><small id="maternal-prenatal-denom">0 answered</small></div>
+              <div><span>1st trimester visit</span><strong id="maternal-trimester-rate">—</strong><small id="maternal-trimester-denom">0 answered</small></div>
+              <div><span>Postnatal visit</span><strong id="maternal-postnatal-rate">—</strong><small id="maternal-postnatal-denom">0 answered</small></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="analytics-grid two-col">
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Health-seeking behavior</span><h2>Recorded Delay Reasons</h2></div>
+            </div>
+            <p class="analytics-panel-note">Counts only. Empty checkbox groups cannot distinguish “none” from “not answered,” so no delay percentage is calculated.</p>
+            <div id="delay-reasons-list" class="analytics-ranked-list"></div>
+          </article>
+
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">PhilHealth</span><h2>Recorded Membership</h2></div>
+            </div>
+            <div class="analytics-philhealth-summary">
+              <div><span>Households with ≥1 record</span><strong id="philhealth-households">0</strong></div>
+              <div><span>Members recorded</span><strong id="philhealth-members">0</strong></div>
+              <div><span>Active</span><strong id="philhealth-active">0</strong></div>
+              <div><span>Inactive</span><strong id="philhealth-inactive">0</strong></div>
+            </div>
+            <p class="analytics-panel-note">This reports what is recorded in the form; it is not labeled household PhilHealth coverage.</p>
+          </article>
+        </section>
+
+        <section class="analytics-grid two-col">
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Child health</span><h2>Repeated Diarrheal Episodes</h2></div>
+            </div>
+            <div id="chart-diarrhea" class="analytics-bars compact"></div>
+            <small id="diarrhea-denominator" class="analytics-denominator"></small>
+          </article>
+
+          <article class="portal-panel analytics-panel">
+            <div class="portal-panel-heading">
+              <div><span class="portal-label">Environmental practices</span><h2>Garbage Disposal Selections</h2></div>
+            </div>
+            <p class="analytics-panel-note">Counts of selected practices; respondents may select more than one.</p>
+            <div id="garbage-disposal-list" class="analytics-ranked-list"></div>
+          </article>
+        </section>
+
+        <section class="portal-panel analytics-quality-panel">
+          <div class="portal-panel-heading">
+            <div>
+              <span class="portal-label">Data quality</span>
+              <h2>Answered Denominators</h2>
+              <p>Use this before interpreting any percentage.</p>
+            </div>
+          </div>
+          <div id="analytics-quality-grid" class="analytics-quality-grid"></div>
+        </section>
+
+        <section class="field-map-method-note">
+          <strong>Interpretation note</strong>
+          <p>
+            This page provides descriptive summaries of selected fields in the current household survey.
+            It does not automatically define official SHS, DOH, or LGU indicators, nor does it replace validation of denominators, eligibility, or survey completeness.
+          </p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="survey-analytics.js"></script>
+</body>
+</html>

@@ -4385,3 +4385,219 @@ body.field-detail-open{overflow:hidden!important}.field-detail-backdrop{position
   .community-field-map { height:430px; }
   .field-map-layer-toggles { justify-content:flex-start; }
 }
+
+
+/* =========================================================
+   PHASE 7C.1 — COMMUNITY HEALTH ANALYTICS
+   ========================================================= */
+
+.survey-analytics-main { padding-bottom: 70px; }
+
+.analytics-method-note {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:14px;
+  padding:14px 16px;
+  border:1px solid #ddd3c7;
+  border-radius:18px;
+  background:linear-gradient(90deg,#faf4ea,#fffdf9);
+}
+.analytics-method-note > div { display:grid; gap:3px; }
+.analytics-method-note strong { font-family:var(--serif); color:var(--green); font-size:18px; }
+.analytics-method-note p { margin:0; font-family:var(--serif); color:#6a625a; font-size:11px; }
+
+.analytics-filter-bar {
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr .8fr .8fr auto;
+  gap:10px;
+  align-items:end;
+  margin-bottom:14px;
+  padding:14px;
+  border:1px solid #ddd4c8;
+  border-radius:18px;
+  background:#fff;
+}
+.analytics-filter-bar label { display:grid; gap:5px; }
+.analytics-filter-bar label span {
+  font-size:8px; text-transform:uppercase; letter-spacing:.08em; font-weight:900; color:#6a625a;
+}
+.analytics-filter-bar select,
+.analytics-filter-bar input {
+  min-height:42px;
+  border:1px solid #d1c8bd;
+  border-radius:10px;
+  background:#fffdfa;
+  padding:8px 10px;
+  font-family:var(--serif);
+  color:#2b2722;
+}
+
+.analytics-kpi-grid {
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:14px;
+}
+.analytics-kpi-grid article {
+  padding:15px 16px;
+  border:1px solid #ddd4c8;
+  border-radius:18px;
+  background:#fff;
+  display:grid;
+  gap:3px;
+}
+.analytics-kpi-grid span {
+  font-size:8px; text-transform:uppercase; letter-spacing:.08em; font-weight:900; color:#6d655d;
+}
+.analytics-kpi-grid strong {
+  font-family:var(--serif);
+  font-size:30px;
+  line-height:1;
+  color:var(--maroon);
+}
+.analytics-kpi-grid small { font-family:var(--serif); color:#746c64; }
+
+.analytics-grid {
+  display:grid;
+  gap:14px;
+  margin-bottom:14px;
+}
+.analytics-grid.two-col { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.analytics-grid.three-col { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.analytics-panel { padding:16px; }
+.analytics-panel .portal-panel-heading { padding:0 0 12px; }
+.analytics-panel .portal-panel-heading h2 { font-size:23px; }
+
+.analytics-bars { display:grid; gap:12px; }
+.analytics-bar-row { display:grid; gap:5px; }
+.analytics-bar-row > div:first-child {
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.analytics-bar-row span { font-family:var(--serif); color:#514a43; }
+.analytics-bar-row strong { color:#2d2924; font-size:11px; }
+.analytics-bar-track { height:9px; border-radius:999px; background:#ebe4dc; overflow:hidden; }
+.analytics-bar-track i {
+  display:block; height:100%; border-radius:inherit;
+  background:linear-gradient(90deg,var(--green),#1f7b4b);
+}
+.analytics-yes .analytics-bar-track i { background:linear-gradient(90deg,#17683b,#37905b); }
+.analytics-no .analytics-bar-track i { background:linear-gradient(90deg,#7b1113,#b23a41); }
+.analytics-bars.compact { gap:10px; }
+.analytics-denominator {
+  display:block; margin-top:12px; padding-top:9px; border-top:1px solid #eee7df;
+  font-family:var(--serif); color:#746c64;
+}
+
+.analytics-split-metrics {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.analytics-split-metrics.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.analytics-split-metrics > div {
+  padding:16px;
+  border:1px solid #e1d9cf;
+  border-radius:15px;
+  background:#fbf7f1;
+  display:grid;
+  gap:4px;
+}
+.analytics-split-metrics span {
+  font-size:8px; text-transform:uppercase; letter-spacing:.08em; font-weight:900; color:#6e665e;
+}
+.analytics-split-metrics strong {
+  font-family:var(--serif); font-size:28px; color:var(--green);
+}
+.analytics-split-metrics small { font-family:var(--serif); color:#716960; }
+
+.analytics-panel-note {
+  margin:-4px 0 12px;
+  font-family:var(--serif);
+  font-size:11px;
+  line-height:1.5;
+  color:#736b63;
+}
+
+.analytics-ranked-list { display:grid; }
+.analytics-ranked-list article {
+  display:grid;
+  grid-template-columns:28px minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  padding:9px 2px;
+  border-bottom:1px solid #eee7df;
+}
+.analytics-ranked-list article > span {
+  width:25px; height:25px; border-radius:50%; display:grid; place-items:center;
+  background:#f3ece4; color:var(--maroon); font-family:var(--serif); font-weight:900;
+}
+.analytics-ranked-list article > div { display:grid; gap:1px; }
+.analytics-ranked-list strong { font-family:var(--serif); color:var(--green); }
+.analytics-ranked-list small { color:#756d65; }
+.analytics-ranked-list b { font-family:var(--serif); font-size:20px; color:var(--maroon); }
+
+.analytics-philhealth-summary {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.analytics-philhealth-summary > div {
+  padding:14px;
+  border-radius:14px;
+  background:#f9f5ef;
+  border:1px solid #e3dbd1;
+  display:grid;
+}
+.analytics-philhealth-summary span {
+  font-size:8px; text-transform:uppercase; letter-spacing:.08em; font-weight:900; color:#6e665e;
+}
+.analytics-philhealth-summary strong {
+  margin-top:4px; font-family:var(--serif); font-size:26px; color:var(--maroon);
+}
+
+.analytics-quality-panel { margin-bottom:14px; }
+.analytics-quality-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.analytics-quality-grid article {
+  padding:13px;
+  border:1px solid #e0d8ce;
+  border-radius:14px;
+  background:#fffdfa;
+  display:grid;
+  gap:4px;
+}
+.analytics-quality-grid span { font-family:var(--serif); color:#554e47; font-weight:800; }
+.analytics-quality-grid strong { font-family:var(--serif); font-size:23px; color:var(--green); }
+.analytics-quality-grid small { color:#776f67; line-height:1.35; }
+.analytics-quality-track {
+  height:5px; margin-top:4px; border-radius:999px; background:#e9e2d9; overflow:hidden;
+}
+.analytics-quality-track i {
+  display:block; height:100%; border-radius:inherit; background:var(--maroon);
+}
+
+@media (max-width:1180px) {
+  .analytics-filter-bar { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .analytics-kpi-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .analytics-quality-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+
+@media (max-width:850px) {
+  .analytics-grid.two-col,
+  .analytics-grid.three-col { grid-template-columns:1fr; }
+  .analytics-split-metrics.three { grid-template-columns:1fr; }
+  .analytics-quality-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+@media (max-width:640px) {
+  .analytics-method-note { align-items:stretch; flex-direction:column; }
+  .analytics-filter-bar { grid-template-columns:1fr; }
+  .analytics-kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .analytics-split-metrics { grid-template-columns:1fr; }
+  .analytics-quality-grid { grid-template-columns:1fr; }
+}
