@@ -70,6 +70,25 @@
     window.location.replace("index.html");
   }
 
+
+  function communityCoverImage(name = "") {
+    const normalized = String(name || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z]/g, "");
+
+    const covers = {
+      alangalang: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Church_of_Alangalang%2C_Leyte.jpg",
+      dagami: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dagami_Town_Hall.jpg",
+      dulag: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Church_of_Dulag%2C_Leyte.jpg",
+      palo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Palo_Municipal_Hall_%28Palo%2C_Leyte%3B_09-09-2022%29.jpg",
+      tanauan: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tanauan_%28Leyte%29_Church.jpg",
+      tolosa: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tolosa%2C_Leyte_from_air_%28Leyte%3B_09-08-2022%29.jpg"
+    };
+
+    return covers[normalized] || "";
+  }
+
   function renderCommunities() {
     const target = document.getElementById("portal-communities");
     if (!target) return;
@@ -77,15 +96,32 @@
       target.innerHTML = `<article><span>—</span><strong>No communities</strong><small>No data yet</small></article>`;
       return;
     }
-    target.innerHTML = communities.map((c, index) => `
-      <a class="portal-community-link" href="community.html?id=${encodeURIComponent(c.id)}">
-        <article>
-          <span>${String(index + 1).padStart(2, "0")}</span>
-          <strong>${safe(prettyCommunityName(c.name))}</strong>
-          <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
-        </article>
-      </a>
-    `).join("");
+    target.innerHTML = communities.map(c => {
+      const displayName = prettyCommunityName(c.name);
+      const cover = communityCoverImage(c.name);
+
+      return `
+        <a class="portal-community-link phase6-community-card-link"
+           href="community.html?id=${encodeURIComponent(c.id)}">
+          <article class="phase6-community-cover-card">
+            <div
+              class="phase6-community-cover"
+              ${cover ? `style="background-image: linear-gradient(180deg, rgba(12,44,31,.03), rgba(12,44,31,.14)), url('${cover}')"` : ""}
+              role="img"
+              aria-label="${safe(displayName)} municipality">
+            </div>
+
+            <div class="phase6-community-card-body">
+              <div>
+                <strong>${safe(displayName)}</strong>
+                <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
+              </div>
+              <span class="phase6-community-arrow" aria-hidden="true">→</span>
+            </div>
+          </article>
+        </a>
+      `;
+    }).join("");
   }
 
   function renderProjects() {
