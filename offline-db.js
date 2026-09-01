@@ -1,45 +1,44 @@
 (() => {
   const DB_NAME = "upm-shs-fieldwork";
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
 
   function openDB() {
     return new Promise((resolve, reject) => {
       const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = () => {
+      req.onupgradeneeded = event => {
         const db = req.result;
+        const tx = event.target.transaction;
+
         if (!db.objectStoreNames.contains("submissions")) {
           const store = db.createObjectStore("submissions", { keyPath: "local_uuid" });
           store.createIndex("sync_status", "sync_status", { unique: false });
           store.createIndex("form_code", "form_code", { unique: false });
           store.createIndex("updated_at", "updated_at", { unique: false });
         }
+
         if (!db.objectStoreNames.contains("media")) {
-          db.createObjectStore("media", { keyPath: "local_media_id" });
+          const media = db.createObjectStore("media", { keyPath: "local_media_id" });
+          media.createIndex("local_uuid", "local_uuid", { unique: false });
+        } else {
+          const media = tx.objectStore("media");
+          if (!media.indexNames.contains("local_uuid")) {
+            media.createIndex("local_uuid", "local_uuid", { unique: false });
+          }
         }
+
         if (!db.objectStoreNames.contains("settings")) {
           db.createObjectStore("settings", { keyPath: "key" });
+        }
+
+        if (!db.objectStoreNames.contains("templates")) {
+          const templates = db.createObjectStore("templates", { keyPath: "version_id" });
+          templates.createIndex("form_id", "form_id", { unique: false });
+          templates.createIndex("form_code", "form_code", { unique: false });
+          templates.createIndex("cached_at", "cached_at", { unique: false });
         }
       };
       req.onsuccess = () => resolve(req.result);
       req.onerror = () => reject(req.error);
-    });
-  }
-
-  async function withStore(storeName, mode, callback) {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(storeName, mode);
-      const store = tx.objectStore(storeName);
-      let result;
-      try {
-        result = callback(store);
-      } catch (err) {
-        reject(err);
-        return;
-      }
-      tx.oncomplete = () => resolve(result);
-      tx.onerror = () => reject(tx.error);
-      tx.onabort = () => reject(tx.error);
     });
   }
 
@@ -89,6 +88,17 @@
     return requestPromise(tx.objectStore("media").get(local_media_id));
   }
 
+  async function getMediaForSubmission(local_uuid) {
+    const db = await openDB();
+    const tx = db.transaction("media", "readonly");
+    const store = tx.objectStore("media");
+    if (store.indexNames.contains("local_uuid")) {
+      return requestPromise(store.index("local_uuid").getAll(local_uuid));
+    }
+    const rows = await requestPromise(store.getAll());
+    return (rows || []).filter(row => row.local_uuid === local_uuid);
+  }
+
   async function deleteMedia(local_media_id) {
     const db = await openDB();
     return new Promise((resolve, reject) => {
@@ -116,15 +126,42 @@
     return row?.value ?? null;
   }
 
+  async function putTemplate(record) {
+    const row = { ...record, cached_at: new Date().toISOString() };
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("templates", "readwrite");
+      tx.objectStore("templates").put(row);
+      tx.oncomplete = () => resolve(row);
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async function getTemplate(version_id) {
+    const db = await openDB();
+    const tx = db.transaction("templates", "readonly");
+    return requestPromise(tx.objectStore("templates").get(version_id));
+  }
+
+  async function getAllTemplates() {
+    const db = await openDB();
+    const tx = db.transaction("templates", "readonly");
+    return (await requestPromise(tx.objectStore("templates").getAll())) || [];
+  }
+
+  async function deleteTemplate(version_id) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("templates", "readwrite");
+      tx.objectStore("templates").delete(version_id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
   window.ToolkitOfflineDB = {
-    openDB,
-    putSubmission,
-    getSubmission,
-    getAllSubmissions,
-    putMedia,
-    getMedia,
-    deleteMedia,
-    setSetting,
-    getSetting
+    openDB, putSubmission, getSubmission, getAllSubmissions,
+    putMedia, getMedia, getMediaForSubmission, deleteMedia,
+    setSetting, getSetting, putTemplate, getTemplate, getAllTemplates, deleteTemplate
   };
 })();

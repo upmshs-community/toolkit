@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#7b1113">
+  <title>Form Builder | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="form-builder.css?v=7d1a">
+</head>
+<body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page form-builder-page portal-is-loading">
+  <div id="form-builder-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS"><strong>Opening Form Builder…</strong>
+    <span>Loading forms, versions, and assignments.</span>
+  </div>
+
+  <div id="form-builder-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="admin.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div><strong>Toolkit Administration</strong><span>Form Builder &amp; Versioning</span></div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy"><strong data-user-name>Form Manager</strong><span data-user-email></span></div>
+        <a class="portal-signout admin-return-link" href="field-forms.html">Field Forms</a>
+        <a class="portal-signout admin-return-link" href="admin.html">Admin</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell">
+      <aside class="portal-sidebar admin-sidebar">
+        <div class="portal-sidebar-title">Administration</div>
+        <nav>
+          <a href="admin.html#users">User Management</a><a href="admin.html#communities">Communities</a>
+          <a href="admin.html#rotations">Rotations</a><a href="admin.html#projects">Projects</a>
+          <a href="admin.html#handovers">Handovers</a><a href="field-submissions-admin.html">Field Surveys</a>
+          <a href="field-map.html">Field Map</a><a href="survey-analytics.html">Health Analytics</a>
+          <a href="calendar-admin.html">Calendar</a><a class="active" href="form-builder.html">Form Builder</a>
+        </nav>
+        <div class="sidebar-note"><strong>Version-safe forms</strong><span>Published versions are frozen. Revise them through a new draft version.</span></div>
+      </aside>
+
+      <main class="portal-main admin-main form-builder-main">
+        <section class="portal-welcome admin-welcome">
+          <span class="portal-kicker">Phase 7D · Form Builder</span>
+          <h1>Build SHS field forms without code.</h1>
+          <p>Create sections and fields, preview drafts, publish immutable versions, and assign forms by community, course, or batch.</p>
+        </section>
+
+        <section class="form-builder-layout">
+          <aside class="portal-panel form-catalog-panel">
+            <div class="form-catalog-heading"><div><span class="portal-label">Form catalog</span><h2>Forms</h2></div><button id="new-form-btn" class="button button-green" type="button">+ New</button></div>
+            <div id="form-catalog" class="form-catalog"><div class="table-loading">Loading forms…</div></div>
+          </aside>
+
+          <section class="form-builder-center">
+            <article id="form-empty-state" class="portal-panel form-empty-state"><strong>Select or create a form.</strong><span>The builder will appear here.</span></article>
+            <div id="form-editor" hidden>
+              <article class="portal-panel form-editor-header">
+                <div class="form-editor-title-row">
+                  <div><span id="editor-form-code" class="portal-label">FORM</span><h2 id="editor-form-title">Form title</h2><p id="editor-form-description"></p></div>
+                  <div class="form-editor-version-actions"><select id="version-select"></select><span id="version-status" class="form-version-status">Draft</span></div>
+                </div>
+                <div class="form-editor-toolbar">
+                  <button id="preview-version-btn" class="button button-outline-maroon" type="button">Preview</button>
+                  <button id="new-version-btn" class="button button-outline-maroon" type="button">Create New Version</button>
+                  <button id="publish-version-btn" class="button button-maroon" type="button">Publish Version</button>
+                  <span id="builder-save-status" class="builder-save-status">Ready</span>
+                </div>
+              </article>
+              <article id="published-version-note" class="published-version-note" hidden><strong>This version is frozen.</strong><span>Published/archived schemas cannot be edited. Create a new version to revise the form.</span></article>
+              <div id="section-builder" class="section-builder"></div>
+              <button id="add-section-btn" class="button button-green form-add-section" type="button">+ Add Section</button>
+            </div>
+          </section>
+
+          <aside class="form-builder-right">
+            <article class="portal-panel form-properties-panel">
+              <div class="form-side-heading"><span class="portal-label">Form details</span><h2>Properties</h2></div>
+              <form id="form-properties-form" class="form-properties-form">
+                <label><span>Form title</span><input id="prop-title" type="text" required></label>
+                <label><span>Code</span><input id="prop-code" type="text" required></label>
+                <label><span>Category</span><input id="prop-category" type="text"></label>
+                <label><span>Description</span><textarea id="prop-description" rows="4"></textarea></label>
+                <button class="button button-maroon" type="submit">Save Form Details</button>
+              </form>
+              <div id="form-properties-message" class="admin-message"></div>
+            </article>
+
+            <article class="portal-panel form-assignment-panel">
+              <div class="form-side-heading"><span class="portal-label">Audience</span><h2>Assignments</h2><p>No assignments = available to all active Toolkit users.</p></div>
+              <form id="assignment-form" class="assignment-form">
+                <label><span>Community</span><select id="assignment-community"><option value="">Any community</option></select></label>
+                <label><span>Course</span><input id="assignment-course" type="text" placeholder="Any course"></label>
+                <label><span>Batch</span><input id="assignment-batch" type="text" placeholder="Any batch"></label>
+                <button class="button button-green" type="submit">+ Add Assignment</button>
+              </form>
+              <div id="assignment-list" class="assignment-list"><div class="table-empty">Select a form.</div></div>
+            </article>
+          </aside>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="new-form-dialog" class="form-builder-dialog">
+    <form id="new-form-form">
+      <header><span class="portal-label">New field form</span><h2>Create Form</h2></header>
+      <label><span>Title</span><input id="new-form-title" type="text" required></label>
+      <label><span>Code</span><input id="new-form-code" type="text" required placeholder="SHS-FORM-CODE"></label>
+      <label><span>Category</span><input id="new-form-category" type="text"></label>
+      <label><span>Description</span><textarea id="new-form-description" rows="3"></textarea></label>
+      <footer><button id="cancel-new-form" class="button button-outline-maroon" type="button">Cancel</button><button class="button button-maroon" type="submit">Create Form</button></footer>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="form-engine.js?v=7d1a"></script>
+  <script src="form-builder.js?v=7d1a"></script>
+</body>
+</html>

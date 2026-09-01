@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" class="toolkit-scroll-document">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#7b1113">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#7b1113">
   <title>Field Forms | Community Health Toolkit</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="form-engine.css?v=7d1a">
 </head>
 <body class="portal-body toolkit-scroll-page field-forms-page portal-is-loading">
   <div id="field-forms-loading" class="portal-loading">
-    <img src="assets/shs-logo.png" alt="UPM-SHS">
-    <strong>Opening Offline Field Forms…</strong>
-    <span>Preparing your locally available forms and sync queue.</span>
+    <img src="assets/shs-logo.png" alt="UPM-SHS"><strong>Opening Offline Field Forms…</strong>
+    <span>Preparing your assigned forms and local sync queue.</span>
   </div>
 
   <div id="field-forms-app" hidden>
@@ -22,18 +20,11 @@
         <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
         <span class="portal-topbar-divider"></span>
         <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
-        <div>
-          <strong>Offline Field Forms</strong>
-          <span>Community Health Toolkit · Fieldwork</span>
-        </div>
+        <div><strong>Offline Field Forms</strong><span>Community Health Toolkit · Fieldwork</span></div>
       </a>
-
       <div class="portal-account">
         <div class="portal-avatar" data-user-initials>UP</div>
-        <div class="portal-user-copy">
-          <strong data-user-name>Toolkit user</strong>
-          <span data-user-email></span>
-        </div>
+        <div class="portal-user-copy"><strong data-user-name>Toolkit user</strong><span data-user-email></span></div>
         <a class="portal-signout admin-return-link" href="portal.html">Portal</a>
         <button class="portal-signout" data-sign-out type="button">Sign out</button>
       </div>
@@ -42,86 +33,65 @@
     <main class="field-forms-main">
       <section class="field-forms-hero">
         <div>
-          <span class="portal-kicker">Phase 7B · Offline-first fieldwork</span>
+          <span class="portal-kicker">Phase 7D · Offline form engine</span>
           <h1>Field Forms</h1>
-          <p>Offline forms for community fieldwork.</p>
+          <p>Use assigned SHS forms in the field, with local drafts and later synchronization.</p>
         </div>
-
         <aside class="offline-status-card">
           <span id="network-status-dot" class="network-dot"></span>
-          <div>
-            <strong id="network-status-text">Checking connection…</strong>
-            <small id="network-status-copy">Preparing offline support.</small>
-          </div>
+          <div><strong id="network-status-text">Checking connection…</strong><small id="network-status-copy">Preparing offline support.</small></div>
         </aside>
       </section>
 
       <section class="field-sync-summary">
-        <article>
-          <span>Local drafts</span>
-          <strong id="local-draft-count">0</strong>
-          <small>Saved on this device</small>
-        </article>
-        <article>
-          <span>Waiting to sync</span>
-          <strong id="pending-sync-count">0</strong>
-          <small>Will upload when online</small>
-        </article>
-        <article>
-          <span>Synced locally</span>
-          <strong id="synced-local-count">0</strong>
-          <small>Latest local sync state</small>
-        </article>
+        <article><span>Local drafts</span><strong id="local-draft-count">0</strong><small>Saved on this device</small></article>
+        <article><span>Waiting to sync</span><strong id="pending-sync-count">0</strong><small>Will upload when online</small></article>
+        <article><span>Synced locally</span><strong id="synced-local-count">0</strong><small>Latest local sync state</small></article>
         <button id="sync-all-btn" class="button button-green" type="button">Sync Now</button>
       </section>
 
       <section class="portal-panel field-template-panel">
         <div class="portal-panel-heading">
-          <div>
-            <span class="portal-label">Available offline</span>
-            <h2>Household Survey Form</h2>
-          </div>
-          <span class="portal-chip">SHS · 2023 form</span>
+          <div><span class="portal-label">Current SHS form</span><h2>Household Survey</h2></div>
+          <span class="portal-chip">Legacy form · preserved</span>
         </div>
-
         <div class="field-template-card">
           <div class="field-template-icon">⌂</div>
           <div class="field-template-copy">
             <h3>UPM-SHS Household Survey</h3>
-            <p>Digital version of the current SHS household survey.</p>
-            <div class="field-template-tags">
-              <span>Offline drafts</span>
-              <span>GPS location</span>
-              <span>Optional photo</span>
-              <span>Supabase sync</span>
-            </div>
+            <p>The existing 2023 digital Household Survey remains unchanged while the generic form engine is introduced.</p>
+            <div class="field-template-tags"><span>Offline drafts</span><span>GPS location</span><span>Optional photo</span><span>Supabase sync</span></div>
           </div>
           <a class="button button-maroon" href="household-survey.html">+ New Household Survey</a>
         </div>
       </section>
 
-      <section class="portal-panel">
+      <section class="portal-panel dynamic-form-library-panel">
         <div class="portal-panel-heading">
           <div>
-            <span class="portal-label">This device</span>
-            <h2>Saved Household Surveys</h2>
+            <span class="portal-label">Assigned to you</span><h2>Additional SHS Forms</h2>
+            <p>Published forms matched to your active community, course, and batch appear here and are cached for offline use.</p>
           </div>
+          <span id="dynamic-form-cache-chip" class="portal-chip">Checking forms…</span>
         </div>
-        <div id="local-survey-list" class="local-survey-list">
-          <div class="table-empty">Loading local records…</div>
-        </div>
+        <div id="dynamic-form-library" class="dynamic-form-library"><div class="table-empty">Loading assigned forms…</div></div>
       </section>
 
-      <section class="field-offline-note">
-        <strong>Offline mode</strong>
-        <p>Drafts stay on this device and sync when internet returns.</p>
+      <section class="portal-panel">
+        <div class="portal-panel-heading"><div><span class="portal-label">This device</span><h2>Saved Field Forms</h2></div></div>
+        <div id="local-survey-list" class="local-survey-list"><div class="table-empty">Loading local records…</div></div>
+      </section>
+
+      <section class="field-offline-note"><strong>Offline mode</strong>
+        <p>Open Field Forms while online before fieldwork. Assigned dynamic form definitions are cached on this device; drafts stay local until synchronization succeeds.</p>
       </section>
     </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script src="offline-db.js"></script>
-  <script src="field-forms.js"></script>
+  <script src="offline-db.js?v=7d1a"></script>
+  <script src="form-engine.js?v=7d1a"></script>
+  <script src="field-forms.js?v=7d1a"></script>
 </body>
 </html>

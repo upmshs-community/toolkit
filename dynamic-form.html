@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#7b1113">
+  <title>Field Form | Community Health Toolkit</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="form-engine.css?v=7d1a">
+</head>
+<body class="portal-body toolkit-scroll-page dynamic-form-page portal-is-loading">
+  <div id="dynamic-form-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS"><strong>Opening field form…</strong>
+    <span>Loading the published form definition and your local draft.</span>
+  </div>
+
+  <div id="dynamic-form-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="field-forms.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div><strong>Field Forms</strong><span id="dynamic-header-title">Community Health Toolkit</span></div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy"><strong data-user-name>Toolkit user</strong><span data-user-email></span></div>
+        <a class="portal-signout admin-return-link" href="field-forms.html">Field Forms</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="dynamic-form-main">
+      <section class="dynamic-form-hero">
+        <div>
+          <span id="dynamic-form-category" class="portal-kicker">SHS Field Form</span>
+          <h1 id="dynamic-form-title">Field Form</h1>
+          <p id="dynamic-form-description"></p>
+          <div class="dynamic-form-meta"><span id="dynamic-form-code"></span><span id="dynamic-form-version"></span><span id="dynamic-form-community"></span></div>
+        </div>
+        <aside class="dynamic-form-status-card">
+          <span id="dynamic-network-dot" class="network-dot"></span>
+          <div><strong id="dynamic-network-text">Checking connection…</strong><small id="dynamic-save-status">Preparing local draft…</small></div>
+        </aside>
+      </section>
+
+      <nav id="dynamic-section-nav" class="dynamic-section-nav" aria-label="Form sections"></nav>
+      <form id="dynamic-field-form" novalidate><div id="dynamic-form-sections"></div></form>
+
+      <section class="dynamic-form-bottom-bar">
+        <div><strong id="dynamic-bottom-save">Saved locally</strong><small id="dynamic-bottom-detail">Draft remains on this device until synchronization succeeds.</small></div>
+        <div class="dynamic-bottom-actions">
+          <button id="dynamic-save-btn" class="button button-outline-maroon" type="button">Save Draft</button>
+          <button id="dynamic-complete-btn" class="button button-maroon" type="button">Mark Complete &amp; Sync</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="offline-db.js?v=7d1a"></script>
+  <script src="form-engine.js?v=7d1a"></script>
+  <script src="dynamic-form.js?v=7d1a"></script>
+</body>
+</html>
