@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#7b1113">
+  <title>Calendar Administration | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="calendar-admin.css?v=7c4a">
+</head>
+<body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page calendar-admin-page portal-is-loading">
+  <div id="calendar-admin-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS">
+    <strong>Opening Calendar Administration…</strong>
+    <span>Loading activities and audience settings.</span>
+  </div>
+
+  <div id="calendar-admin-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="admin.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div>
+          <strong>Toolkit Administration</strong>
+          <span>Calendar &amp; Activities</span>
+        </div>
+      </a>
+
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy">
+          <strong data-user-name>Calendar Manager</strong>
+          <span data-user-email></span>
+        </div>
+        <a class="portal-signout admin-return-link" href="portal.html#calendar">Student Calendar</a>
+        <a class="portal-signout admin-return-link" href="admin.html">Admin</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell">
+      <aside class="portal-sidebar admin-sidebar">
+        <div class="portal-sidebar-title">Administration</div>
+        <nav>
+          <a href="admin.html#users">User Management</a>
+          <a href="admin.html#communities">Communities</a>
+          <a href="admin.html#rotations">Rotations</a>
+          <a href="admin.html#projects">Projects</a>
+          <a href="admin.html#handovers">Handovers</a>
+          <a href="field-submissions-admin.html">Field Surveys</a>
+          <a href="field-map.html">Field Map</a>
+          <a href="survey-analytics.html">Health Analytics</a>
+          <a class="active" href="calendar-admin.html">Calendar</a>
+        </nav>
+
+        <div class="sidebar-note">
+          <strong>Calendar publishing</strong>
+          <span>Publish LMS deadlines, fieldwork schedules, meetings, and project activities to the appropriate learners.</span>
+        </div>
+      </aside>
+
+      <main class="portal-main admin-main calendar-admin-main">
+        <section class="portal-welcome admin-welcome calendar-admin-welcome">
+          <span class="portal-kicker">Phase 7C.4 · Calendar Administration</span>
+          <h1>Plan the community learning calendar.</h1>
+          <p>
+            Add activities once, scope them to the right learners, and let the student portal surface what is due or happening next.
+          </p>
+        </section>
+
+        <section class="calendar-admin-stat-grid">
+          <article>
+            <span>Published</span>
+            <strong id="calendar-stat-published">0</strong>
+            <small>Visible activities</small>
+          </article>
+          <article>
+            <span>This month</span>
+            <strong id="calendar-stat-month">0</strong>
+            <small>Scheduled activities</small>
+          </article>
+          <article>
+            <span>Next 14 days</span>
+            <strong id="calendar-stat-upcoming">0</strong>
+            <small>Upcoming items</small>
+          </article>
+          <article>
+            <span>LMS deadlines</span>
+            <strong id="calendar-stat-lms">0</strong>
+            <small>Linked learning activities</small>
+          </article>
+        </section>
+
+        <section class="calendar-admin-workspace">
+          <article class="portal-panel calendar-manager-calendar">
+            <div class="calendar-manager-heading">
+              <div>
+                <span class="portal-label">Month view</span>
+                <h2>Calendar</h2>
+                <p>Click a date to start a new activity on that day.</p>
+              </div>
+              <div class="calendar-manager-controls">
+                <button id="admin-calendar-prev" type="button" aria-label="Previous month">←</button>
+                <strong id="admin-calendar-month-label">Month</strong>
+                <button id="admin-calendar-next" type="button" aria-label="Next month">→</button>
+              </div>
+            </div>
+
+            <div class="calendar-manager-weekdays" aria-hidden="true">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+              <span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+
+            <div id="admin-calendar-grid" class="calendar-manager-grid">
+              <div class="table-loading">Loading calendar…</div>
+            </div>
+
+            <div class="calendar-manager-legend">
+              <span><i class="cal-type-dot lms_due"></i>LMS</span>
+              <span><i class="cal-type-dot fieldwork"></i>Fieldwork</span>
+              <span><i class="cal-type-dot meeting"></i>Meeting</span>
+              <span><i class="cal-type-dot project"></i>Project</span>
+              <span><i class="cal-type-dot other"></i>Other</span>
+            </div>
+          </article>
+
+          <article class="portal-panel calendar-editor-card">
+            <div class="calendar-editor-heading">
+              <div>
+                <span class="portal-label">Activity editor</span>
+                <h2 id="calendar-editor-title">Add Activity</h2>
+                <p id="calendar-editor-copy">Create a published activity or save it unpublished while preparing it.</p>
+              </div>
+              <button id="calendar-new-event" class="button button-outline-maroon" type="button">New</button>
+            </div>
+
+            <form id="calendar-event-form" class="calendar-event-form">
+              <input id="calendar-event-id" type="hidden">
+
+              <label class="calendar-form-wide">
+                <span>Activity title</span>
+                <input id="calendar-event-title" type="text" required placeholder="e.g. Household Survey Fieldwork">
+              </label>
+
+              <label>
+                <span>Date</span>
+                <input id="calendar-event-date" type="date" required>
+              </label>
+
+              <label>
+                <span>Activity type</span>
+                <select id="calendar-event-type">
+                  <option value="lms_due">LMS deadline</option>
+                  <option value="fieldwork">Fieldwork</option>
+                  <option value="meeting">Meeting / conference</option>
+                  <option value="project">Project milestone</option>
+                  <option value="rotation">Rotation activity</option>
+                  <option value="other" selected>Other activity</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Start time</span>
+                <input id="calendar-event-start" type="time">
+              </label>
+
+              <label>
+                <span>End time</span>
+                <input id="calendar-event-end" type="time">
+              </label>
+
+              <label class="calendar-form-wide">
+                <span>Description</span>
+                <textarea id="calendar-event-description" rows="3" placeholder="Short instructions or context"></textarea>
+              </label>
+
+              <fieldset class="calendar-audience-fieldset calendar-form-wide">
+                <legend>Who should see this?</legend>
+                <p>Leave all three blank to publish to everyone with active Toolkit access.</p>
+
+                <div class="calendar-audience-grid">
+                  <label>
+                    <span>Community</span>
+                    <select id="calendar-event-community">
+                      <option value="">All communities</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    <span>Course / rotation label</span>
+                    <input id="calendar-event-course" type="text" list="calendar-course-options" placeholder="All courses">
+                    <datalist id="calendar-course-options"></datalist>
+                  </label>
+
+                  <label>
+                    <span>Batch</span>
+                    <input id="calendar-event-batch" type="text" placeholder="All batches">
+                  </label>
+                </div>
+
+                <div id="calendar-audience-summary" class="calendar-audience-summary">Visible to all active Toolkit users.</div>
+              </fieldset>
+
+              <fieldset class="calendar-link-fieldset calendar-form-wide">
+                <legend>Where should the activity open?</legend>
+
+                <label>
+                  <span>Destination</span>
+                  <select id="calendar-link-type">
+                    <option value="none">No link</option>
+                    <option value="lesson">LMS lesson</option>
+                    <option value="field_forms">Field Forms</option>
+                    <option value="diagnosis">Community Diagnosis</option>
+                    <option value="community">Selected Community Profile</option>
+                    <option value="project">Project</option>
+                    <option value="custom">Custom URL</option>
+                  </select>
+                </label>
+
+                <label id="calendar-lesson-wrap" hidden>
+                  <span>LMS lesson</span>
+                  <select id="calendar-event-lesson">
+                    <option value="">Select lesson</option>
+                  </select>
+                </label>
+
+                <label id="calendar-project-wrap" hidden>
+                  <span>Project</span>
+                  <select id="calendar-event-project">
+                    <option value="">Select project</option>
+                  </select>
+                </label>
+
+                <label id="calendar-custom-link-wrap" hidden>
+                  <span>Custom URL / Toolkit page</span>
+                  <input id="calendar-event-custom-link" type="text" placeholder="https://… or page.html">
+                </label>
+              </fieldset>
+
+              <label class="calendar-publish-toggle calendar-form-wide">
+                <input id="calendar-event-published" type="checkbox" checked>
+                <span>
+                  <strong>Published</strong>
+                  <small>Students in the selected audience can see this event.</small>
+                </span>
+              </label>
+
+              <div class="calendar-form-actions calendar-form-wide">
+                <button id="calendar-cancel-edit" class="button button-outline-maroon" type="button">Clear</button>
+                <button id="calendar-save-event" class="button button-maroon" type="submit">Save Activity</button>
+              </div>
+            </form>
+
+            <div id="calendar-form-message" class="admin-message" aria-live="polite"></div>
+          </article>
+        </section>
+
+        <section class="portal-panel calendar-event-list-panel">
+          <div class="portal-panel-heading calendar-list-heading">
+            <div>
+              <span class="portal-label">Published &amp; draft activities</span>
+              <h2>Calendar Activities</h2>
+              <p>Edit, duplicate, publish/unpublish, or remove calendar items.</p>
+            </div>
+
+            <div class="calendar-list-filters">
+              <input id="calendar-search" type="search" placeholder="Search activity…">
+              <select id="calendar-filter-type">
+                <option value="">All types</option>
+                <option value="lms_due">LMS deadline</option>
+                <option value="fieldwork">Fieldwork</option>
+                <option value="meeting">Meeting</option>
+                <option value="project">Project</option>
+                <option value="rotation">Rotation</option>
+                <option value="other">Other</option>
+              </select>
+              <select id="calendar-filter-published">
+                <option value="">Published + drafts</option>
+                <option value="published">Published</option>
+                <option value="draft">Unpublished</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table calendar-event-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Activity</th>
+                  <th>Audience</th>
+                  <th>Destination</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="calendar-events-body">
+                <tr><td colspan="6" class="table-loading">Loading calendar activities…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="calendar-list-footer" class="calendar-list-footer">0 activities</div>
+        </section>
+
+        <section class="field-map-method-note calendar-admin-note">
+          <strong>Recommended use</strong>
+          <p>
+            Use the Toolkit calendar as the source of truth for course and community activities.
+            Individual events can later be exported to Google Calendar without giving up Toolkit-specific audience rules and LMS/community links.
+          </p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="calendar-admin.js?v=7c4a"></script>
+</body>
+</html>
