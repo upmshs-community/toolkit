@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" class="toolkit-scroll-document">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#7b1113">
+  <title>LMS Administration | Community Health Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lms-admin.css?v=7e1a">
+</head>
+<body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page lms-admin-page portal-is-loading">
+  <div id="lms-admin-loading" class="portal-loading">
+    <img src="assets/shs-logo.png" alt="UPM-SHS"><strong>Opening LMS Administration…</strong>
+    <span>Loading courses, lessons, resources, and learner progress.</span>
+  </div>
+
+  <div id="lms-admin-app" hidden>
+    <header class="portal-topbar">
+      <a class="portal-topbar-brand" href="admin.html">
+        <img src="assets/up-upm-branding.png" alt="UP and UP Manila">
+        <span class="portal-topbar-divider"></span>
+        <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
+        <div><strong>Toolkit Administration</strong><span>LMS Administration</span></div>
+      </a>
+      <div class="portal-account">
+        <div class="portal-avatar" data-user-initials>UP</div>
+        <div class="portal-user-copy"><strong data-user-name>LMS Manager</strong><span data-user-email></span></div>
+        <a class="portal-signout admin-return-link" href="modules.html">Student LMS</a>
+        <a class="portal-signout admin-return-link" href="admin.html">Admin</a>
+        <button class="portal-signout" data-sign-out type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="portal-shell">
+      <aside class="portal-sidebar admin-sidebar">
+        <div class="portal-sidebar-title">Administration</div>
+        <nav>
+          <a href="admin.html#users">User Management</a><a href="admin.html#communities">Communities</a>
+          <a href="admin.html#rotations">Rotations</a><a href="admin.html#projects">Projects</a>
+          <a href="admin.html#handovers">Handovers</a><a href="field-submissions-admin.html">Field Surveys</a>
+          <a href="field-map.html">Field Map</a><a href="survey-analytics.html">Health Analytics</a>
+          <a href="calendar-admin.html">Calendar</a><a href="form-builder.html">Form Builder</a>
+          <a class="active" href="lms-admin.html">LMS Administration</a>
+        </nav>
+        <div class="sidebar-note"><strong>Keep it focused</strong><span>The Toolkit LMS supports community-based learning, not full university LMS replacement.</span></div>
+      </aside>
+
+      <main class="portal-main admin-main lms-admin-main">
+        <section class="portal-welcome admin-welcome">
+          <span class="portal-kicker">Phase 7E · LMS Administration</span>
+          <h1>Manage the learning pathway visually.</h1>
+          <p>Edit courses, modules, lessons, resources, deadlines, publication status, and learner progress without touching SQL.</p>
+        </section>
+
+        <section class="lms-admin-tabs">
+          <button class="active" type="button" data-lms-admin-tab="content">Content</button>
+          <button type="button" data-lms-admin-tab="progress">Learner Progress</button>
+        </section>
+
+        <section id="lms-content-tab">
+          <div class="lms-admin-layout">
+            <aside class="portal-panel lms-tree-panel">
+              <div class="lms-tree-heading">
+                <div><span class="portal-label">Course structure</span><h2>Learning Pathway</h2></div>
+                <button id="add-course-btn" class="button button-green" type="button">+ Course</button>
+              </div>
+              <div id="lms-tree" class="lms-tree"><div class="table-loading">Loading LMS structure…</div></div>
+            </aside>
+
+            <section class="lms-editor-column">
+              <article id="lms-editor-empty" class="portal-panel lms-editor-empty">
+                <strong>Select a course, module, or lesson.</strong><span>Its settings will appear here.</span>
+              </article>
+
+              <article id="course-editor" class="portal-panel lms-editor-card" hidden>
+                <div class="lms-editor-heading"><div><span class="portal-label">Course</span><h2>Course Settings</h2></div></div>
+                <form id="course-form" class="lms-edit-form">
+                  <input id="course-id" type="hidden">
+                  <label><span>Course code</span><input id="course-code" required></label>
+                  <label><span>Title</span><input id="course-title" required></label>
+                  <label class="wide"><span>Description</span><textarea id="course-description" rows="4"></textarea></label>
+                  <label><span>Sort order</span><input id="course-sort" type="number"></label>
+                  <label class="publish-toggle"><input id="course-active" type="checkbox"><span><strong>Active</strong><small>Visible in the student LMS.</small></span></label>
+                  <div class="wide lms-form-actions"><button class="button button-maroon" type="submit">Save Course</button></div>
+                </form>
+              </article>
+
+              <article id="module-editor" class="portal-panel lms-editor-card" hidden>
+                <div class="lms-editor-heading"><div><span class="portal-label">Module</span><h2>Module Settings</h2></div></div>
+                <form id="module-form" class="lms-edit-form">
+                  <input id="module-id" type="hidden">
+                  <label><span>Module number</span><input id="module-number" type="number" required></label>
+                  <label><span>Title</span><input id="module-title" required></label>
+                  <label class="wide"><span>Summary</span><textarea id="module-summary" rows="3"></textarea></label>
+                  <label><span>Sort order</span><input id="module-sort" type="number"></label>
+                  <label class="publish-toggle"><input id="module-published" type="checkbox"><span><strong>Published</strong><small>Students can see this module.</small></span></label>
+                  <div class="wide lms-form-actions">
+                    <button id="delete-module-btn" class="button button-outline-maroon" type="button">Delete if unused</button>
+                    <button class="button button-maroon" type="submit">Save Module</button>
+                  </div>
+                </form>
+              </article>
+
+              <article id="lesson-editor" class="portal-panel lms-editor-card" hidden>
+                <div class="lms-editor-heading">
+                  <div><span class="portal-label">Lesson</span><h2 id="lesson-editor-heading-title">Lesson Editor</h2></div>
+                  <a id="preview-lesson-link" class="button button-outline-maroon" href="#" target="_blank">Preview Student View</a>
+                </div>
+
+                <form id="lesson-form" class="lms-edit-form lesson-edit-form">
+                  <input id="lesson-id" type="hidden">
+                  <label><span>Lesson number</span><input id="lesson-number" type="number" required></label>
+                  <label><span>Title</span><input id="lesson-title-input" required></label>
+                  <label><span>Lesson type</span>
+                    <select id="lesson-type-input">
+                      <option value="reading">Reading</option><option value="activity">Activity</option>
+                      <option value="reflection">Reflection</option><option value="resource">Resource</option>
+                      <option value="quiz">Quiz</option>
+                    </select>
+                  </label>
+                  <label><span>Estimated minutes</span><input id="lesson-minutes" type="number" min="1"></label>
+                  <label><span>Sort order</span><input id="lesson-sort" type="number"></label>
+                  <label><span>Due date & time</span><input id="lesson-due" type="datetime-local"></label>
+                  <label><span>Due batch (optional)</span><input id="lesson-due-batch" placeholder="e.g. MD24"></label>
+                  <label class="publish-toggle"><input id="lesson-published" type="checkbox"><span><strong>Published</strong><small>Visible to students and synced to Calendar if a due date exists.</small></span></label>
+
+                  <div class="wide">
+                    <span class="lms-field-label">Lesson content</span>
+                    <div class="rich-toolbar" id="lesson-rich-toolbar">
+                      <button type="button" data-rich-command="bold"><b>B</b></button>
+                      <button type="button" data-rich-command="italic"><i>I</i></button>
+                      <button type="button" data-rich-block="h2">H2</button>
+                      <button type="button" data-rich-block="h3">H3</button>
+                      <button type="button" data-rich-command="insertUnorderedList">• List</button>
+                      <button type="button" data-rich-command="insertOrderedList">1. List</button>
+                      <button type="button" data-rich-link>Link</button>
+                      <button type="button" data-rich-command="removeFormat">Clear</button>
+                    </div>
+                    <div id="lesson-content-editor" class="lesson-content-editor" contenteditable="true"></div>
+                  </div>
+
+                  <label class="wide"><span>Reflection / activity prompt</span><textarea id="lesson-activity-prompt" rows="4" placeholder="Optional learner response prompt"></textarea></label>
+
+                  <div class="wide lesson-resource-manager">
+                    <div class="lesson-resource-heading">
+                      <div><span class="portal-label">Supporting materials</span><h3>Attached Resources</h3></div>
+                      <a class="button button-outline-maroon" href="knowledge-admin.html">Manage Library</a>
+                    </div>
+                    <div id="lesson-resource-list" class="lesson-resource-list"><div class="table-empty">Save/select a lesson first.</div></div>
+                    <div class="lesson-resource-add">
+                      <select id="lesson-resource-library"><option value="">Select Toolkit Library resource…</option></select>
+                      <input id="lesson-resource-label" placeholder="Optional display label">
+                      <button id="add-library-resource-btn" class="button button-green" type="button">Attach Library Resource</button>
+                    </div>
+                    <div class="lesson-resource-add">
+                      <input id="lesson-external-url" type="url" placeholder="https://…">
+                      <input id="lesson-external-label" placeholder="External resource label">
+                      <button id="add-external-resource-btn" class="button button-green" type="button">Attach External Link</button>
+                    </div>
+                  </div>
+
+                  <div class="wide lms-form-actions">
+                    <button id="delete-lesson-btn" class="button button-outline-maroon" type="button">Delete if unused</button>
+                    <button class="button button-maroon" type="submit">Save Lesson</button>
+                  </div>
+                </form>
+              </article>
+
+              <div id="lms-editor-message" class="admin-message"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="lms-progress-tab" hidden>
+          <article class="portal-panel progress-dashboard-panel">
+            <div class="portal-panel-heading progress-heading">
+              <div><span class="portal-label">Learning progress</span><h2>Learner Progress</h2><p>Completion is calculated from currently published lessons in the selected course.</p></div>
+              <div class="progress-filters">
+                <select id="progress-course"></select>
+                <input id="progress-search" type="search" placeholder="Search learner / batch…">
+              </div>
+            </div>
+            <div class="lms-progress-stats">
+              <article><span>Students</span><strong id="progress-students">0</strong></article>
+              <article><span>Average completion</span><strong id="progress-average">0%</strong></article>
+              <article><span>Completed course</span><strong id="progress-complete">0</strong></article>
+              <article><span>Not started</span><strong id="progress-not-started">0</strong></article>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead><tr><th>Learner</th><th>Batch</th><th>Progress</th><th>Lessons</th><th>Last activity</th><th></th></tr></thead>
+                <tbody id="progress-body"><tr><td colspan="6" class="table-loading">Loading learner progress…</td></tr></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="learner-progress-dialog" class="lms-progress-dialog">
+    <article>
+      <header><div><span class="portal-label">Learner detail</span><h2 id="learner-detail-name">Learner</h2><p id="learner-detail-meta"></p></div><button id="close-progress-dialog" type="button">×</button></header>
+      <div id="learner-detail-lessons" class="learner-detail-lessons"></div>
+    </article>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="lms-admin.js?v=7e1a"></script>
+</body>
+</html>
