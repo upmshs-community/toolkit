@@ -27,6 +27,33 @@
       .replaceAll("'","&#039;");
   }
 
+  function prettyCommunityName(value = "") {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+    if (/^alangalang$/i.test(raw)) return "Alang-alang";
+    return raw;
+  }
+
+  function updatePhase6CurrentCommunity() {
+    const link = currentRotation?.community_id
+      ? `community.html?id=${encodeURIComponent(currentRotation.community_id)}`
+      : "portal.html#communities";
+    const communityName = currentRotation?.community_name || "Community Profile";
+    const meta = currentRotation
+      ? [currentRotation.rotation_type, currentRotation.course_code, currentRotation.batch].filter(Boolean).join(" · ") || "Open your assigned community profile."
+      : "Open your assigned community profile.";
+
+    document.querySelectorAll("[data-current-community-link]").forEach(el => {
+      if (el.tagName === "A") el.setAttribute("href", link);
+    });
+    document.querySelectorAll("[data-current-community-name]").forEach(el => {
+      el.textContent = communityName;
+    });
+    document.querySelectorAll("[data-current-rotation-meta]").forEach(el => {
+      el.textContent = meta;
+    });
+  }
+
   function setLoadingCard({title, text, detail = "", action = ""}) {
     if (!loading) return;
     loading.hidden = false;
@@ -50,6 +77,24 @@
     return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
   }
 
+  function communityCoverImage(name = "") {
+    const normalized = String(name || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z]/g, "");
+
+    const covers = {
+      alangalang: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Church_of_Alangalang%2C_Leyte.jpg",
+      dagami: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dagami_Town_Hall.jpg",
+      dulag: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Church_of_Dulag%2C_Leyte.jpg",
+      palo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Palo_Municipal_Hall_%28Palo%2C_Leyte%3B_09-09-2022%29.jpg",
+      tanauan: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tanauan_%28Leyte%29_Church.jpg",
+      tolosa: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tolosa%2C_Leyte_from_air_%28Leyte%3B_09-08-2022%29.jpg"
+    };
+
+    return covers[normalized] || "";
+  }
+
   function renderCommunities() {
     const target = document.getElementById("portal-communities");
     if (!target) return;
@@ -57,15 +102,33 @@
       target.innerHTML = `<article><span>—</span><strong>No communities</strong><small>No data yet</small></article>`;
       return;
     }
-    target.innerHTML = communities.map((c, index) => `
-      <a class="portal-community-link" href="community.html?id=${encodeURIComponent(c.id)}">
-        <article>
-          <span>${String(index + 1).padStart(2,"0")}</span>
-          <strong>${safe(c.name)}</strong>
-          <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
-        </article>
-      </a>
-    `).join("");
+
+    target.innerHTML = communities.map(c => {
+      const displayName = prettyCommunityName(c.name);
+      const cover = communityCoverImage(c.name);
+
+      return `
+        <a class="portal-community-link phase6-community-card-link"
+           href="community.html?id=${encodeURIComponent(c.id)}">
+          <article class="phase6-community-cover-card">
+            <div
+              class="phase6-community-cover"
+              ${cover ? `style="background-image: linear-gradient(180deg, rgba(12,44,31,.03), rgba(12,44,31,.14)), url('${cover}')"` : ""}
+              role="img"
+              aria-label="${safe(displayName)} municipality">
+            </div>
+
+            <div class="phase6-community-card-body">
+              <div>
+                <strong>${safe(displayName)}</strong>
+                <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
+              </div>
+              <span class="phase6-community-arrow" aria-hidden="true">→</span>
+            </div>
+          </article>
+        </a>
+      `;
+    }).join("");
   }
 
   function renderProjects() {
@@ -220,6 +283,7 @@
 
     if (error || !data?.length) {
       currentRotation = null;
+      updatePhase6CurrentCommunity();
       if (summary) {
         summary.innerHTML = `
           <strong>No active rotation assigned yet.</strong>
@@ -235,12 +299,14 @@
     currentRotation = {
       id: rotation.id,
       community_id: rotation.community_id,
-      community_name: rotation.communities?.name || "Assigned community",
+      community_name: prettyCommunityName(rotation.communities?.name || "Assigned community"),
       preceptor_name: rotation.communities?.preceptor_name || "",
       course_code: rotation.course_code,
       rotation_type: rotation.rotation_type,
       batch: rotation.batch
     };
+
+    updatePhase6CurrentCommunity();
 
     const details = [rotation.rotation_type, rotation.course_code, rotation.batch].filter(Boolean).join(" · ");
     if (communityEl) communityEl.textContent = currentRotation.community_name;
@@ -282,7 +348,7 @@
 
     projects = (data || []).map(p => ({
       ...p,
-      community_name: p.communities?.name || "Unknown community"
+      community_name: prettyCommunityName(p.communities?.name || "Unknown community")
     }));
     renderProjects();
     populatePortalHandoverProjects();
@@ -314,7 +380,7 @@
     handovers = (data || []).map(h => ({
       ...h,
       project_title: h.projects?.title || "Unknown project",
-      community_name: h.projects?.communities?.name || ""
+      community_name: prettyCommunityName(h.projects?.communities?.name || "")
     }));
     renderHandovers();
   }
@@ -446,8 +512,13 @@
     const fullName = profile.full_name || user.email || "Authorized user";
     const email = profile.email || user.email || "";
     const role = profile.role || "student";
+    const firstName = String(profile.full_name || user.email || "there")
+      .trim()
+      .split(/\s+/)[0]
+      .replace(/[._-]+.*$/, "") || "there";
 
     document.querySelectorAll("[data-user-name]").forEach(el => el.textContent = fullName);
+    document.querySelectorAll("[data-user-first-name]").forEach(el => el.textContent = firstName);
     document.querySelectorAll("[data-user-email]").forEach(el => el.textContent = email);
     document.querySelectorAll("[data-user-role]").forEach(el => el.textContent = role.charAt(0).toUpperCase() + role.slice(1));
     document.querySelectorAll("[data-user-batch]").forEach(el => el.textContent = profile.batch || "—");
