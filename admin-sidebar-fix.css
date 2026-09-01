@@ -1,63 +1,173 @@
-/* Admin Navigation Cleanup v2 */
+/* ============================================================
+   ADMIN FIXED SHELL v3
+   Desktop / landscape-tablet administration pages:
+   - top header stays visible
+   - green sidebar stays visible
+   - only the right/main content scrolls
+   - sidebar nav scrolls independently only if it is taller than screen
+
+   Scoped ONLY to .admin-sticky-sidebar-page.
+   Portal dashboard is not affected.
+   ============================================================ */
+
 @media (min-width: 821px) {
-  body.admin-sticky-sidebar-page .admin-sidebar {
-    display:flex!important;
-    flex-direction:column!important;
-    align-self:start!important;
-    position:sticky!important;
-    top:84px!important;
-    height:calc(100dvh - 84px)!important;
-    min-height:0!important;
-    overflow:hidden!important;
-    padding:24px 18px 16px!important;
+  body.admin-sticky-sidebar-page {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
   }
+
+  /* Do not override the app while JS/auth still keeps it hidden. */
+  body.admin-sticky-sidebar-page > [id$="-app"]:not([hidden]) {
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Header stays at the top of the app. */
+  body.admin-sticky-sidebar-page .portal-topbar {
+    position: relative !important;
+    top: auto !important;
+    flex: 0 0 auto !important;
+    width: 100%;
+    z-index: 100;
+  }
+
+  /* Shell fills only the space below the top header. */
+  body.admin-sticky-sidebar-page .portal-shell {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    align-items: stretch !important;
+  }
+
+  /* Green sidebar never follows the document scroll because the document
+     itself no longer scrolls on these pages. */
+  body.admin-sticky-sidebar-page .admin-sidebar {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    align-self: stretch !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px 18px 16px !important;
+  }
+
   body.admin-sticky-sidebar-page .admin-sidebar .portal-sidebar-title {
-    flex:0 0 auto;
-    margin-bottom:12px;
+    flex: 0 0 auto;
+    margin-bottom: 12px;
   }
+
   body.admin-sticky-sidebar-page .admin-sidebar nav {
-    flex:1 1 auto;
-    min-height:0;
-    display:flex!important;
-    flex-direction:column;
-    gap:3px!important;
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
-    padding:0 4px 12px 0;
-    scrollbar-width:thin;
-    scrollbar-color:rgba(255,255,255,.28) transparent;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: flex !important;
+    flex-direction: column;
+    gap: 3px !important;
+    padding: 0 4px 12px 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.28) transparent;
+    overscroll-behavior: contain;
   }
-  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar { width:5px; }
-  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar-track { background:transparent; }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar-thumb {
-    background:rgba(255,255,255,.25);
-    border-radius:999px;
+    background: rgba(255,255,255,.25);
+    border-radius: 999px;
   }
+
   body.admin-sticky-sidebar-page .admin-sidebar nav a {
-    flex:0 0 auto;
-    min-height:40px;
-    padding:8px 11px!important;
-    display:flex;
-    align-items:center;
-    line-height:1.25;
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 8px 11px !important;
+    display: flex;
+    align-items: center;
+    line-height: 1.25;
   }
+
+  /* Decorative notes were the source of link overlap on shorter screens. */
   body.admin-sticky-sidebar-page .admin-sidebar .sidebar-note {
-    display:none!important;
+    display: none !important;
+  }
+
+  /* The right side is the ONLY vertical page scroller. */
+  body.admin-sticky-sidebar-page .admin-main {
+    height: 100% !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* These panels previously used top:88px because the whole document scrolled.
+     Inside the new fixed app shell, a small inset is enough. */
+  body.admin-sticky-sidebar-page .lms-tree-panel,
+  body.admin-sticky-sidebar-page .form-catalog-panel,
+  body.admin-sticky-sidebar-page .form-builder-right {
+    top: 16px !important;
   }
 }
-@media (min-width:821px) and (max-width:1180px) {
+
+/* Landscape tablets / smaller laptops: slightly tighter but finger-friendly. */
+@media (min-width: 821px) and (max-width: 1180px) {
   body.admin-sticky-sidebar-page .admin-sidebar {
-    padding-left:14px!important;
-    padding-right:14px!important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
   }
+
   body.admin-sticky-sidebar-page .admin-sidebar nav a {
-    min-height:38px;
-    padding:7px 10px!important;
-    font-size:11px;
+    min-height: 38px;
+    padding: 7px 10px !important;
+    font-size: 11px;
   }
 }
-@media (max-width:820px) {
+
+/* Phones / narrow portrait tablets keep the original document scrolling and
+   horizontal administration navigation. */
+@media (max-width: 820px) {
+  body.admin-sticky-sidebar-page {
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow: auto !important;
+  }
+
+  body.admin-sticky-sidebar-page > [id$="-app"]:not([hidden]) {
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  body.admin-sticky-sidebar-page .portal-shell {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-main {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   body.admin-sticky-sidebar-page .admin-sidebar .sidebar-note {
-    display:none!important;
+    display: none !important;
   }
 }
