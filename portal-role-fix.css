@@ -1,0 +1,8 @@
+/* Portal role visibility fix only.
+   No layout, sidebar, Oble, typography, or component styles are changed. */
+
+#review-link[hidden],
+#knowledge-link[hidden],
+#admin-link[hidden] {
+  display: none !important;
+}

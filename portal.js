@@ -461,37 +461,19 @@
       .join("") || "UP";
     document.querySelectorAll("[data-user-initials]").forEach(el => el.textContent = initials);
 
-    // Role-gated header controls. Hide everything first so a student never
-    // sees management links, even if an old stylesheet/browser cache tries
-    // to override the HTML `hidden` attribute.
     const adminLink = document.getElementById("admin-link");
+    if (adminLink && ["admin","coordinator"].includes(role)) {
+      adminLink.hidden = false;
+    }
+
     const reviewLink = document.getElementById("review-link");
+    if (reviewLink && ["admin","coordinator","faculty","preceptor"].includes(role)) {
+      reviewLink.hidden = false;
+    }
+
     const knowledgeLink = document.getElementById("knowledge-link");
-
-    [adminLink, reviewLink, knowledgeLink].forEach(link => {
-      if (!link) return;
-      link.hidden = true;
-      link.setAttribute("aria-hidden", "true");
-      link.style.setProperty("display", "none", "important");
-    });
-
-    const showRoleLink = link => {
-      if (!link) return;
-      link.hidden = false;
-      link.removeAttribute("aria-hidden");
-      link.style.removeProperty("display");
-    };
-
-    if (["admin","coordinator"].includes(role)) {
-      showRoleLink(adminLink);
-    }
-
-    if (["admin","coordinator","faculty","preceptor"].includes(role)) {
-      showRoleLink(reviewLink);
-    }
-
-    if (["admin","coordinator","faculty"].includes(role)) {
-      showRoleLink(knowledgeLink);
+    if (knowledgeLink && ["admin","coordinator","faculty"].includes(role)) {
+      knowledgeLink.hidden = false;
     }
 
     document.querySelectorAll("[data-sign-out]").forEach(button => {
