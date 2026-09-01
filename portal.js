@@ -488,6 +488,7 @@
 
     if (loading) loading.hidden = true;
     if (app) app.hidden = false;
+    document.body.classList.remove("portal-is-loading");
 
     await loadCurrentRotation(user.id);
     await Promise.all([
