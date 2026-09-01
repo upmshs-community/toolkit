@@ -13,6 +13,14 @@
   let communities = [];
   let projects = [];
   let handovers = [];
+  let calendarEvents = [];
+  let calendarCursor = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  let selectedCalendarDate = null;
+
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
 
   function configMissing() {
     return !url || !key || url.includes("PASTE_YOUR") || key.includes("PASTE_YOUR");
@@ -142,8 +150,8 @@
           <p>No project records are available for your current view.</p>
         </article>
       `;
-      document.getElementById("dashboard-project-count").textContent = "0";
-      document.getElementById("dashboard-project-detail").textContent = "No registered projects yet.";
+      setText("dashboard-project-count", "0");
+      setText("dashboard-project-detail", "No registered projects yet.");
       return;
     }
 
@@ -164,9 +172,11 @@
       </article>
     `).join("");
 
-    document.getElementById("dashboard-project-count").textContent = String(projects.filter(p => ["active","for_handover","planning"].includes(p.status)).length);
-    document.getElementById("dashboard-project-detail").textContent =
-      currentRotation ? `Projects linked to ${currentRotation.community_name}.` : "Showing accessible project records.";
+    setText("dashboard-project-count", String(projects.filter(p => ["active","for_handover","planning"].includes(p.status)).length));
+    setText(
+      "dashboard-project-detail",
+      currentRotation ? `Projects linked to ${currentRotation.community_name}.` : "Showing accessible project records."
+    );
   }
 
   function renderHandovers() {
@@ -180,8 +190,8 @@
           <span>No continuity notes are available yet for your current view.</span>
         </article>
       `;
-      document.getElementById("dashboard-handover-count").textContent = "0";
-      document.getElementById("dashboard-handover-detail").textContent = "No pending or recent handovers.";
+      setText("dashboard-handover-count", "0");
+      setText("dashboard-handover-detail", "No pending or recent handovers.");
       return;
     }
 
@@ -197,9 +207,11 @@
       </article>
     `).join("");
 
-    document.getElementById("dashboard-handover-count").textContent = String(handovers.filter(h => ["submitted","returned"].includes(h.status)).length);
-    document.getElementById("dashboard-handover-detail").textContent =
-      currentRotation ? `Recent handovers for ${currentRotation.community_name}.` : "Showing accessible handover notes.";
+    setText("dashboard-handover-count", String(handovers.filter(h => ["submitted","returned"].includes(h.status)).length));
+    setText(
+      "dashboard-handover-detail",
+      currentRotation ? `Recent handovers for ${currentRotation.community_name}.` : "Showing accessible handover notes."
+    );
   }
 
   function populatePortalHandoverProjects() {
@@ -286,8 +298,11 @@
       updatePhase6CurrentCommunity();
       if (summary) {
         summary.innerHTML = `
-          <strong>No active rotation assigned yet.</strong>
-          <span>Your coordinator can assign your community from the Admin portal.</span>
+          <div class="portal-assignment-copy">
+            <strong>No active rotation assigned yet.</strong>
+            <span>Your coordinator can assign your community from the Admin portal.</span>
+          </div>
+          <span class="portal-assignment-arrow">View communities →</span>
         `;
       }
       if (communityEl) communityEl.textContent = "To be assigned";
@@ -303,7 +318,9 @@
       preceptor_name: rotation.communities?.preceptor_name || "",
       course_code: rotation.course_code,
       rotation_type: rotation.rotation_type,
-      batch: rotation.batch
+      batch: rotation.batch,
+      start_date: rotation.start_date,
+      end_date: rotation.end_date
     };
 
     updatePhase6CurrentCommunity();
@@ -317,10 +334,13 @@
         ? `<small>Preceptor: ${safe(currentRotation.preceptor_name)}</small>`
         : "";
       summary.innerHTML = `
-        <span class="portal-label">Current assignment</span>
-        <strong>${safe(currentRotation.community_name)}</strong>
-        <span>${safe(details || "Active rotation")}</span>
-        ${preceptor}
+        <div class="portal-assignment-copy">
+          <span class="portal-label">Current assignment</span>
+          <strong>${safe(currentRotation.community_name)}</strong>
+          <span>${safe(details || "Active rotation")}</span>
+          ${preceptor}
+        </div>
+        <span class="portal-assignment-arrow">Open community →</span>
       `;
     }
   }
@@ -341,8 +361,8 @@
 
     const { data, error } = await query;
     if (error) {
-      document.getElementById("dashboard-project-count").textContent = "—";
-      document.getElementById("dashboard-project-detail").textContent = error.message;
+      setText("dashboard-project-count", "—");
+      setText("dashboard-project-detail", error.message);
       return;
     }
 
@@ -372,8 +392,8 @@
 
     const { data, error } = await query;
     if (error) {
-      document.getElementById("dashboard-handover-count").textContent = "—";
-      document.getElementById("dashboard-handover-detail").textContent = error.message;
+      setText("dashboard-handover-count", "—");
+      setText("dashboard-handover-detail", error.message);
       return;
     }
 
@@ -383,6 +403,263 @@
       community_name: prettyCommunityName(h.projects?.communities?.name || "")
     }));
     renderHandovers();
+  }
+
+
+  function dateKey(value) {
+    const d = value instanceof Date ? value : new Date(`${String(value).slice(0,10)}T00:00:00`);
+    if (Number.isNaN(d.getTime())) return "";
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function monthBounds(cursor = calendarCursor) {
+    const start = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+    const end = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0);
+    return { start: dateKey(start), end: dateKey(end) };
+  }
+
+  function calendarEventLink(event) {
+    if (event.link_url) return event.link_url;
+    if (event.lesson_id) return `lesson.html?id=${encodeURIComponent(event.lesson_id)}`;
+    if (event.event_type === "rotation_start" || event.event_type === "rotation_end") {
+      return currentRotation?.community_id
+        ? `community.html?id=${encodeURIComponent(currentRotation.community_id)}`
+        : "#rotation";
+    }
+    if (event.event_type === "project_due" && event.project_id) {
+      return `project.html?id=${encodeURIComponent(event.project_id)}`;
+    }
+    return "";
+  }
+
+  function calendarTypeLabel(type = "") {
+    const labels = {
+      lms_due: "LMS",
+      fieldwork: "Fieldwork",
+      rotation: "Rotation",
+      rotation_start: "Rotation",
+      rotation_end: "Rotation",
+      project: "Project",
+      project_due: "Project",
+      meeting: "Meeting",
+      other: "Activity"
+    };
+    return labels[type] || "Activity";
+  }
+
+  function syntheticCalendarEvents() {
+    const items = [];
+    const { start, end } = monthBounds();
+
+    if (currentRotation?.start_date &&
+        currentRotation.start_date >= start &&
+        currentRotation.start_date <= end) {
+      items.push({
+        id: `rotation-start-${currentRotation.id}`,
+        title: `${currentRotation.community_name} rotation starts`,
+        event_date: currentRotation.start_date,
+        event_type: "rotation_start",
+        description: [currentRotation.rotation_type, currentRotation.course_code].filter(Boolean).join(" · ")
+      });
+    }
+
+    if (currentRotation?.end_date &&
+        currentRotation.end_date >= start &&
+        currentRotation.end_date <= end) {
+      items.push({
+        id: `rotation-end-${currentRotation.id}`,
+        title: `${currentRotation.community_name} rotation ends`,
+        event_date: currentRotation.end_date,
+        event_type: "rotation_end",
+        description: "Review outputs, continuity notes, and handover requirements."
+      });
+    }
+
+    projects.forEach(project => {
+      if (!project.end_date || project.end_date < start || project.end_date > end) return;
+      items.push({
+        id: `project-${project.id}`,
+        project_id: project.id,
+        title: `${project.title} target date`,
+        event_date: project.end_date,
+        event_type: "project_due",
+        description: project.community_name || ""
+      });
+    });
+
+    return items;
+  }
+
+  function eventSort(a, b) {
+    const dateCompare = String(a.event_date || "").localeCompare(String(b.event_date || ""));
+    if (dateCompare) return dateCompare;
+    return String(a.start_time || "").localeCompare(String(b.start_time || ""));
+  }
+
+  function renderCalendarAgenda(date = null) {
+    const target = document.getElementById("portal-calendar-agenda");
+    const title = document.getElementById("portal-agenda-title");
+    const showAll = document.getElementById("calendar-show-all");
+    if (!target || !title) return;
+
+    let list = [...calendarEvents].sort(eventSort);
+
+    if (date) {
+      list = list.filter(event => event.event_date === date);
+      const selected = new Date(`${date}T00:00:00`);
+      title.textContent = selected.toLocaleDateString(undefined, {
+        weekday: "long", month: "long", day: "numeric"
+      });
+      if (showAll) showAll.hidden = false;
+    } else {
+      const today = dateKey(new Date());
+      const isCurrentMonth =
+        calendarCursor.getFullYear() === new Date().getFullYear() &&
+        calendarCursor.getMonth() === new Date().getMonth();
+
+      title.textContent = isCurrentMonth ? "Upcoming Activities" : "Activities This Month";
+      if (isCurrentMonth) list = list.filter(event => event.event_date >= today);
+      if (showAll) showAll.hidden = true;
+    }
+
+    if (!list.length) {
+      target.innerHTML = `
+        <div class="portal-agenda-empty">
+          <strong>No scheduled activity${date ? " on this date" : ""}.</strong>
+          <span>LMS deadlines and fieldwork activities will appear here once published.</span>
+        </div>
+      `;
+      return;
+    }
+
+    target.innerHTML = list.slice(0, 8).map(event => {
+      const d = new Date(`${event.event_date}T00:00:00`);
+      const href = calendarEventLink(event);
+      const content = `
+        <div class="portal-agenda-date">
+          <strong>${d.toLocaleDateString(undefined,{day:"2-digit"})}</strong>
+          <span>${d.toLocaleDateString(undefined,{month:"short"})}</span>
+        </div>
+        <div class="portal-agenda-copy">
+          <span class="portal-calendar-event-type type-${safe(event.event_type || "other")}">${safe(calendarTypeLabel(event.event_type))}</span>
+          <strong>${safe(event.title)}</strong>
+          ${event.description ? `<small>${safe(event.description)}</small>` : ""}
+        </div>
+        ${href ? '<span class="portal-agenda-arrow">→</span>' : ""}
+      `;
+      return href
+        ? `<a class="portal-agenda-event" href="${safe(href)}">${content}</a>`
+        : `<article class="portal-agenda-event">${content}</article>`;
+    }).join("");
+  }
+
+  function renderCalendar() {
+    const grid = document.getElementById("portal-calendar-grid");
+    const label = document.getElementById("calendar-month-label");
+    if (!grid || !label) return;
+
+    label.textContent = calendarCursor.toLocaleDateString(undefined, {
+      month: "long", year: "numeric"
+    });
+
+    const year = calendarCursor.getFullYear();
+    const month = calendarCursor.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const days = new Date(year, month + 1, 0).getDate();
+    const today = dateKey(new Date());
+
+    const eventsByDate = new Map();
+    calendarEvents.forEach(event => {
+      if (!eventsByDate.has(event.event_date)) eventsByDate.set(event.event_date, []);
+      eventsByDate.get(event.event_date).push(event);
+    });
+
+    const cells = [];
+    for (let i = 0; i < firstDay; i++) {
+      cells.push('<div class="portal-calendar-day is-empty" aria-hidden="true"></div>');
+    }
+
+    for (let day = 1; day <= days; day++) {
+      const key = dateKey(new Date(year, month, day));
+      const dayEvents = eventsByDate.get(key) || [];
+      const dots = dayEvents.slice(0, 3).map(event =>
+        `<i class="calendar-dot type-${safe(event.event_type || "other")}"></i>`
+      ).join("");
+
+      cells.push(`
+        <button class="portal-calendar-day
+          ${key === today ? "is-today" : ""}
+          ${selectedCalendarDate === key ? "is-selected" : ""}
+          ${dayEvents.length ? "has-events" : ""}"
+          type="button"
+          data-calendar-date="${key}">
+          <span>${day}</span>
+          <small>${dayEvents.length ? `${dayEvents.length} ${dayEvents.length === 1 ? "item" : "items"}` : ""}</small>
+          <div class="calendar-dots">${dots}</div>
+        </button>
+      `);
+    }
+
+    grid.innerHTML = cells.join("");
+    grid.querySelectorAll("[data-calendar-date]").forEach(button => {
+      button.addEventListener("click", () => {
+        selectedCalendarDate = button.dataset.calendarDate;
+        renderCalendar();
+        renderCalendarAgenda(selectedCalendarDate);
+      });
+    });
+
+    renderCalendarAgenda(selectedCalendarDate);
+  }
+
+  async function loadCalendarEvents() {
+    const { start, end } = monthBounds();
+    let published = [];
+
+    try {
+      const { data, error } = await client.rpc("get_my_calendar_events", {
+        p_start: start,
+        p_end: end
+      });
+      if (error) throw error;
+      published = data || [];
+    } catch (error) {
+      console.warn("[Toolkit Calendar]", error.message || error);
+    }
+
+    const combined = [...published, ...syntheticCalendarEvents()];
+    const seen = new Set();
+    calendarEvents = combined.filter(event => {
+      const key = `${event.event_date}|${event.title}|${event.event_type}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).sort(eventSort);
+
+    renderCalendar();
+  }
+
+  function setupCalendarControls() {
+    document.getElementById("calendar-prev")?.addEventListener("click", async () => {
+      calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() - 1, 1);
+      selectedCalendarDate = null;
+      await loadCalendarEvents();
+    });
+
+    document.getElementById("calendar-next")?.addEventListener("click", async () => {
+      calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() + 1, 1);
+      selectedCalendarDate = null;
+      await loadCalendarEvents();
+    });
+
+    document.getElementById("calendar-show-all")?.addEventListener("click", () => {
+      selectedCalendarDate = null;
+      renderCalendar();
+      renderCalendarAgenda();
+    });
   }
 
   async function submitPortalHandover(event) {
@@ -562,12 +839,11 @@
     document.body.classList.remove("portal-is-loading");
 
     await loadCurrentRotation(user.id);
-    await Promise.all([
-      loadCommunities(),
-      loadResourceCount()
-    ]);
+    setupCalendarControls();
+    await loadCommunities();
     await loadProjects();
     await loadHandovers();
+    await loadCalendarEvents();
   }
 
   start();

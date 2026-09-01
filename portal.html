@@ -8,6 +8,7 @@
   <title>Community Health Toolkit Portal | UPM-SHS</title>
   <link rel="stylesheet" href="styles.css?v=7c3a">
   <link rel="stylesheet" href="portal-role-fix.css?v=1">
+  <link rel="stylesheet" href="portal-dashboard-refresh.css?v=1">
 </head>
 <body class="portal-body portal-dashboard-page portal-is-loading">
   <div id="portal-loading" class="portal-loading">
@@ -54,6 +55,7 @@
 
         <nav>
           <a class="active" href="#dashboard">Home</a>
+          <a href="#calendar">Calendar</a>
           <a href="#communities">Communities</a>
           <a href="#projects">Projects</a>
           <a href="modules.html">Manual &amp; Modules</a>
@@ -81,10 +83,16 @@
               access learning resources, revisit previous projects, and prepare continuity outputs for the next batch.
             </p>
 
-            <div id="current-rotation-summary" class="current-rotation-summary phase6-rotation-banner">
-              <strong>Loading current rotation…</strong>
-              <span>Please wait.</span>
-            </div>
+            <a id="current-rotation-summary"
+               class="current-rotation-summary phase6-rotation-banner portal-assignment-link"
+               data-current-community-link
+               href="#communities">
+              <div>
+                <strong>Loading current rotation…</strong>
+                <span>Please wait.</span>
+              </div>
+              <span class="portal-assignment-arrow">Open community →</span>
+            </a>
           </div>
 
           <aside class="phase6-quote-card">
@@ -94,35 +102,45 @@
           </aside>
         </section>
 
-        <section class="portal-stat-grid phase6-stats">
-          <article>
-            <span>Assigned community</span>
-            <strong id="dashboard-community">To be assigned</strong>
-            <small id="dashboard-rotation-detail">No active rotation assignment yet.</small>
+        <section id="calendar" class="portal-calendar-section">
+          <article class="portal-panel portal-calendar-card">
+            <div class="portal-calendar-heading">
+              <div>
+                <span class="portal-label">Schedule</span>
+                <h2>My Calendar</h2>
+                <p>LMS deadlines, fieldwork activities, rotation dates, and project milestones.</p>
+              </div>
+              <div class="portal-calendar-controls">
+                <button id="calendar-prev" type="button" aria-label="Previous month">←</button>
+                <strong id="calendar-month-label">Month</strong>
+                <button id="calendar-next" type="button" aria-label="Next month">→</button>
+              </div>
+            </div>
+
+            <div class="portal-calendar-weekdays" aria-hidden="true">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+              <span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div id="portal-calendar-grid" class="portal-calendar-grid">
+              <div class="portal-calendar-loading">Loading calendar…</div>
+            </div>
           </article>
-          <article>
-            <span>Active projects</span>
-            <strong id="dashboard-project-count">—</strong>
-            <small id="dashboard-project-detail">Loading project registry…</small>
-          </article>
-          <article>
-            <span>Pending handovers</span>
-            <strong id="dashboard-handover-count">—</strong>
-            <small id="dashboard-handover-detail">Loading handover queue…</small>
-          </article>
-          <article>
-            <span>Toolkit resources</span>
-            <strong id="dashboard-resource-count">—</strong>
-            <small id="dashboard-resource-detail">Loading approved resources…</small>
-          </article>
+
+          <aside class="portal-panel portal-agenda-card">
+            <div class="portal-agenda-heading">
+              <div>
+                <span class="portal-label">Coming up</span>
+                <h2 id="portal-agenda-title">Upcoming Activities</h2>
+              </div>
+              <button id="calendar-show-all" type="button" hidden>Show month</button>
+            </div>
+            <div id="portal-calendar-agenda" class="portal-calendar-agenda">
+              <div class="portal-calendar-loading">Loading activities…</div>
+            </div>
+          </aside>
         </section>
 
         <section class="phase6-quick-grid">
-          <a class="phase6-quick-card" data-current-community-link href="portal.html#communities">
-            <span class="phase6-quick-icon">⌘</span>
-            <strong data-current-community-name>Community Profile</strong>
-            <small data-current-rotation-meta>Open your assigned community profile.</small>
-          </a>
           <a class="phase6-quick-card" href="modules.html">
             <span class="phase6-quick-icon">📘</span>
             <strong>Manual &amp; Modules</strong>
@@ -247,6 +265,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script src="portal.js?v=7c3d-restore"></script>
+  <script src="portal.js?v=calendar-dashboard-1"></script>
 </body>
 </html>

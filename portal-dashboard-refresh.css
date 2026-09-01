@@ -1,0 +1,416 @@
+/* ============================================================
+   Portal Dashboard Refresh — assignment + calendar only
+   This file intentionally does NOT change the sidebar/Oble,
+   municipality photo cards, global typography, or other pages.
+   ============================================================ */
+
+.portal-assignment-link {
+  color: inherit;
+  text-decoration: none;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  cursor: pointer;
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+.portal-assignment-link:hover {
+  transform: translateY(-2px);
+  border-color: rgba(123,17,19,.28);
+  box-shadow: 0 14px 30px rgba(64,38,26,.08);
+}
+
+.portal-assignment-copy {
+  display: grid;
+  min-width: 0;
+}
+
+.portal-assignment-copy > strong {
+  margin: 3px 0 2px;
+}
+
+.portal-assignment-arrow {
+  flex: 0 0 auto;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--maroon);
+  white-space: nowrap;
+}
+
+.portal-calendar-section {
+  display: grid;
+  grid-template-columns: minmax(0,1.45fr) minmax(310px,.72fr);
+  gap: 16px;
+  margin-bottom: 18px;
+  scroll-margin-top: 100px;
+}
+
+.portal-calendar-card,
+.portal-agenda-card {
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.portal-calendar-heading,
+.portal-agenda-heading {
+  min-height: 92px;
+  padding: 17px 18px 14px;
+  border-bottom: 1px solid #e5ddd3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.portal-calendar-heading h2,
+.portal-agenda-heading h2 {
+  margin: 3px 0 2px;
+  font-family: var(--serif);
+  font-size: 25px;
+  color: var(--maroon);
+}
+
+.portal-calendar-heading p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 11px;
+  color: #726960;
+}
+
+.portal-calendar-controls {
+  display: grid;
+  grid-template-columns: 38px minmax(150px,auto) 38px;
+  align-items: center;
+  gap: 6px;
+}
+
+.portal-calendar-controls button,
+.portal-agenda-heading button {
+  min-height: 36px;
+  border: 1px solid #d6ccc0;
+  border-radius: 9px;
+  background: #fffdfa;
+  color: var(--maroon);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.portal-calendar-controls strong {
+  text-align: center;
+  font-family: var(--serif);
+  color: var(--green);
+  font-size: 15px;
+}
+
+.portal-calendar-weekdays,
+.portal-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7,minmax(0,1fr));
+}
+
+.portal-calendar-weekdays {
+  padding: 9px 13px 5px;
+  background: #fbf7f1;
+}
+
+.portal-calendar-weekdays span {
+  text-align: center;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #746b62;
+}
+
+.portal-calendar-grid {
+  padding: 7px 13px 14px;
+  gap: 5px;
+}
+
+.portal-calendar-loading {
+  grid-column: 1 / -1;
+  min-height: 160px;
+  display: grid;
+  place-items: center;
+  font-family: var(--serif);
+  color: #756c63;
+}
+
+.portal-calendar-day {
+  position: relative;
+  min-height: 76px;
+  padding: 8px;
+  border: 1px solid #e5ddd3;
+  border-radius: 11px;
+  background: #fffdfa;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+
+.portal-calendar-day.is-empty {
+  border-color: transparent;
+  background: transparent;
+  cursor: default;
+}
+
+.portal-calendar-day > span {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 900;
+  color: #4e4740;
+}
+
+.portal-calendar-day > small {
+  min-height: 14px;
+  font-size: 7px;
+  color: #8a8178;
+}
+
+.portal-calendar-day:hover,
+.portal-calendar-day.is-selected {
+  border-color: rgba(123,17,19,.38);
+  background: #fff7f4;
+}
+
+.portal-calendar-day.is-today > span {
+  width: 27px;
+  height: 27px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--maroon);
+  color: #fff;
+}
+
+.calendar-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: auto;
+}
+
+.calendar-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.calendar-dot.type-lms_due { background: var(--maroon); }
+.calendar-dot.type-fieldwork { background: var(--green); }
+.calendar-dot.type-rotation,
+.calendar-dot.type-rotation_start,
+.calendar-dot.type-rotation_end { background: #8c6c24; }
+.calendar-dot.type-project,
+.calendar-dot.type-project_due { background: #70558e; }
+.calendar-dot.type-meeting { background: #2e6785; }
+
+.portal-agenda-card {
+  display: grid;
+  grid-template-rows: auto minmax(0,1fr);
+}
+
+.portal-agenda-heading button {
+  padding: 0 11px;
+  font-size: 10px;
+}
+
+.portal-calendar-agenda {
+  padding: 7px 16px 15px;
+  display: grid;
+  align-content: start;
+}
+
+.portal-agenda-event {
+  display: grid;
+  grid-template-columns: 44px minmax(0,1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 11px 2px;
+  border-bottom: 1px solid #ede5dc;
+  color: inherit;
+  text-decoration: none;
+}
+
+.portal-agenda-event:last-child {
+  border-bottom: 0;
+}
+
+a.portal-agenda-event:hover .portal-agenda-copy > strong {
+  color: var(--maroon);
+}
+
+.portal-agenda-date {
+  width: 42px;
+  height: 47px;
+  border-radius: 10px;
+  background: #f4ede4;
+  display: grid;
+  place-items: center;
+  align-content: center;
+}
+
+.portal-agenda-date strong {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1;
+  color: var(--maroon);
+}
+
+.portal-agenda-date span {
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #766e65;
+}
+
+.portal-agenda-copy {
+  display: grid;
+  gap: 2px;
+}
+
+.portal-agenda-copy > strong {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--green);
+  line-height: 1.28;
+}
+
+.portal-agenda-copy > small {
+  color: #766e65;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.portal-calendar-event-type {
+  width: max-content;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: #eee8df;
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  font-weight: 900;
+  color: #665f57;
+}
+
+.portal-calendar-event-type.type-lms_due {
+  background: #f7e5e4;
+  color: var(--maroon);
+}
+
+.portal-calendar-event-type.type-fieldwork {
+  background: #e5f2e9;
+  color: var(--green);
+}
+
+.portal-calendar-event-type.type-project_due,
+.portal-calendar-event-type.type-project {
+  background: #eee9f4;
+  color: #604577;
+}
+
+.portal-calendar-event-type.type-rotation_start,
+.portal-calendar-event-type.type-rotation_end,
+.portal-calendar-event-type.type-rotation {
+  background: #f5edd7;
+  color: #745a17;
+}
+
+.portal-agenda-arrow {
+  font-family: var(--serif);
+  color: var(--maroon);
+  font-weight: 900;
+}
+
+.portal-agenda-empty {
+  min-height: 180px;
+  padding: 24px 10px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.portal-agenda-empty strong {
+  font-family: var(--serif);
+  color: var(--green);
+  font-size: 16px;
+}
+
+.portal-agenda-empty span {
+  max-width: 270px;
+  margin-top: 3px;
+  font-family: var(--serif);
+  font-size: 10px;
+  color: #766e65;
+}
+
+/* Three quick actions now that the duplicated assigned-community card is gone. */
+.phase6-quick-grid {
+  grid-template-columns: repeat(3,minmax(0,1fr));
+}
+
+/* Hide legacy numeric-stat row if an old cached HTML version briefly renders it. */
+.phase6-stats {
+  display: none !important;
+}
+
+@media (max-width: 1080px) {
+  .portal-calendar-section {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-calendar-day {
+    min-height: 70px;
+  }
+}
+
+@media (max-width: 760px) {
+  .portal-assignment-link {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .portal-calendar-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .portal-calendar-controls {
+    width: 100%;
+    grid-template-columns: 38px 1fr 38px;
+  }
+
+  .portal-calendar-grid {
+    padding-left: 6px;
+    padding-right: 6px;
+    gap: 3px;
+  }
+
+  .portal-calendar-weekdays {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .portal-calendar-day {
+    min-height: 60px;
+    padding: 5px;
+    border-radius: 8px;
+  }
+
+  .portal-calendar-day > small {
+    display: none;
+  }
+
+  .phase6-quick-grid {
+    grid-template-columns: 1fr;
+  }
+}
