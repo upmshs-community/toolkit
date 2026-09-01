@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#7b1113">
   <title>Calendar Administration | Community Health Toolkit</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="admin-sidebar-fix.css?v=5">
+  <link rel="stylesheet" href="admin-sidebar-fix.css?v=6">
   <link rel="stylesheet" href="calendar-admin.css?v=7c4a">
 </head>
 <body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page calendar-admin-page portal-is-loading">
@@ -29,6 +29,14 @@
         </div>
       </a>
 
+      <button class="admin-mobile-nav-toggle"
+                  type="button"
+                  aria-controls="admin-sidebar"
+                  aria-expanded="false">
+            <span aria-hidden="true">☰</span>
+            <span>Menu</span>
+          </button>
+
       <div class="portal-account">
         <div class="portal-avatar" data-user-initials>UP</div>
         <div class="portal-user-copy">
@@ -42,7 +50,7 @@
     </header>
 
     <div class="portal-shell">
-      <aside class="portal-sidebar admin-sidebar">
+      <aside id="admin-sidebar" class="portal-sidebar admin-sidebar">
         <div class="portal-sidebar-title">Administration</div>
         <nav>
           <a href="admin.html#users">User Management</a>
@@ -321,6 +329,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script src="calendar-admin.js?v=7c4a"></script>
+    <script src="admin-shell.js?v=6"></script>
+<script src="calendar-admin.js?v=7c4a"></script>
 </body>
 </html>

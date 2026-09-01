@@ -5,7 +5,7 @@
   <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#7b1113">
   <title>Form Builder | Community Health Toolkit</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="admin-sidebar-fix.css?v=5">
+  <link rel="stylesheet" href="admin-sidebar-fix.css?v=6">
   <link rel="stylesheet" href="form-builder.css?v=7d1a">
 </head>
 <body class="portal-body toolkit-scroll-page admin-sticky-sidebar-page form-builder-page portal-is-loading">
@@ -22,6 +22,14 @@
         <img class="portal-topbar-shs" src="assets/shs-logo.png" alt="UPM-SHS">
         <div><strong>Toolkit Administration</strong><span>Form Builder &amp; Versioning</span></div>
       </a>
+      <button class="admin-mobile-nav-toggle"
+                  type="button"
+                  aria-controls="admin-sidebar"
+                  aria-expanded="false">
+            <span aria-hidden="true">☰</span>
+            <span>Menu</span>
+          </button>
+
       <div class="portal-account">
         <div class="portal-avatar" data-user-initials>UP</div>
         <div class="portal-user-copy"><strong data-user-name>Form Manager</strong><span data-user-email></span></div>
@@ -32,7 +40,7 @@
     </header>
 
     <div class="portal-shell">
-      <aside class="portal-sidebar admin-sidebar">
+      <aside id="admin-sidebar" class="portal-sidebar admin-sidebar">
         <div class="portal-sidebar-title">Administration</div>
         <nav>
           <a href="admin.html#users">User Management</a>
@@ -127,6 +135,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="form-engine.js?v=7d1a"></script>
-  <script src="form-builder.js?v=7d1a"></script>
+    <script src="admin-shell.js?v=6"></script>
+<script src="form-builder.js?v=7d1a"></script>
 </body>
 </html>
