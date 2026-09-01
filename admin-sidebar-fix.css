@@ -1,0 +1,92 @@
+/* ============================================================
+   ADMIN SIDEBAR OVERLAP FIX
+   Targeted only to admin.html / admin-sticky-sidebar-page.
+   Keeps all existing Toolkit styling intact.
+   ============================================================ */
+
+@media (min-width: 821px) {
+  body.admin-sticky-sidebar-page .admin-sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    height: calc(100dvh - 84px) !important;
+    overflow: hidden !important;
+    padding-bottom: 16px !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar .portal-sidebar-title {
+    flex: 0 0 auto;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 4px 10px 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.28) transparent;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.25);
+    border-radius: 999px;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav a {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+
+  /* The note must participate in normal layout instead of covering
+     Form Builder / LMS Administration. */
+  body.admin-sticky-sidebar-page .admin-sidebar .sidebar-note {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    flex: 0 0 auto;
+    margin: 10px 4px 0;
+    padding: 12px 6px 0;
+    background: #153d2c;
+  }
+}
+
+/* Slightly more compact nav on landscape tablets / small laptops. */
+@media (min-width: 821px) and (max-width: 1180px) {
+  body.admin-sticky-sidebar-page .admin-sidebar {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav {
+    gap: 2px;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav a {
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar .sidebar-note span {
+    font-size: 8px;
+    line-height: 1.45;
+  }
+}
+
+/* Keep the existing horizontal navigation behavior on narrow tablets/phones. */
+@media (max-width: 820px) {
+  body.admin-sticky-sidebar-page .admin-sidebar .sidebar-note {
+    display: none !important;
+  }
+}
