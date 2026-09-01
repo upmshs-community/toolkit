@@ -1,0 +1,590 @@
+/* ============================================================
+   STUDENT PORTAL — MOBILE UI v1
+   Targeted only to portal-dashboard-page at <= 820px.
+   Desktop/tablet landscape Portal remains unchanged.
+   ============================================================ */
+
+.portal-mobile-menu-toggle,
+.portal-mobile-drawer-account,
+.portal-mobile-backdrop {
+  display: none;
+}
+
+@media (max-width: 820px) {
+  :root {
+    --portal-mobile-header-h: 64px;
+  }
+
+  html,
+  body.portal-dashboard-page {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
+
+  body.portal-dashboard-page {
+    padding-top: var(--portal-mobile-header-h);
+    background: var(--cream);
+  }
+
+  body.portal-dashboard-page.portal-mobile-nav-open {
+    overflow: hidden !important;
+  }
+
+  /* ------------------------------------------------------------
+     Compact fixed mobile header
+     ------------------------------------------------------------ */
+  body.portal-dashboard-page .portal-topbar {
+    position: fixed !important;
+    inset: 0 0 auto 0 !important;
+    z-index: 1200 !important;
+
+    width: 100% !important;
+    height: var(--portal-mobile-header-h) !important;
+    min-height: var(--portal-mobile-header-h) !important;
+
+    padding: 7px 10px !important;
+    border-top-width: 4px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+
+    background: rgba(255,253,248,.98) !important;
+    backdrop-filter: blur(12px);
+  }
+
+  body.portal-dashboard-page .portal-topbar-brand {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    gap: 8px !important;
+  }
+
+  /* Wide UP branding is unnecessary in a 320–820px viewport. */
+  body.portal-dashboard-page .portal-topbar-brand > img:first-child,
+  body.portal-dashboard-page .portal-topbar-divider {
+    display: none !important;
+  }
+
+  body.portal-dashboard-page .portal-topbar-shs {
+    display: block !important;
+    flex: 0 0 38px !important;
+    width: 38px !important;
+    height: 38px !important;
+    margin: 0 !important;
+  }
+
+  body.portal-dashboard-page .portal-topbar-brand div {
+    display: grid !important;
+    min-width: 0 !important;
+    line-height: 1.05 !important;
+  }
+
+  body.portal-dashboard-page .portal-topbar-brand strong {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 13px !important;
+  }
+
+  body.portal-dashboard-page .portal-topbar-brand div span {
+    display: none !important;
+  }
+
+  .portal-mobile-menu-toggle {
+    flex: 0 0 auto;
+
+    min-width: 44px;
+    min-height: 42px;
+    padding: 0 9px;
+
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    border: 1px solid #d8cec2;
+    border-radius: 9px;
+
+    background: #fffdfa;
+    color: var(--green);
+
+    font-size: 10px;
+    font-weight: 900;
+
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .portal-mobile-menu-toggle > span:first-child {
+    font-size: 17px;
+    line-height: 1;
+  }
+
+  body.portal-dashboard-page .portal-account {
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+    gap: 0 !important;
+  }
+
+  /* Keep only the recognizable avatar in the top bar.
+     All role actions + Sign out live inside the drawer. */
+  body.portal-dashboard-page .portal-user-copy,
+  body.portal-dashboard-page .portal-account .admin-return-link,
+  body.portal-dashboard-page .portal-account > [data-sign-out] {
+    display: none !important;
+  }
+
+  body.portal-dashboard-page .portal-avatar {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 12px !important;
+  }
+
+  /* ------------------------------------------------------------
+     Main page
+     ------------------------------------------------------------ */
+  body.portal-dashboard-page .portal-shell {
+    display: block !important;
+    grid-template-columns: none !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    overflow: visible !important;
+  }
+
+  body.portal-dashboard-page .portal-main {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    padding: 20px 13px 54px !important;
+    margin: 0 !important;
+
+    overflow-x: hidden !important;
+  }
+
+  /* ------------------------------------------------------------
+     Off-canvas mobile navigation
+     ------------------------------------------------------------ */
+  body.portal-dashboard-page .portal-sidebar {
+    position: fixed !important;
+    top: var(--portal-mobile-header-h) !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    right: auto !important;
+
+    z-index: 1150 !important;
+
+    width: min(86vw, 330px) !important;
+    height: auto !important;
+    max-height: none !important;
+
+    padding: 18px 14px 24px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    transform: translateX(-105%);
+    transition: transform .2s ease;
+
+    box-shadow: 16px 0 38px rgba(27,17,12,.22);
+
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  body.portal-dashboard-page.portal-mobile-nav-open .portal-sidebar {
+    transform: translateX(0);
+  }
+
+  body.portal-dashboard-page .portal-sidebar-brand-block {
+    display: flex !important;
+    flex: 0 0 auto !important;
+
+    margin: 0 3px 13px !important;
+    padding: 0 0 13px !important;
+
+    border-bottom: 1px solid rgba(255,255,255,.18);
+  }
+
+  body.portal-dashboard-page .portal-sidebar-brand-block img {
+    width: 43px !important;
+    height: 43px !important;
+  }
+
+  body.portal-dashboard-page .portal-sidebar-brand-block strong {
+    font-size: 12px !important;
+  }
+
+  body.portal-dashboard-page .portal-sidebar-brand-block span {
+    font-size: 8px !important;
+    line-height: 1.35 !important;
+  }
+
+  body.portal-dashboard-page .portal-sidebar nav {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    gap: 4px !important;
+
+    overflow: visible !important;
+  }
+
+  body.portal-dashboard-page .portal-sidebar nav a {
+    width: 100% !important;
+    min-height: 46px !important;
+
+    padding: 10px 12px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    border-left: 3px solid transparent !important;
+    border-bottom: 0 !important;
+
+    border-radius: 8px;
+
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+
+    white-space: normal !important;
+
+    touch-action: manipulation;
+  }
+
+  body.portal-dashboard-page .portal-sidebar nav a.active {
+    border-left-color: var(--gold) !important;
+    border-bottom-color: transparent !important;
+    background: rgba(255,255,255,.09) !important;
+  }
+
+  body.portal-dashboard-page .sidebar-note {
+    display: none !important;
+  }
+
+  .portal-mobile-drawer-account {
+    flex: 0 0 auto;
+
+    margin-top: 15px;
+    padding-top: 14px;
+
+    display: grid !important;
+    gap: 10px;
+
+    border-top: 1px solid rgba(255,255,255,.18);
+  }
+
+  .portal-mobile-drawer-user {
+    display: grid;
+    grid-template-columns: 40px minmax(0,1fr);
+    gap: 9px;
+    align-items: center;
+
+    color: #fff;
+  }
+
+  .portal-mobile-drawer-avatar {
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: var(--maroon);
+    color: #fff;
+
+    font-family: var(--serif);
+    font-weight: 900;
+  }
+
+  .portal-mobile-drawer-user > div:last-child {
+    min-width: 0;
+    display: grid;
+  }
+
+  .portal-mobile-drawer-user strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-family: var(--serif);
+    font-size: 12px;
+  }
+
+  .portal-mobile-drawer-user span {
+    margin-top: 1px;
+    font-size: 8px;
+    color: rgba(255,255,255,.72);
+  }
+
+  .portal-mobile-role-actions {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 6px;
+  }
+
+  .portal-mobile-role-actions:empty {
+    display: none;
+  }
+
+  .portal-mobile-role-actions a,
+  .portal-mobile-signout {
+    min-height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 8px;
+
+    background: rgba(255,255,255,.08);
+    color: #fff;
+
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    touch-action: manipulation;
+  }
+
+  .portal-mobile-signout {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .portal-mobile-backdrop {
+    position: fixed;
+    inset: var(--portal-mobile-header-h) 0 0 0;
+
+    z-index: 1100;
+
+    display: block;
+
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    background: rgba(17,22,19,.42);
+    backdrop-filter: blur(1px);
+
+    cursor: pointer;
+  }
+
+  .portal-mobile-backdrop[hidden] {
+    display: none !important;
+  }
+
+  /* ------------------------------------------------------------
+     Dashboard mobile hierarchy
+     ------------------------------------------------------------ */
+  body.portal-dashboard-page .phase6-hero {
+    display: block !important;
+    margin-bottom: 14px !important;
+  }
+
+  body.portal-dashboard-page .phase6-hero-main {
+    padding: 0 !important;
+  }
+
+  body.portal-dashboard-page .phase6-hero h1,
+  body.portal-dashboard-page .phase6-dashboard h1 {
+    margin: 5px 0 8px !important;
+    font-size: clamp(33px, 9vw, 42px) !important;
+    line-height: .98 !important;
+  }
+
+  body.portal-dashboard-page .phase6-hero-main > p {
+    margin-bottom: 14px !important;
+    font-size: 13px !important;
+    line-height: 1.48 !important;
+  }
+
+  /* Quote is decorative; remove it on narrow screens so assignment appears sooner. */
+  body.portal-dashboard-page .phase6-quote-card {
+    display: none !important;
+  }
+
+  body.portal-dashboard-page .portal-assignment-link {
+    padding: 15px !important;
+    border-radius: 16px !important;
+  }
+
+  body.portal-dashboard-page .portal-assignment-link > div {
+    min-width: 0;
+  }
+
+  body.portal-dashboard-page .portal-assignment-link strong {
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+  }
+
+  body.portal-dashboard-page .portal-assignment-arrow {
+    font-size: 10px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-section {
+    gap: 11px !important;
+    margin-bottom: 12px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-card,
+  body.portal-dashboard-page .portal-agenda-card,
+  body.portal-dashboard-page .portal-panel {
+    border-radius: 16px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-heading,
+  body.portal-dashboard-page .portal-agenda-heading {
+    min-height: 0 !important;
+    padding: 14px 13px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-heading h2,
+  body.portal-dashboard-page .portal-agenda-heading h2 {
+    font-size: 21px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-heading p {
+    font-size: 9px !important;
+    line-height: 1.35 !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-controls {
+    grid-template-columns: 36px minmax(0,1fr) 36px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-controls button {
+    min-height: 36px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-grid {
+    padding: 6px 7px 11px !important;
+    gap: 3px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-weekdays {
+    padding: 8px 7px 4px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-day {
+    min-height: 51px !important;
+    padding: 4px !important;
+    border-radius: 8px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-day > span {
+    font-size: 12px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-day.is-today > span {
+    width: 23px !important;
+    height: 23px !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-agenda {
+    padding: 6px 12px 12px !important;
+  }
+
+  body.portal-dashboard-page .portal-agenda-event {
+    grid-template-columns: 40px minmax(0,1fr) auto !important;
+    gap: 8px !important;
+  }
+
+  body.portal-dashboard-page .portal-agenda-date {
+    width: 38px !important;
+    height: 43px !important;
+  }
+
+  body.portal-dashboard-page .phase6-quick-grid,
+  body.portal-dashboard-page .portal-content-grid,
+  body.portal-dashboard-page .phase6-dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  body.portal-dashboard-page .phase6-quick-card {
+    min-height: 0 !important;
+    padding: 14px !important;
+  }
+
+  body.portal-dashboard-page .portal-panel-heading {
+    padding: 14px !important;
+  }
+
+  body.portal-dashboard-page .portal-panel-heading h2 {
+    font-size: 21px !important;
+  }
+
+  body.portal-dashboard-page .rotation-checklist,
+  body.portal-dashboard-page .quick-resource-list,
+  body.portal-dashboard-page .portal-handover-form {
+    padding-left: 13px !important;
+    padding-right: 13px !important;
+  }
+
+  body.portal-dashboard-page .phase6-inline-actions {
+    flex-direction: column;
+  }
+
+  body.portal-dashboard-page .phase6-inline-actions a {
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+  }
+
+  body.portal-dashboard-page .portal-community-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+
+  body.portal-dashboard-page .portal-project-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.portal-dashboard-page .portal-platform-note {
+    margin-bottom: 6px;
+  }
+}
+
+@media (max-width: 430px) {
+  body.portal-dashboard-page .portal-topbar-brand strong {
+    max-width: 115px;
+    font-size: 12px !important;
+  }
+
+  .portal-mobile-menu-toggle > span:last-child {
+    display: none;
+  }
+
+  .portal-mobile-menu-toggle {
+    width: 42px;
+    min-width: 42px;
+    padding: 0;
+  }
+
+  body.portal-dashboard-page .portal-main {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  body.portal-dashboard-page .portal-community-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.portal-dashboard-page .portal-calendar-day {
+    min-height: 47px !important;
+  }
+}

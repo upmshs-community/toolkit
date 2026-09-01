@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="portal-role-fix.css?v=1">
   <link rel="stylesheet" href="portal-dashboard-refresh.css?v=1">
   <link rel="stylesheet" href="performance.css?v=8a1">
+  <link rel="stylesheet" href="portal-mobile.css?v=1">
 </head>
 <body class="portal-body portal-dashboard-page portal-is-loading">
   <div id="portal-loading" class="portal-loading">
@@ -31,6 +32,14 @@
         </div>
       </a>
 
+      <button class="portal-mobile-menu-toggle"
+              type="button"
+              aria-controls="portal-mobile-sidebar"
+              aria-expanded="false">
+        <span aria-hidden="true">☰</span>
+        <span>Menu</span>
+      </button>
+
       <div class="portal-account">
         <div class="portal-avatar" data-user-initials>UP</div>
         <div class="portal-user-copy">
@@ -46,7 +55,7 @@
     </header>
 
     <div class="portal-shell">
-      <aside class="portal-sidebar">
+      <aside id="portal-mobile-sidebar" class="portal-sidebar">
         <div class="portal-sidebar-brand-block">
           <img src="assets/shs-logo.png" decoding="async" alt="UPM-SHS seal">
           <div>
@@ -68,6 +77,18 @@
           <a href="#handover">Handover</a>
           <a href="search.html">Search</a>
         </nav>
+
+        <section class="portal-mobile-drawer-account" aria-label="Account">
+          <div class="portal-mobile-drawer-user">
+            <div class="portal-mobile-drawer-avatar" data-mobile-user-initials>UP</div>
+            <div>
+              <strong data-mobile-user-name>Toolkit user</strong>
+              <span data-mobile-user-meta>Student</span>
+            </div>
+          </div>
+          <div id="portal-mobile-role-actions" class="portal-mobile-role-actions"></div>
+          <button id="portal-mobile-signout" class="portal-mobile-signout" type="button">Sign out</button>
+        </section>
 
         <div class="sidebar-note phase6-sidebar-note">
           <strong>Honor. Excellence. Service.</strong>
@@ -269,5 +290,6 @@
   <script src="supabase-config.js"></script>
   <script src="toolkit-runtime.js?v=8a1"></script>
   <script src="portal.js?v=8a1"></script>
+  <script src="portal-mobile.js?v=1"></script>
 </body>
 </html>
