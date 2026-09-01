@@ -6,6 +6,7 @@
   const sidebar = document.getElementById("portal-mobile-sidebar");
   const mobileRoleActions = document.getElementById("portal-mobile-role-actions");
   const mobileSignout = document.getElementById("portal-mobile-signout");
+  const account = document.querySelector(".portal-account");
 
   if (!toggle || !sidebar) return;
 
@@ -16,17 +17,13 @@
   backdrop.setAttribute("aria-label", "Close Toolkit menu");
   document.body.appendChild(backdrop);
 
-  function isMobile() {
-    return window.matchMedia("(max-width: 820px)").matches;
-  }
+  const isMobile = () => window.matchMedia("(max-width: 820px)").matches;
 
   function setOpen(open) {
     if (!isMobile()) open = false;
-
     body.classList.toggle("portal-mobile-nav-open", open);
     toggle.setAttribute("aria-expanded", String(open));
     backdrop.hidden = !open;
-
     if (open) {
       requestAnimationFrame(() => {
         sidebar.querySelector("nav a.active")?.scrollIntoView({ block: "nearest" });
@@ -44,37 +41,50 @@
     const role = text("[data-user-role]", "Student");
     const batch = text("[data-user-batch]", "");
     const year = text("[data-user-year]", "");
+    const meta = [role, batch, year].filter(v => v && v !== "—").join(" · ") || role;
 
     document.querySelectorAll("[data-mobile-user-name]").forEach(el => {
-      el.textContent = name;
+      if (el.textContent !== name) el.textContent = name;
     });
     document.querySelectorAll("[data-mobile-user-initials]").forEach(el => {
-      el.textContent = initials;
+      if (el.textContent !== initials) el.textContent = initials;
     });
     document.querySelectorAll("[data-mobile-user-meta]").forEach(el => {
-      el.textContent = [role, batch, year].filter(v => v && v !== "—").join(" · ") || role;
+      if (el.textContent !== meta) el.textContent = meta;
     });
   }
 
   function syncRoleActions() {
     if (!mobileRoleActions) return;
 
-    const sources = [
+    const desired = [
       document.getElementById("review-link"),
       document.getElementById("knowledge-link"),
       document.getElementById("admin-link")
-    ].filter(Boolean);
+    ]
+      .filter(source => source && !source.hidden)
+      .map(source => ({ href: source.href, label: source.textContent.trim() }));
 
-    mobileRoleActions.innerHTML = "";
+    const current = [...mobileRoleActions.querySelectorAll("a")]
+      .map(anchor => ({ href: anchor.href, label: anchor.textContent.trim() }));
 
-    sources.forEach(source => {
-      if (source.hidden) return;
+    const unchanged =
+      desired.length === current.length &&
+      desired.every((item, index) =>
+        item.href === current[index]?.href &&
+        item.label === current[index]?.label
+      );
 
+    if (unchanged) return;
+
+    const fragment = document.createDocumentFragment();
+    desired.forEach(item => {
       const anchor = document.createElement("a");
-      anchor.href = source.href;
-      anchor.textContent = source.textContent.trim();
-      mobileRoleActions.appendChild(anchor);
+      anchor.href = item.href;
+      anchor.textContent = item.label;
+      fragment.appendChild(anchor);
     });
+    mobileRoleActions.replaceChildren(fragment);
   }
 
   function syncDrawer() {
@@ -85,42 +95,36 @@
   toggle.addEventListener("click", () => {
     setOpen(!body.classList.contains("portal-mobile-nav-open"));
   });
-
   backdrop.addEventListener("click", () => setOpen(false));
-
   sidebar.addEventListener("click", event => {
-    if (isMobile() && event.target.closest("a[href]")) {
-      setOpen(false);
-    }
+    if (isMobile() && event.target.closest("a[href]")) setOpen(false);
   });
-
   mobileSignout?.addEventListener("click", () => {
-    const original = document.querySelector(".portal-account [data-sign-out]");
-    if (original) original.click();
+    document.querySelector(".portal-account [data-sign-out]")?.click();
   });
-
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") setOpen(false);
   });
-
   window.addEventListener("hashchange", () => setOpen(false));
 
   const breakpoint = window.matchMedia("(max-width: 820px)");
   const resetOnBreakpoint = () => setOpen(false);
-  if (breakpoint.addEventListener) breakpoint.addEventListener("change", resetOnBreakpoint);
-  else if (breakpoint.addListener) breakpoint.addListener(resetOnBreakpoint);
+  breakpoint.addEventListener?.("change", resetOnBreakpoint);
 
-  /* portal.js fills the profile and role-gated links asynchronously.
-     Observe those changes so the drawer always mirrors the correct role. */
-  const observer = new MutationObserver(syncDrawer);
-  observer.observe(document.getElementById("portal-app") || document.body, {
-    subtree: true,
-    childList: true,
-    attributes: true,
-    attributeFilter: ["hidden"]
-  });
+  // FIX: watch only the desktop account block. The drawer is outside this
+  // subtree, so updating the drawer cannot recursively trigger this observer.
+  if (account) {
+    const observer = new MutationObserver(() => queueMicrotask(syncDrawer));
+    observer.observe(account, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ["hidden"]
+    });
+  }
 
   syncDrawer();
-  window.setTimeout(syncDrawer, 300);
-  window.setTimeout(syncDrawer, 1000);
+  setTimeout(syncDrawer, 250);
+  setTimeout(syncDrawer, 900);
 })();
