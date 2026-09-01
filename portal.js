@@ -119,11 +119,16 @@
         <a class="portal-community-link phase6-community-card-link"
            href="community.html?id=${encodeURIComponent(c.id)}">
           <article class="phase6-community-cover-card">
-            <div
-              class="phase6-community-cover"
-              ${cover ? `style="background-image: linear-gradient(180deg, rgba(12,44,31,.03), rgba(12,44,31,.14)), url('${cover}')"` : ""}
-              role="img"
-              aria-label="${safe(displayName)} municipality">
+            <div class="phase6-community-cover" role="img" aria-label="${safe(displayName)} municipality">
+              ${cover ? `
+                <img
+                  class="phase8-community-cover-img"
+                  src="${cover}"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                  alt="">
+              ` : ""}
             </div>
 
             <div class="phase6-community-card-body">

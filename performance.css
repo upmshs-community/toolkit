@@ -1,0 +1,34 @@
+/* ============================================================
+   PHASE 8A — PERFORMANCE HARDENING
+   Rendering-only optimizations. No visual redesign.
+   ============================================================ */
+
+/* Municipality covers are now lazy <img> elements instead of eager CSS
+   background images. Preserve the exact cover-card crop. */
+.phase6-community-cover {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(12,44,31,.03), rgba(12,44,31,.14)),
+    #e7ece7;
+}
+
+.phase8-community-cover-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Delay layout/paint work for sections far below the initial viewport.
+   Browsers without content-visibility support simply ignore these rules. */
+@supports (content-visibility: auto) {
+  .portal-dashboard-page #communities,
+  .portal-dashboard-page #projects,
+  .portal-dashboard-page #handover,
+  .portal-dashboard-page .portal-platform-note {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 560px;
+  }
+}

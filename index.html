@@ -6,7 +6,9 @@
   <meta name="description" content="UP Manila School of Health Sciences Community-Based Medicine and Community Health Toolkit portal.">
   <meta name="theme-color" content="#7b1113">
   <title>Community-Based Medicine | UPM-SHS</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preload" as="image" href="assets/hero-group-1400.jpg" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=8a1">
 </head>
 <body class="public-landing-page">
   <div class="topline">
@@ -22,9 +24,9 @@
   <header class="site-header">
     <div class="wrap header-inner">
       <a href="#home" class="institution-lockup" aria-label="UPM-SHS Community-Based Medicine Home">
-        <img src="assets/up-upm-branding.png" class="up-branding" alt="University of the Philippines and UP Manila branding">
+        <img src="assets/up-upm-branding.png" class="up-branding" decoding="async" alt="University of the Philippines and UP Manila branding">
         <div class="lockup-rule"></div>
-        <img src="assets/shs-logo.png" class="shs-seal" alt="UP Manila School of Health Sciences seal">
+        <img src="assets/shs-logo.png" class="shs-seal" decoding="async" alt="UP Manila School of Health Sciences seal">
         <div class="institution-title">
           <strong>School of Health Sciences</strong>
           <span>Community-Based Medicine</span>
@@ -45,8 +47,10 @@
   <main id="home">
     <section class="hero" aria-labelledby="hero-title">
       <picture class="hero-picture">
-        <source media="(max-width: 900px)" srcset="assets/hero-group-1400.jpg">
-        <img src="assets/hero-group.jpg" alt="UP Manila School of Health Sciences faculty and students during the 50th Commitment Building and Candlelighting Ceremony">
+        <img src="assets/hero-group-1400.jpg"
+             fetchpriority="high"
+             decoding="async"
+             alt="UP Manila School of Health Sciences faculty and students during the 50th Commitment Building and Candlelighting Ceremony">
       </picture>
       <div class="hero-overlay"></div>
 
@@ -67,7 +71,7 @@
 
         <aside class="portal-card" aria-label="Community Health Toolkit portal">
           <div class="portal-seal">
-            <img src="assets/shs-logo.png" alt="">
+            <img src="assets/shs-logo.png" loading="lazy" decoding="async" alt="">
           </div>
           <span class="portal-eyebrow">Internal portal</span>
           <h2>Community Health<br>Toolkit</h2>
@@ -143,7 +147,7 @@
         </article>
 
         <article class="feature-block feature-center">
-          <div class="feature-seal"><img src="assets/shs-logo.png" alt="UPM-SHS seal"></div>
+          <div class="feature-seal"><img src="assets/shs-logo.png" loading="lazy" decoding="async" alt="UPM-SHS seal"></div>
           <span class="section-label">The SHS Model</span>
           <h2>Service, accountability, and continuity.</h2>
           <p>
@@ -168,7 +172,7 @@
     <section id="toolkit" class="toolkit-strip">
       <div class="wrap toolkit-layout">
         <div class="toolkit-intro">
-          <div class="toolkit-round-icon"><img src="assets/shs-logo.png" alt=""></div>
+          <div class="toolkit-round-icon"><img src="assets/shs-logo.png" loading="lazy" decoding="async" alt=""></div>
           <div>
             <span class="section-label">Community Health Toolkit</span>
             <p>Your digital companion for community immersion, project continuity, and institutional memory.</p>
@@ -220,5 +224,6 @@
   <script src="supabase-config.js"></script>
   <script src="script.js"></script>
   <script src="auth.js"></script>
+  <script src="toolkit-runtime.js?v=8a1"></script>
 </body>
 </html>
