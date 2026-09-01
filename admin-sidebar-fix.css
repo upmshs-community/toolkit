@@ -1,23 +1,23 @@
 /* ============================================================
-   ADMIN FIXED SHELL v3
-   Desktop / landscape-tablet administration pages:
-   - top header stays visible
-   - green sidebar stays visible
-   - only the right/main content scrolls
-   - sidebar nav scrolls independently only if it is taller than screen
+   ADMIN FULLY FIXED SIDEBAR v4
+   User requirement:
+   - top header does not move
+   - green sidebar does not move
+   - sidebar title and ALL menu links do not move
+   - ONLY the right/main content scrolls
 
-   Scoped ONLY to .admin-sticky-sidebar-page.
-   Portal dashboard is not affected.
+   Scoped only to .admin-sticky-sidebar-page.
    ============================================================ */
 
 @media (min-width: 821px) {
+  html:has(body.admin-sticky-sidebar-page),
   body.admin-sticky-sidebar-page {
     height: 100dvh !important;
     min-height: 100dvh !important;
     overflow: hidden !important;
   }
 
-  /* Do not override the app while JS/auth still keeps it hidden. */
+  /* The visible admin app becomes a fixed-height application shell. */
   body.admin-sticky-sidebar-page > [id$="-app"]:not([hidden]) {
     height: 100dvh !important;
     min-height: 0 !important;
@@ -26,7 +26,7 @@
     flex-direction: column !important;
   }
 
-  /* Header stays at the top of the app. */
+  /* Header never participates in the scrolling content area. */
   body.admin-sticky-sidebar-page .portal-topbar {
     position: relative !important;
     top: auto !important;
@@ -35,7 +35,7 @@
     z-index: 100;
   }
 
-  /* Shell fills only the space below the top header. */
+  /* Everything below the header fills the remaining viewport. */
   body.admin-sticky-sidebar-page .portal-shell {
     flex: 1 1 auto !important;
     min-height: 0 !important;
@@ -44,8 +44,7 @@
     align-items: stretch !important;
   }
 
-  /* Green sidebar never follows the document scroll because the document
-     itself no longer scrolls on these pages. */
+  /* Entire green sidebar is stationary. */
   body.admin-sticky-sidebar-page .admin-sidebar {
     position: relative !important;
     top: auto !important;
@@ -54,95 +53,131 @@
     height: 100% !important;
     min-height: 0 !important;
     max-height: none !important;
-    overflow: hidden !important;
+
     display: flex !important;
     flex-direction: column !important;
-    padding: 24px 18px 16px !important;
+
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+
+    padding: clamp(15px, 2.3vh, 24px) 18px 12px !important;
   }
 
   body.admin-sticky-sidebar-page .admin-sidebar .portal-sidebar-title {
     flex: 0 0 auto;
-    margin-bottom: 12px;
+    margin: 0 0 clamp(7px, 1.3vh, 12px) !important;
   }
 
+  /* CRITICAL v4 change:
+     nav itself NEVER scrolls. Every menu item remains fixed in place. */
   body.admin-sticky-sidebar-page .admin-sidebar nav {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+
     display: flex !important;
-    flex-direction: column;
-    gap: 3px !important;
-    padding: 0 4px 12px 0;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.28) transparent;
-    overscroll-behavior: contain;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    scrollbar-width: none !important;
+
+    gap: clamp(0px, .3vh, 3px) !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  body.admin-sticky-sidebar-page .admin-sidebar nav::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,.25);
-    border-radius: 999px;
+    display: none !important;
   }
 
   body.admin-sticky-sidebar-page .admin-sidebar nav a {
-    flex: 0 0 auto;
-    min-height: 40px;
-    padding: 8px 11px !important;
-    display: flex;
-    align-items: center;
-    line-height: 1.25;
+    flex: 0 0 auto !important;
+    min-height: clamp(31px, 4.15vh, 39px) !important;
+    height: auto !important;
+
+    padding:
+      clamp(5px, .8vh, 8px)
+      clamp(8px, 1vw, 11px) !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    font-size: clamp(10px, 1.05vw, 12px) !important;
+    line-height: 1.15 !important;
   }
 
-  /* Decorative notes were the source of link overlap on shorter screens. */
+  /* Decorative notes are removed because they consume vertical room and
+     previously overlapped the final administration links. */
   body.admin-sticky-sidebar-page .admin-sidebar .sidebar-note {
     display: none !important;
   }
 
-  /* The right side is the ONLY vertical page scroller. */
+  /* ONLY this right-hand area scrolls. */
   body.admin-sticky-sidebar-page .admin-main {
     height: 100% !important;
     min-height: 0 !important;
     min-width: 0 !important;
+
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    overscroll-behavior-y: contain;
+
+    overscroll-behavior-y: contain !important;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
   }
 
-  /* These panels previously used top:88px because the whole document scrolled.
-     Inside the new fixed app shell, a small inset is enough. */
+  /* Nested editor side-panels may remain sticky inside the RIGHT scroller,
+     but they do not affect the green navigation. */
   body.admin-sticky-sidebar-page .lms-tree-panel,
   body.admin-sticky-sidebar-page .form-catalog-panel,
   body.admin-sticky-sidebar-page .form-builder-right {
-    top: 16px !important;
+    top: 14px !important;
   }
 }
 
-/* Landscape tablets / smaller laptops: slightly tighter but finger-friendly. */
+/* Landscape tablets: make the fixed menu slightly tighter so all
+   Administration items fit without any sidebar scrolling. */
 @media (min-width: 821px) and (max-width: 1180px) {
   body.admin-sticky-sidebar-page .admin-sidebar {
-    padding-left: 14px !important;
-    padding-right: 14px !important;
+    padding-left: 13px !important;
+    padding-right: 13px !important;
   }
 
   body.admin-sticky-sidebar-page .admin-sidebar nav a {
-    min-height: 38px;
-    padding: 7px 10px !important;
-    font-size: 11px;
+    min-height: clamp(29px, 4vh, 36px) !important;
+    padding: 5px 9px !important;
+    font-size: 10.5px !important;
   }
 }
 
-/* Phones / narrow portrait tablets keep the original document scrolling and
-   horizontal administration navigation. */
+/* Especially short landscape screens:
+   compact further instead of introducing a sidebar scrollbar. */
+@media (min-width: 821px) and (max-height: 720px) {
+  body.admin-sticky-sidebar-page .admin-sidebar {
+    padding-top: 11px !important;
+    padding-bottom: 8px !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar .portal-sidebar-title {
+    margin-bottom: 5px !important;
+    font-size: 10px !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav {
+    gap: 0 !important;
+  }
+
+  body.admin-sticky-sidebar-page .admin-sidebar nav a {
+    min-height: 28px !important;
+    padding: 4px 8px !important;
+    font-size: 9.5px !important;
+  }
+}
+
+/* Phones / narrow portrait tablets retain the site's existing normal
+   document scrolling / horizontal admin navigation. */
 @media (max-width: 820px) {
   body.admin-sticky-sidebar-page {
     height: auto !important;
