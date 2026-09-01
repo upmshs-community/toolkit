@@ -5545,3 +5545,22 @@ body.field-detail-open{overflow:hidden!important}.field-detail-backdrop{position
     grid-template-columns: 1fr;
   }
 }
+
+
+/* =========================================================
+   PHASE 7C.3b — ROLE-GATED PORTAL HEADER
+   ========================================================= */
+
+/* Never let author styles override elements intentionally hidden by role. */
+[hidden] {
+  display: none !important;
+}
+
+.portal-account > [aria-hidden="true"] {
+  display: none !important;
+}
+
+/* Keep the student header clean when only Sign out remains. */
+.portal-account .portal-signout:not([hidden]) {
+  white-space: nowrap;
+}

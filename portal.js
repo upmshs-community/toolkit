@@ -1,3 +1,4 @@
+
 (() => {
   const cfg = window.APP_CONFIG || {};
   const url = cfg.SUPABASE_URL || "";
@@ -19,38 +20,11 @@
 
   function safe(value = "") {
     return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  function prettyCommunityName(value = "") {
-    const raw = String(value || "").trim();
-    if (!raw) return "";
-    if (/^alangalang$/i.test(raw)) return "Alang-alang";
-    return raw;
-  }
-
-  function updatePhase6CurrentCommunity() {
-    const link = currentRotation?.community_id
-      ? `community.html?id=${encodeURIComponent(currentRotation.community_id)}`
-      : "portal.html#communities";
-    const communityName = currentRotation?.community_name || "Community Profile";
-    const meta = currentRotation
-      ? [currentRotation.rotation_type, currentRotation.course_code, currentRotation.batch].filter(Boolean).join(" · ") || "Open your assigned community profile."
-      : "Open your assigned community profile.";
-
-    document.querySelectorAll("[data-current-community-link]").forEach(el => {
-      if (el.tagName === "A") el.setAttribute("href", link);
-    });
-    document.querySelectorAll("[data-current-community-name]").forEach(el => {
-      el.textContent = communityName;
-    });
-    document.querySelectorAll("[data-current-rotation-meta]").forEach(el => {
-      el.textContent = meta;
-    });
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
   }
 
   function setLoadingCard({title, text, detail = "", action = ""}) {
@@ -70,23 +44,10 @@
     window.location.replace("index.html");
   }
 
-
-  function communityCoverImage(name = "") {
-    const normalized = String(name || "")
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z]/g, "");
-
-    const covers = {
-      alangalang: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Church_of_Alangalang%2C_Leyte.jpg",
-      dagami: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dagami_Town_Hall.jpg",
-      dulag: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Church_of_Dulag%2C_Leyte.jpg",
-      palo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Palo_Municipal_Hall_%28Palo%2C_Leyte%3B_09-09-2022%29.jpg",
-      tanauan: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tanauan_%28Leyte%29_Church.jpg",
-      tolosa: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tolosa%2C_Leyte_from_air_%28Leyte%3B_09-08-2022%29.jpg"
-    };
-
-    return covers[normalized] || "";
+  function formatDate(value) {
+    if (!value) return "—";
+    const d = new Date(value);
+    return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
   }
 
   function renderCommunities() {
@@ -96,32 +57,15 @@
       target.innerHTML = `<article><span>—</span><strong>No communities</strong><small>No data yet</small></article>`;
       return;
     }
-    target.innerHTML = communities.map(c => {
-      const displayName = prettyCommunityName(c.name);
-      const cover = communityCoverImage(c.name);
-
-      return `
-        <a class="portal-community-link phase6-community-card-link"
-           href="community.html?id=${encodeURIComponent(c.id)}">
-          <article class="phase6-community-cover-card">
-            <div
-              class="phase6-community-cover"
-              ${cover ? `style="background-image: linear-gradient(180deg, rgba(12,44,31,.03), rgba(12,44,31,.14)), url('${cover}')"` : ""}
-              role="img"
-              aria-label="${safe(displayName)} municipality">
-            </div>
-
-            <div class="phase6-community-card-body">
-              <div>
-                <strong>${safe(displayName)}</strong>
-                <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
-              </div>
-              <span class="phase6-community-arrow" aria-hidden="true">→</span>
-            </div>
-          </article>
-        </a>
-      `;
-    }).join("");
+    target.innerHTML = communities.map((c, index) => `
+      <a class="portal-community-link" href="community.html?id=${encodeURIComponent(c.id)}">
+        <article>
+          <span>${String(index + 1).padStart(2,"0")}</span>
+          <strong>${safe(c.name)}</strong>
+          <small>${safe(c.preceptor_name || c.province || "Learning site")}</small>
+        </article>
+      </a>
+    `).join("");
   }
 
   function renderProjects() {
@@ -143,7 +87,7 @@
     target.innerHTML = projects.map(p => `
       <article class="project-portal-card">
         <div class="project-card-top">
-          <span class="project-pill status-${safe(p.status)}">${safe((p.status || "").replaceAll("_", " "))}</span>
+          <span class="project-pill status-${safe(p.status)}">${safe((p.status || "").replaceAll("_"," "))}</span>
           <small>${safe(p.community_name || "")}</small>
         </div>
         <h3>${safe(p.title)}</h3>
@@ -157,7 +101,7 @@
       </article>
     `).join("");
 
-    document.getElementById("dashboard-project-count").textContent = String(projects.filter(p => ["active", "for_handover", "planning"].includes(p.status)).length);
+    document.getElementById("dashboard-project-count").textContent = String(projects.filter(p => ["active","for_handover","planning"].includes(p.status)).length);
     document.getElementById("dashboard-project-detail").textContent =
       currentRotation ? `Projects linked to ${currentRotation.community_name}.` : "Showing accessible project records.";
   }
@@ -181,7 +125,7 @@
     target.innerHTML = handovers.map(h => `
       <article class="portal-handover-card">
         <div class="project-card-top">
-          <span class="project-pill status-${safe(h.status)}">${safe((h.status || "").replaceAll("_", " "))}</span>
+          <span class="project-pill status-${safe(h.status)}">${safe((h.status || "").replaceAll("_"," "))}</span>
           <small>${safe(h.project_title)}</small>
         </div>
         <strong>${safe(h.community_name || "Community project")}</strong>
@@ -190,7 +134,7 @@
       </article>
     `).join("");
 
-    document.getElementById("dashboard-handover-count").textContent = String(handovers.filter(h => ["submitted", "returned"].includes(h.status)).length);
+    document.getElementById("dashboard-handover-count").textContent = String(handovers.filter(h => ["submitted","returned"].includes(h.status)).length);
     document.getElementById("dashboard-handover-detail").textContent =
       currentRotation ? `Recent handovers for ${currentRotation.community_name}.` : "Showing accessible handover notes.";
   }
@@ -207,7 +151,7 @@
     const form = document.getElementById("portal-handover-form");
     if (!note || !form) return;
 
-    const elevated = ["admin", "coordinator", "faculty"].includes(currentProfile.role);
+    const elevated = ["admin","coordinator","faculty","preceptor"].includes(currentProfile.role);
     const canSubmit = elevated || !!currentRotation;
 
     if (canSubmit && projects.length) {
@@ -276,7 +220,6 @@
 
     if (error || !data?.length) {
       currentRotation = null;
-      updatePhase6CurrentCommunity();
       if (summary) {
         summary.innerHTML = `
           <strong>No active rotation assigned yet.</strong>
@@ -292,14 +235,12 @@
     currentRotation = {
       id: rotation.id,
       community_id: rotation.community_id,
-      community_name: prettyCommunityName(rotation.communities?.name || "Assigned community"),
+      community_name: rotation.communities?.name || "Assigned community",
       preceptor_name: rotation.communities?.preceptor_name || "",
       course_code: rotation.course_code,
       rotation_type: rotation.rotation_type,
       batch: rotation.batch
     };
-
-    updatePhase6CurrentCommunity();
 
     const details = [rotation.rotation_type, rotation.course_code, rotation.batch].filter(Boolean).join(" · ");
     if (communityEl) communityEl.textContent = currentRotation.community_name;
@@ -327,7 +268,7 @@
       `)
       .order("created_at", { ascending: false });
 
-    const elevated = ["admin", "coordinator", "faculty"].includes(currentProfile.role);
+    const elevated = ["admin","coordinator","faculty","preceptor"].includes(currentProfile.role);
     if (!elevated && currentRotation?.community_id) {
       query = query.eq("community_id", currentRotation.community_id);
     }
@@ -341,7 +282,7 @@
 
     projects = (data || []).map(p => ({
       ...p,
-      community_name: prettyCommunityName(p.communities?.name || "Unknown community")
+      community_name: p.communities?.name || "Unknown community"
     }));
     renderProjects();
     populatePortalHandoverProjects();
@@ -358,7 +299,7 @@
       .order("updated_at", { ascending: false })
       .limit(8);
 
-    const elevated = ["admin", "coordinator", "faculty"].includes(currentProfile.role);
+    const elevated = ["admin","coordinator","faculty","preceptor"].includes(currentProfile.role);
     if (!elevated && currentRotation?.community_id) {
       query = query.eq("projects.community_id", currentRotation.community_id);
     }
@@ -373,7 +314,7 @@
     handovers = (data || []).map(h => ({
       ...h,
       project_title: h.projects?.title || "Unknown project",
-      community_name: prettyCommunityName(h.projects?.communities?.name || "")
+      community_name: h.projects?.communities?.name || ""
     }));
     renderHandovers();
   }
@@ -505,13 +446,8 @@
     const fullName = profile.full_name || user.email || "Authorized user";
     const email = profile.email || user.email || "";
     const role = profile.role || "student";
-    const firstName = (profile.full_name || user.email || "there")
-      .trim()
-      .split(/\s+/)[0]
-      .replace(/[._-]+.*$/, "") || "there";
 
     document.querySelectorAll("[data-user-name]").forEach(el => el.textContent = fullName);
-    document.querySelectorAll("[data-user-first-name]").forEach(el => el.textContent = firstName);
     document.querySelectorAll("[data-user-email]").forEach(el => el.textContent = email);
     document.querySelectorAll("[data-user-role]").forEach(el => el.textContent = role.charAt(0).toUpperCase() + role.slice(1));
     document.querySelectorAll("[data-user-batch]").forEach(el => el.textContent = profile.batch || "—");
@@ -525,17 +461,38 @@
       .join("") || "UP";
     document.querySelectorAll("[data-user-initials]").forEach(el => el.textContent = initials);
 
+    // Role-gated header controls. Hide everything first so a student never
+    // sees management links, even if an old stylesheet/browser cache tries
+    // to override the HTML `hidden` attribute.
     const adminLink = document.getElementById("admin-link");
-    if (adminLink && ["admin", "coordinator"].includes(role)) adminLink.hidden = false;
-
-    const facultyLink = document.getElementById("faculty-link");
-    if (facultyLink && role === "faculty") facultyLink.hidden = false;
-
     const reviewLink = document.getElementById("review-link");
-    if (reviewLink && ["admin", "coordinator", "faculty"].includes(role)) reviewLink.hidden = false;
-
     const knowledgeLink = document.getElementById("knowledge-link");
-    if (knowledgeLink && ["admin", "coordinator", "faculty"].includes(role)) knowledgeLink.hidden = false;
+
+    [adminLink, reviewLink, knowledgeLink].forEach(link => {
+      if (!link) return;
+      link.hidden = true;
+      link.setAttribute("aria-hidden", "true");
+      link.style.setProperty("display", "none", "important");
+    });
+
+    const showRoleLink = link => {
+      if (!link) return;
+      link.hidden = false;
+      link.removeAttribute("aria-hidden");
+      link.style.removeProperty("display");
+    };
+
+    if (["admin","coordinator"].includes(role)) {
+      showRoleLink(adminLink);
+    }
+
+    if (["admin","coordinator","faculty","preceptor"].includes(role)) {
+      showRoleLink(reviewLink);
+    }
+
+    if (["admin","coordinator","faculty"].includes(role)) {
+      showRoleLink(knowledgeLink);
+    }
 
     document.querySelectorAll("[data-sign-out]").forEach(button => {
       button.addEventListener("click", async () => {
@@ -549,12 +506,12 @@
 
     if (loading) loading.hidden = true;
     if (app) app.hidden = false;
-    document.body.classList.remove("portal-is-loading");
-    document.body.classList.add("portal-is-ready");
-    updatePhase6CurrentCommunity();
 
     await loadCurrentRotation(user.id);
-    await Promise.all([loadCommunities(), loadResourceCount()]);
+    await Promise.all([
+      loadCommunities(),
+      loadResourceCount()
+    ]);
     await loadProjects();
     await loadHandovers();
   }
